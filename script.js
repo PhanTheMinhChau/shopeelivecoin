@@ -54,6 +54,8 @@ async function fetchData() {
     updateCountdowns();
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu:", error);
+  } finally {
+    document.getElementById("loading").style.display = "none"; // Ẩn loading
   }
 }
 
