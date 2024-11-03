@@ -36,9 +36,14 @@ async function fetchData() {
     dataList.innerHTML = "";
     items = data.map(item => {
       const row = document.createElement("tr");
+      if (item.maxcoin==0) {
+        maxcoin = "vc";
+      } else {
+        maxcoin = item.maxcoin;
+      }
       row.innerHTML = `
         <td>${item.userName}</td>
-        <td>${item.maxcoin}</td>
+        <td>${maxcoin}</td>
         <td class="countdown" data-start-time="${item.startTime}"></td>
         <td>
           <button onclick="window.location.href='https://shopee.vn/universal-link/shop/${item.shopId}?utm_source=an_17333510032&utm_medium=affiliates&utm_campaign=-&utm_content=acc48----&utm_term=c1id8gpxye2t'">
