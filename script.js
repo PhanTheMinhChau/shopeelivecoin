@@ -78,3 +78,4 @@ function updateCountdowns() {
 fetchData().then(() => {
   setInterval(updateCountdowns, 1000);
 });
+setInterval(fetchData, 10000);
