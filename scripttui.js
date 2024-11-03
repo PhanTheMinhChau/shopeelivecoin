@@ -37,7 +37,7 @@ async function fetchData() {
     items = data.map(item => {
       const row = document.createElement("tr");
       if (item.maxcoin==0) {
-        maxcoin = "vc";
+        maxcoin = "voucher";
       } else {
         maxcoin = item.maxcoin;
       }
