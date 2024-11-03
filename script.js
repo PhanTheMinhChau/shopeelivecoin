@@ -42,7 +42,7 @@ async function fetchData() {
         <td class="countdown" data-start-time="${item.startTime}"></td>
         <td>
           <button onclick="window.location.reload();window.location.href='https://shopee.vn/universal-link/shop/${item.shopId}?utm_source=an_17333510032&utm_medium=affiliates&utm_campaign=-&utm_content=acc48----&utm_term=c1id8gpxye2t;'">
-            Đến Shop
+            đi👉
           </button>
         </td>
       `;
