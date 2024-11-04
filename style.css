@@ -2,38 +2,79 @@ body {
   font-family: Arial, sans-serif;
   text-align: center;
   padding: 20px;
+  background-color: #f9f9f9;
 }
 
 h1 {
   color: #333;
+  margin-bottom: 20px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+.data-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-th, td {
-  padding: 10px;
-  border: 1px solid #ddd;
+.card {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
 }
 
-th {
-/*   background-color: #f79817; */
+.top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.shop-name {
+  max-width: 90px;
+  font-size: 1em;
+  color: #555;
+  font-weight: bold;
+    display: -webkit-box;        /* Sử dụng hộp flexbox cho trình duyệt hỗ trợ */
+    -webkit-box-orient: vertical; /* Định hướng theo chiều dọc */
+    -webkit-line-clamp: 2;      /* Giới hạn số dòng hiển thị */
+    overflow: hidden;            /* Ẩn phần văn bản bị cắt */
+    text-overflow: ellipsis;  
+}
+
+.coin-section {
+  background: #fff;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #f0a500;
+}
+
+.coin-section::after {
+  content: 'xu';
+  font-size: 1.1em;
+  margin-left: 5px;
+}
+
+.button-section button {
   background-color: #4CAF50;
-  color: white;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
 }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-tr:hover {
-  background-color: #ddd;
+.button-section button:hover {
+  background-color: #4CAF50;
 }
 
 .countdown {
-  font-weight: bold;
-  color: #e67e22;
+  font-size: 0.9em;
+  color: #777;
+  margin-top: 8px;
+  font-weight: normal;
+  text-align: center;
 }
