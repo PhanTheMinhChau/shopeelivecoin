@@ -13,7 +13,7 @@ function formatCountdown(timeDifference) {
   if (days > 0) parts.push(`${days} ngày`);
   if (hours > 0) parts.push(`${hours} giờ`);
   if (minutes > 0) parts.push(`${minutes} phút`);
-  if (seconds > 0) parts.push(`${seconds} giây`);
+  if (seconds >= 0) parts.push(`${seconds} giây`);
 
   return parts.join(" ");
 }
