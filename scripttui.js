@@ -35,7 +35,7 @@ async function fetchData() {
       card.innerHTML = `
         <div class="top-row">
           <div class="shop-name"> ${item.userName}</div>
-          <div class="coin-section">${maxcoin}</div>
+          <div class="coin-section">${maxcoin}xu</div>
           <div class="button-section">
             <button onclick="window.location.href='https://shopee.vn/universal-link/shop/${item.shopId}?utm_source=an_17333510032&utm_medium=affiliates&utm_campaign=-&utm_content=acc48----&utm_term=c1id8gpxye2t;'">Vào ngay</button>
           </div>
