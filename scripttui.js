@@ -31,7 +31,7 @@ async function fetchData() {
       const card = document.createElement("div");
       card.classList.add("card");
       
-      const maxcoin = item.maxcoin === 0 ? "voucher - 0" : item.maxcoin;
+      const maxcoin = item.maxcoin === 0 ? "voucher" : item.maxcoin;
       card.innerHTML = `
         <div class="top-row">
           <div class="shop-name"> ${item.userName}</div>
