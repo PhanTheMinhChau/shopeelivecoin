@@ -50,7 +50,6 @@ h1 {
 }
 
 .coin-section::after {
-  content: 'xu';
   font-size: 1.1em;
   margin-left: 5px;
 }
