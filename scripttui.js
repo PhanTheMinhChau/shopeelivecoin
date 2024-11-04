@@ -60,6 +60,11 @@ async function fetchData() {
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu:", error);
   } finally {
+    if (items.length == 0) {
+        document.getElementById("koco").style.display = "block";
+    } else {
+        document.getElementById("koco").style.display = "none";
+    };
     document.getElementById("loading").style.display = "none"; // Ẩn loading
   }
 }
