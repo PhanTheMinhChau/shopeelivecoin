@@ -7,45 +7,23 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- <a href="/" class="button" style="
+  <a href="/" class="button" style="
     padding: 8px 16px;
-    background-color: black; /* Nền tất cả là màu đen */
-    color: white; /* Chữ &quot;Chơi&quot; màu trắng */
+    background-color: #4CAF50;
+    color: white;
     text-decoration: none;
     border-radius: 4px;
     font-weight: bold;
-    transition: background-color 0.3s ease;
-">
-  Chơi <span class="highlight" style="
-    background-color: #f79817; /* Nền chữ &quot;Túi quà&quot; màu vàng */
-    color: black; /* Chữ &quot;Túi quà&quot; màu đen */
-    font-weight: bold;
-    border-radius: 7px;
-    padding: 3px 5px;
-">Vòng quay</span></a> -->
-  <a href="/" class="button" style="  padding: 8px 16px;
-  background-color: #4CAF50;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;">👈 vòng quay</a>
+    transition: background-color 0.3s ease;">👈 vòng quay</a>
+  
   <h1>Túi quà 🎁</h1>
-  <table id="data-table">
-    <thead>
-      <tr>
-        <th>Live</th>
-        <th>Xu chia</th>
-        <th>Bắt đầu sau</th>
-        <th>Đến shop</th>
-      </tr>
-    </thead>
-    <tbody id="data-list"></tbody>
-  </table>
-  <div id="loading" class="loading" style="
-    margin-top: 12px;
-">Đợi xíu...</div>
+  
+  <div id="data-list" class="data-list"></div>
+  
+  <div id="loading" class="loading" style="margin-top: 12px;">Đợi xíu...</div>
+  
   <div id="koco" style="margin-top: 12px; display: none;">Không có shop nào tung Túi cả! Đứng đó đợi xíu tui đi kiếm hoặc quay lại sau nha!!</div>
-  <script src="scripttui.js"></script>
+  
+  <script src="script.js"></script>
 </body>
 </html>
