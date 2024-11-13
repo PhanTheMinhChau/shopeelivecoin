@@ -81,7 +81,6 @@ h1 {
   display: flex;
   flex-flow: column;
   align-items: center;
-  width: 100%;
   padding: 15px;
 }
 
@@ -89,13 +88,11 @@ h1 {
   display: flex;
   flex-flow: row;
   align-items: center;
-  margin-bottom: 30px;
   @media (max-width: 767px) {
     flex-flow: column;
   }
   .socialTitle {
-    margin: 0 15px 0 0;
-    font-size: 20px;
+    margin: 0 0 0 0;
     @media (max-width: 767px) {
       margin-bottom: 15px;
       text-align: center;
@@ -147,7 +144,7 @@ h1 {
         background-color: #00aced;
       }
       &:nth-child(3) a {
-        background-color: #BD081C;
+        background-color: #3268ff;
       }
       &:nth-child(4) a {
         background-color: #111111;
