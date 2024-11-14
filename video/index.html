@@ -126,7 +126,7 @@
                         <ul class="pagination home-product__pagination">
                             
                             <li class="pagination-item pagination-item--active">
-                                <a href="#" class="pagination-item__link">Xem thêm</a>
+                                <a onclick="load()" class="pagination-item__link">Xem thêm</a>
                             </li>
                         </ul>
                     </div>
@@ -141,7 +141,7 @@
     <script src="./assets/js/main.js"></script>
     <script>
 // Define the HTML template for the new item
-let pg = 1;
+let pg = 0;
 const createProductItem = (img, name, price_x, price_y, sold) => {
     return `
     <a class="col l-2-4 m-4 c-6" href="/kjhjkh" style="text-decoration: none;">
