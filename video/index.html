@@ -210,6 +210,7 @@ function load() {
         });
 }
 function search_item(query) {
+    document.querySelector('.header__search-input').value = "";
     document.querySelector('.home-product .row.sm-gutter').innerHTML = "";
     document.querySelector('#sss').innerHTML = 'Tìm kiếm: "'+query+'"'
     fetch('https://flask-shopee-video.vercel.app/search?query='+query)
