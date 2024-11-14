@@ -1359,7 +1359,7 @@
 .home-product-item__action {
   display: flex;
   justify-content: space-between;
-  margin: 16px 10px;
+  margin: 6px 10px;
 }
 
 .home-product-item__like {
