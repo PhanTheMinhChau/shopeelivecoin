@@ -142,7 +142,7 @@
     <script>
 // Define the HTML template for the new item
 let pg = 0;
-const createProductItem = (img, name, price_x, price_y, sold) => {
+const createProductItem = (img, name, price_x, price_y, sold, star) => {
     return `
     <a class="col l-2-4 m-4 c-6" href="/kjhjkh" style="text-decoration: none;">
         <div class="home-product-item">
@@ -161,11 +161,8 @@ const createProductItem = (img, name, price_x, price_y, sold) => {
                     <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>
                 </span>
                 <div class="home-product-item__rating">
+                    <a>${star}</a>
                     <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                    <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                    <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                    <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
                 </div>
                 <span class="home-product-item__sold">${sold} đã bán</span> 
             </div>
@@ -199,7 +196,7 @@ function load() {
             // Loop through the fetched products and append the new HTML element to the row
             data.products.forEach(item => {
                 // Use the values from the fetched data to populate the template
-                const productHTML = createProductItem(item.img, item.name, item.price_x, item.price_y, item.sold);
+                const productHTML = createProductItem(item.img, item.name, item.price_x, item.price_y, item.sold, item.star);
                 rowElement.insertAdjacentHTML('beforeend', productHTML);
             });
         })
