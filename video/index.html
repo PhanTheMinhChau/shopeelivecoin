@@ -144,9 +144,9 @@
     <script>
 // Define the HTML template for the new item
 let pg = 0;
-const createProductItem = (img, name, price_x, price_y, sold, star) => {
+const createProductItem = (img, name, price_x, price_y, sold, star, video_id) => {
     return `
-    <a class="col l-2-4 m-4 c-6" href="/kjhjkh" style="text-decoration: none;">
+    <a class="col l-2-4 m-4 c-6" href="https://shopee.vn/universal-link?redir=https%3A%2F%2Fsv.shopee.vn%2Fshare-video%2F${video_id.replace("==","%3D%3D")}%3Faf_siteid%3D%26af_cost_value%3Dh5_video_page%26is_retargeting%3Dtrue&deep_and_deferred=1" style="text-decoration: none;">
         <div class="home-product-item">
             <div class="home-product-item__img" style="background-image: url(https://cf.shopee.vn/file/${img});">
             </div>
