@@ -212,7 +212,8 @@ function load() {
 function search_item(query) {
     document.querySelector('.header__search-input').value = "";
     document.querySelector('.home-product .row.sm-gutter').innerHTML = "";
-    document.querySelector('#sss').innerHTML = 'Tìm kiếm: "'+query+'"'
+    document.querySelector('#sss').innerHTML = 'Tìm kiếm: "'+query+'"';
+    document.querySelector('.pagination-item.pagination-item--active').innerHTML = ""
     fetch('https://flask-shopee-video.vercel.app/search?query='+query)
         .then(response => response.json()) // Assuming the data is returned in JSON format
         .then(data => {
