@@ -152,7 +152,7 @@ const createProductItem = (img, name, price_x, price_y, sold) => {
                 <name>${name}</name>
             </h4>
             <div class="home-product-item__price">
-                <span class="home-product-item__price-old">${price_x}đ</span> 
+                <span class="home-product-item__price-old">${formatNumber(price_x)}đ</span> 
                 <span class="home-product-item__price-current">${price_y}đ</span> 
             </div>
             <div class="home-product-item__action">
@@ -184,6 +184,9 @@ const createProductItem = (img, name, price_x, price_y, sold) => {
     </a>`;
 };
 
+function formatNumber(number) {
+    return parseFloat(number).toLocaleString('de-DE'); // Format the number with periods
+}
 // Fetch data from the endpoint
 function load() {
     pg = pg + 1;
