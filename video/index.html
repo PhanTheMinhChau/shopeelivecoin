@@ -120,6 +120,10 @@
 
                         <!-- Product list -->
                         <div class="home-product">
+                            <p id="sss" style="
+                                font-size: 15px;
+                                margin-bottom: 0px;
+                            "></p>
                             <div class="row sm-gutter">
 
                             </div>
@@ -207,6 +211,7 @@ function load() {
 }
 function search_item(query) {
     document.querySelector('.home-product .row.sm-gutter').innerHTML = "";
+    document.querySelector('#sss').innerHTML = 'Tìm kiếm: "'+query+'"'
     fetch('https://flask-shopee-video.vercel.app/search?query='+query)
         .then(response => response.json()) // Assuming the data is returned in JSON format
         .then(data => {
@@ -226,6 +231,7 @@ function search_item(query) {
             console.error('Error fetching items:', error);
         });
 }
+
 function click_search() {
     if (document.querySelector('.header__search-input').value.length < 3) {
         alert("Vui lòng nhập tên sản phẩm để tìm kiếm")
