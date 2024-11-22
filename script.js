@@ -1,4 +1,4 @@
-const apiUrl = "https://script.google.com/macros/s/AKfycbycu9k_nR4CpbdkqVfutjD4zJCLqjtJnfmvjn9XVmXgSk7MqFb_hAAFv2rIUAAA9kiq3A/exec";
+const apiUrl = "https://script.google.com/macros/s/AKfycbyobr7LWkEQjy0Kvu-_eRoTgTG-aWEPC8Lk81l6pIYar85KIz1BoZfYijcp3zjghvYhPA/exec";
 const dataList = document.getElementById("data-list");
 
 function formatCountdown(timeDifference) {
