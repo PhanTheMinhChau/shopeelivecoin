@@ -1380,7 +1380,7 @@ i.home-product-item__like-icon-fill {
 }
 
 .home-product-item__rating {
-  font-size: 1rem;
+  font-size: 1.4rem;
   transform: scale(0.9);
   transform-origin: right;
   color: rgba(0, 0, 0, 0.3);
