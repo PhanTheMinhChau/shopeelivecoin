@@ -6,11 +6,8 @@
   --border-color: #dbdbdbdb;
   --star-gold-color: #ffce3e;
 
-  --header-height: 136px;
+  --header-height: 50px;
   --navbar-height: 35px;
-  --header-with-search-height: calc(
-    var(--header-height) - var(--navbar-height)
-  );
   --header-sort-bar-height: 46px;
   /* Add more here */
 }
