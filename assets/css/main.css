@@ -473,7 +473,7 @@
 
 /* Header with search */
 .header-with-search {
-  height: var(--header-with-search-height);
+  height: 50px;
   /* height: 85px; */
   display: flex;
   align-items: center;
