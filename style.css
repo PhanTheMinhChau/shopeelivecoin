@@ -3,6 +3,8 @@ body {
   text-align: center;
   padding: 20px;
   background-color: #f9f9f9;
+  margin: auto;
+  max-width: 500px;
 }
 
 h1 {
