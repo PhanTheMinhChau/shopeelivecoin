@@ -4,8 +4,40 @@
   <title>Săn xu ế 😋</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="style.css">
+  <style>
+        .snow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Không cản trở sự tương tác của người dùng */
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: #aaaaaa; /* Màu xám nhạt cho bông tuyết */
+            font-size: 10px;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        /* Hiệu ứng rơi */
+        @keyframes fall {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 <body>
+<div class="snow-container"></div>
 <div class="shareArticle">
   <div class="shareSocial">
     <h3 class="socialTitle">Tham gia nhóm:</h3>
@@ -53,6 +85,29 @@
 ">👇 vào nhóm 👇</a>
 <a href="https://t.me/xueshopee"><img src="/img/tele.png" alt="Girl in a jacket" width="100%"></a><div id="loading" class="loading" style="margin-top: 12px; display: none;">Đợi xíu...</div>
   
+      <script>
+        const snowContainer = document.querySelector('.snow-container');
+        const snowflakes = 100; // Số lượng bông tuyết
 
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.textContent = '❄'; // Dùng ký tự Unicode bông tuyết
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's'; // Tốc độ rơi ngẫu nhiên
+            snowflake.style.fontSize = Math.random() * 20 + 10 + 'px'; // Kích thước ngẫu nhiên
+            snowflake.style.opacity = Math.random();
+
+            snowContainer.appendChild(snowflake);
+
+            // Xóa bông tuyết sau khi rơi xong
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+
+        // Tạo bông tuyết liên tục
+        setInterval(createSnowflake, 100);
+    </script>
 
 </body></html>
