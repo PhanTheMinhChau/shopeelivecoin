@@ -87,5 +87,29 @@
   <div id="koco" style="margin-top: 12px; display: none;">Không có shop nào tung Túi cả! Đứng đó đợi xíu tui đi kiếm hoặc quay lại sau nha!!</div>
   
   <script src="scripttui.js"></script>
+      <script>
+        const snowContainer = document.querySelector('.snow-container');
+        const snowflakes = 100; // Số lượng bông tuyết
+
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.textContent = '❄'; // Dùng ký tự Unicode bông tuyết
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's'; // Tốc độ rơi ngẫu nhiên
+            snowflake.style.fontSize = Math.random() * 20 + 10 + 'px'; // Kích thước ngẫu nhiên
+            snowflake.style.opacity = Math.random();
+
+            snowContainer.appendChild(snowflake);
+
+            // Xóa bông tuyết sau khi rơi xong
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+
+        // Tạo bông tuyết liên tục
+        setInterval(createSnowflake, 100);
+    </script>
 </body>
 </html>
