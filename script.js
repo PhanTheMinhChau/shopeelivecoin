@@ -38,7 +38,7 @@ async function fetchData() {
           <div class="shop-name"> ${item.userName}</div>
           <div class="coin-section">${item.maxcoin} xu</div>
           <div class="button-section">
-            <button onclick="window.location.href='https://shopee.vn/universal-link/shop/${item.shopId}?utm_source=an_17378840053&utm_medium=affiliates&utm_campaign=-&utm_content=acc48----&utm_term=c8h1woox2y6w;'">Vào ngay</button>
+            <button onclick="window.location.href='https://shopee.vn/universal-link/shop/${item.shopId}?utm_source=an_17358480143&utm_medium=affiliates&utm_campaign=-&utm_content=acc48----&utm_term=ca2nkw4egj59;'">Vào ngay</button>
           </div>
         </div>
         <div class="countdown" data-start-time="${item.startTime}"></div>
