@@ -106,7 +106,7 @@
           if (navigator.clipboard) {
               navigator.clipboard.writeText(text)
                   .then(() => {
-                      console.log("Đã sao chép thành công!");
+                      alert("Đã sao chép thành công!");
                   })
                   .catch(err => {
                       console.error("Lỗi khi sao chép: ", err);
