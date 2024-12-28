@@ -93,6 +93,7 @@
   
     <script>
         function replaceLinks(text, oldLinks, newLinks) {
+            document.getElementById("inputText").value = "";
             oldLinks.forEach((oldLink, index) => {
                 // Tạo một biểu thức chính quy để tìm tất cả các liên kết cũ
                 const regex = new RegExp("https://s.shopee.vn/"+oldLink, 'g');
