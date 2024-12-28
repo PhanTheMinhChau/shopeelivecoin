@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopee Link Processor</title>
+</head>
+<body>
+    <h1>Shopee Link Processor</h1>
+    <form id="linkForm">
+        <label for="inputText">Enter your text:</label><br><br>
+        <textarea id="inputText" name="inputText" rows="10" cols="50" placeholder="Paste your text with Shopee links here..."></textarea><br><br>
+        <button type="submit">Process Links</button>
+    </form>
+    <h2>Processed Links:</h2>
+    <div id="result"></div>
+
+    <script>
+        function replaceLinks(text, oldLinks, newLinks) {
+            oldLinks.forEach((oldLink, index) => {
+                // Tạo một biểu thức chính quy để tìm tất cả các liên kết cũ
+                const regex = new RegExp("https://s.shopee.vn/"+oldLink, 'g');
+                // Thay thế liên kết cũ bằng liên kết mới
+                text = text.replace(regex, newLinks[index]);
+            });
+            return text;
+        };
+        const form = document.getElementById('linkForm');
+        const resultDiv = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            resultDiv.innerHTML = "Processing...";
+            
+            const inputText = document.getElementById('inputText').value;
+
+            const links = [...inputText.matchAll(/https:\/\/s\.shopee\.vn\/\S+/g)].map(m => m[0].split("https://s.shopee.vn/")[1]);
+            const response = await fetch('https://sharelink-kappa.vercel.app/process_links', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ short_links: links })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                resultDiv.innerHTML = `<pre>${replaceLinks(inputText, links, data.processed_links)}</pre>`;
+            } else {
+                resultDiv.innerHTML = "Error processing links.";
+            }
+        });
+    </script>
+</body>
+</html>
