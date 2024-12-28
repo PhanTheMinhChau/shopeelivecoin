@@ -119,7 +119,8 @@
 
             if (response.ok) {
                 const data = await response.json();
-                resultDiv.innerHTML = `<pre>${replaceLinks(inputText, links, data.processed_links)}</pre>`;
+                resultDiv.innerHTML = `<textarea id="outputText" rows="10" cols="50"></textarea>`;
+                document.getElementById("outputText").value = replaceLinks(inputText, links, data.processed_links);
             } else {
                 resultDiv.innerHTML = "Error processing links.";
             }
