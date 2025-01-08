@@ -184,7 +184,7 @@ const createProductItem = (img, name, price_x, price_y, sold, star, video_id) =>
                 <input type="checkbox" name="option1" value="Option1">
             </div>
             <div class="home-product-item__origin">
-                <a class="home-product-item__origin-name" onclick="console.log(this.text)">Vào xem video ngay &gt;&gt;</a>
+                <a class="home-product-item__origin-name" onclick="copyToClipboard(${price_x})">sao chép link &gt;&gt;</a>
             </div>
         </div>
     </div>`;
@@ -212,7 +212,7 @@ function load() {
             // Loop through the fetched products and append the new HTML element to the row
             data.products.forEach(item => {
                 // Use the values from the fetched data to populate the template
-                const productHTML = createProductItem(item.images, item.title, 0, 0, 0, 0, "==");
+                const productHTML = createProductItem(item.images, item.title, item.links, 0, 0, 0, "==");
                 rowElement.insertAdjacentHTML('beforeend', productHTML);
             });
         })
