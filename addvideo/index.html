@@ -171,6 +171,10 @@ function copyToClipboard(text) {
       }
 // Define the HTML template for the new item
 let pg = 0;
+let htag = "";
+if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    htag = "#luotvuimualien #videomuasam #shopeevideo #shopeecreator"
+}
 const createProductItem = (img, name, price_x, price_y, sold, star, video_id) => {
     return `
     <div class="col l-2-4 m-4 c-6" style="text-decoration: none;">
@@ -178,7 +182,7 @@ const createProductItem = (img, name, price_x, price_y, sold, star, video_id) =>
             <div class="home-product-item__img" style="background-image: url(https://cf.shopee.vn/file/${img});">
             </div>
             <h4 class="home-product-item__name">
-                <a onclick="copyToClipboard(this.text)">${name}</a>
+                <a onclick="copyToClipboard(this.text)">${name} ${htag}</a>
             </h4>
             <div class="home-product-item__action">
                 <input type="checkbox" name="option1" value="Option1">
