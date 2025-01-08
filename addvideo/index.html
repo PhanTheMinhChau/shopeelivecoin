@@ -175,7 +175,7 @@ let htag = "";
 if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     htag = "#luotvuimualien #videomuasam #shopeevideo #shopeecreator"
 }
-const createProductItem = (img, name, price_x, id, sold, star, video_id) => {
+const createProductItem = (img, name, price_x, id, checkvideo, checkadd, video_id) => {
     return `
     <div class="col l-2-4 m-4 c-6" style="text-decoration: none;">
         <div class="home-product-item">
@@ -185,8 +185,8 @@ const createProductItem = (img, name, price_x, id, sold, star, video_id) => {
                 <a onclick="copyToClipboard(this.text)">${name} ${htag}</a>
             </h4>
             <div class="home-product-item__action">
-                <input type="checkbox" id="videoed" value="${id}" onchange=videoed(this)>
-                <input type="checkbox" id="added" value="${id}" onchange=videoed(this) style="accent-color: #fb5731;">
+                <input type="checkbox" id="videoed" value="${id}" onchange=videoed(this) ${checkvideo}>
+                <input type="checkbox" id="added" value="${id}" onchange=videoed(this) ${checkadd} style="accent-color: #fb5731;">
             </div>
             <div class="home-product-item__origin">
                 <a class="home-product-item__origin-name" onclick="copyToClipboard(\`${price_x}\`)">sao chép link &gt;&gt;</a>
