@@ -152,7 +152,7 @@
 let pg = 0;
 const createProductItem = (img, name, price_x, price_y, sold, star, video_id) => {
     return `
-    <a class="col l-2-4 m-4 c-6" style="text-decoration: none;">
+    <div class="col l-2-4 m-4 c-6" style="text-decoration: none;">
         <div class="home-product-item">
             <div class="home-product-item__img" style="background-image: url(https://cf.shopee.vn/file/${img});">
             </div>
@@ -166,7 +166,7 @@ const createProductItem = (img, name, price_x, price_y, sold, star, video_id) =>
                 <a class="home-product-item__origin-name" onclick="alert('hello')">Vào xem video ngay &gt;&gt;</a>
             </div>
         </div>
-    </a>`;
+    </div>`;
 };
             // <div class="home-product-item__favourite">
             //     <i class="fa-solid fa-check"></i>
