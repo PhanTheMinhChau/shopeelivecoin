@@ -148,6 +148,27 @@
     </div>
     <script src="./assets/js/main.js"></script>
     <script>
+function copyToClipboard(text) {
+          // Kiểm tra nếu Clipboard API có sẵn
+          if (navigator.clipboard) {
+              navigator.clipboard.writeText(text)
+                  .then(() => {
+                      alert("Đã sao chép thành công!");
+                  })
+                  .catch(err => {
+                      console.error("Lỗi khi sao chép: ", err);
+                  });
+          } else {
+              // Dành cho các trình duyệt cũ hoặc không hỗ trợ Clipboard API
+              const textArea = document.createElement("textarea");
+              textArea.value = text;
+              document.body.appendChild(textArea);
+              textArea.select();
+              document.execCommand("copy");
+              document.body.removeChild(textArea);
+              console.log("Đã sao chép thành công!");
+          }
+      }
 // Define the HTML template for the new item
 let pg = 0;
 const createProductItem = (img, name, price_x, price_y, sold, star, video_id) => {
@@ -157,7 +178,7 @@ const createProductItem = (img, name, price_x, price_y, sold, star, video_id) =>
             <div class="home-product-item__img" style="background-image: url(https://cf.shopee.vn/file/${img});">
             </div>
             <h4 class="home-product-item__name">
-                <a onclick="console.log(this.text)">${name}</a>
+                <a onclick="copyToClipboard(this.text)">${name}</a>
             </h4>
             <div class="home-product-item__action">
                 <input type="checkbox" name="option1" value="Option1">
