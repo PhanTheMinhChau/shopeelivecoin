@@ -203,7 +203,7 @@ function load() {
             // Loop through the fetched products and append the new HTML element to the row
             data.products.forEach(item => {
                 // Use the values from the fetched data to populate the template
-                const productHTML = createProductItem(item.images, title, 0, 0, 0, 0, 0);
+                const productHTML = createProductItem(item.images, item.title, 0, 0, 0, 0, 0);
                 rowElement.insertAdjacentHTML('beforeend', productHTML);
             });
         })
