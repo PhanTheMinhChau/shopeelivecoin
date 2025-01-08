@@ -157,25 +157,13 @@ const createProductItem = (img, name, price_x, price_y, sold, star, video_id) =>
             <div class="home-product-item__img" style="background-image: url(https://cf.shopee.vn/file/${img});">
             </div>
             <h4 class="home-product-item__name">
-                <name>${name}</name>
+                <a onclick="alert('hello1')">${name}</a>
             </h4>
-            <div class="home-product-item__price">
-                <span class="home-product-item__price-old">${formatNumber(price_x)}đ</span> 
-                <span class="home-product-item__price-current">${formatNumber(price_y)}đ</span> 
-            </div>
             <div class="home-product-item__action">
-                <span class="home-product-item__like home-product-item__like--liked">
-                    <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
-                    <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>
-                </span>
-<div class="home-product-item__rating">
-${star}
-                    <i class="home-product-item__star--gold fa-solid fa-star"></i>
-                </div>
-                <span class="home-product-item__sold">${sold} đã bán</span> 
+                <input type="checkbox" name="option1" value="Option1">
             </div>
             <div class="home-product-item__origin">
-                <span class="home-product-item__origin-name">Vào xem video ngay &gt;&gt;</span>
+                <a class="home-product-item__origin-name" onclick="alert('hello')">Vào xem video ngay &gt;&gt;</a>
             </div>
         </div>
     </a>`;
