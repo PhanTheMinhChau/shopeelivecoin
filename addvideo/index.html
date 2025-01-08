@@ -186,7 +186,7 @@ const createProductItem = (img, name, price_x, id, sold, star, video_id) => {
             </h4>
             <div class="home-product-item__action">
                 <input type="checkbox" id="videoed" value="${id}" onchange=videoed(this)>
-                <input type="checkbox" id="added" value="${id}" onchange=videoed(this)>
+                <input type="checkbox" id="added" value="${id}" onchange=videoed(this) style="accent-color: #fb5731;">
             </div>
             <div class="home-product-item__origin">
                 <a class="home-product-item__origin-name" onclick="copyToClipboard(\`${price_x}\`)">sao chép link &gt;&gt;</a>
