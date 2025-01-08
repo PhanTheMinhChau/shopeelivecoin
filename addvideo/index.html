@@ -186,7 +186,7 @@ const createProductItem = (img, name, price_x, id, checkvideo, checkadd, video_i
             </h4>
             <div class="home-product-item__action">
                 <input type="checkbox" id="videoed" value="${id}" onchange=videoed(this) ${checkvideo}>
-                <input type="checkbox" id="added" value="${id}" onchange=videoed(this) ${checkadd} style="accent-color: #fb5731;">
+                <input type="checkbox" id="added" value="${id}" onchange=added(this) ${checkadd} style="accent-color: #fb5731;">
             </div>
             <div class="home-product-item__origin">
                 <a class="home-product-item__origin-name" onclick="copyToClipboard(\`${price_x}\`)">sao chép link &gt;&gt;</a>
@@ -249,7 +249,7 @@ function search_item(query) {
             console.error('Error fetching items:', error);
         });
 }
-function videoed(checkbox) {
+function added(checkbox) {
     if (checkbox.checked) {
         fetch("https://flask-shopee-video.vercel.app/added", {
             method: "POST",
@@ -274,7 +274,7 @@ function videoed(checkbox) {
         })
     }
 }
-function added(checkbox) {
+function videoed(checkbox) {
     if (checkbox.checked) {
         fetch("https://flask-shopee-video.vercel.app/videoed", {
             method: "POST",
