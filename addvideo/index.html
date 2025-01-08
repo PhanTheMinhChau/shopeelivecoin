@@ -1,0 +1,250 @@
+<html lang="vn"><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Shopee Video</title>
+    <link rel="shortcut icon" href="./assets/img/shopee.svg" type="image/x-icon">
+    <link rel="stylesheet" href="./assets/css/normalize.min.css">
+    <link rel="stylesheet" href="./assets/css/base.css">
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <link rel="stylesheet" href="./assets/css/grid.css">
+    <link rel="stylesheet" href="./assets/css/responsive.css">
+    <link rel="stylesheet" href="./assets/font/fontawesome-free-6.1.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap&amp;subset=vietnamese" rel="stylesheet">
+</head>
+
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="grid wide">
+                
+
+                <!-- Header with search -->
+                <div class="header-with-search">
+                    <label for="mobile-search-checkbox" class="header__mobile-search">
+                        <i class="header__search-btn-icon fa-solid fa-left-long" onclick="window.history.go(-1); return false;" style="
+                            font-size: 31px;
+                        "></i>
+                    </label>
+
+                    <div class="header__logo hide-on-tablet">
+                        <a href="/" style="
+    color: #fff; text-decoration: none; font-size: 30px;
+">Shopee video</a>
+                    </div>
+
+                    <input type="checkbox" hidden="" id="mobile-search-checkbox" class="mobile-search-checkbox">
+
+                    
+
+                    <!-- Cart layout -->
+                    <div class="header__cart" style=" padding-right: 15px; ">
+                        <i class="header__search-btn-icon fa-solid fa-rotate-right" onclick="window.location.reload()" style="
+                            font-size: 28px;
+                        "></i>
+                    </div>
+                </div>
+            </div>
+            <ul class="header__sort-bar">
+<div class="header__search-input-wrap">
+                            <!-- Header search input -->
+                            <input type="text" class="header__search-input" placeholder="Nhập để tìm kiếm sản phẩm">
+
+                            <!-- History search box -->
+                            
+                        </div>
+<button class="header__search-btn" onclick="click_search()">
+                            <i class="header__search-btn-icon fa-solid fa-magnifying-glass"></i>
+                        </button>
+            </ul>
+        </header>
+
+        <!-- Banner section -->
+        
+
+        <!-- Container -->
+        <div class="app__container">
+            <div class="grid wide">
+                <div class="row sm-gutter app_content">
+                    
+                    
+
+                    
+                    <div class="col l-10 m-12 c-12">
+                        <!-- Filter bar -->
+                        <div class="home-filter hide-on-mobile-tablet">
+                            <span class="home-filter__label">Sắp xếp theo</span>
+                            <button class="home-filter__btn btn">Phổ biến</button>
+                            <button class="home-filter__btn btn btn--primary">Mới nhất</button>
+                            <button class="home-filter__btn btn">Bán chạy</button>
+
+                            <div class="select-input">
+                                <span class="select-input__label">Giá</span>
+                                <i class="select-input__icon fa-solid fa-angle-down"></i>
+
+                                <!-- List options -->
+                                <ul class="select-input__list">
+                                    <li class="select-input__item">
+                                        <a href="" class="select-input__link">
+                                            Giá: Thấp đến Cao
+                                        </a>
+                                    </li>
+                                    <li class="select-input__item">
+                                        <a href="" class="select-input__link">
+                                            Giá: Cao đến Thấp
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="home-filter__page">
+                                <span class="home-filter__page-num">
+                                    <span class="home-filter__page-current">1</span>/<span class="home-filter__page-total">14</span>
+                                </span>
+                                <div class="home-filter__page-control">
+                                    <a href="" class="home-filter__page-btn home-filter__page-btn-disabled">
+                                        <i class="home-filter__page-icon fa-solid fa-angle-left"></i>
+                                    </a>
+                                    <a href="" class="home-filter__page-btn">
+                                        <i class="home-filter__page-icon fa-solid fa-angle-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Category -->
+                        <nav class="mobile-category" style="
+    height: 60px;
+">
+                            
+                        </nav>
+
+                        <!-- Product list -->
+                        <div class="home-product">
+                            <p id="sss" style="
+                                font-size: 15px;
+                                margin-bottom: 0px;
+                            "></p>
+                            <div class="row sm-gutter">
+
+                            </div>
+                        </div>
+                        <!-- Pagination -->
+                        <ul class="pagination home-product__pagination">
+                            
+                            <li class="pagination-item pagination-item--active">
+                                <a onclick="load()" class="pagination-item__link" style="padding:0 12px;">Xem thêm</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+        </footer>
+    </div>
+    <script src="./assets/js/main.js"></script>
+    <script>
+// Define the HTML template for the new item
+let pg = 0;
+const createProductItem = (img, name, price_x, price_y, sold, star, video_id) => {
+    return `
+    <a class="col l-2-4 m-4 c-6" href="https://shopee.vn/universal-link?redir=https%3A%2F%2Fsv.shopee.vn%2Fshare-video%2F${video_id.replace("==","%3D%3D")}%3Faf_siteid%3D%26af_cost_value%3Dh5_video_page%26is_retargeting%3Dtrue&deep_and_deferred=1" style="text-decoration: none;">
+        <div class="home-product-item">
+            <div class="home-product-item__img" style="background-image: url(https://cf.shopee.vn/file/${img});">
+            </div>
+            <h4 class="home-product-item__name">
+                <name>${name}</name>
+            </h4>
+            <div class="home-product-item__price">
+                <span class="home-product-item__price-old">${formatNumber(price_x)}đ</span> 
+                <span class="home-product-item__price-current">${formatNumber(price_y)}đ</span> 
+            </div>
+            <div class="home-product-item__action">
+                <span class="home-product-item__like home-product-item__like--liked">
+                    <i class="home-product-item__like-icon-empty fa-regular fa-heart"></i>
+                    <i class="home-product-item__like-icon-fill fa-solid fa-heart"></i>
+                </span>
+<div class="home-product-item__rating">
+${star}
+                    <i class="home-product-item__star--gold fa-solid fa-star"></i>
+                </div>
+                <span class="home-product-item__sold">${sold} đã bán</span> 
+            </div>
+            <div class="home-product-item__origin">
+                <span class="home-product-item__origin-name">Vào xem video ngay &gt;&gt;</span>
+            </div>
+        </div>
+    </a>`;
+};
+            // <div class="home-product-item__favourite">
+            //     <i class="fa-solid fa-check"></i>
+            //     <span>Yêu thích</span>
+            // </div>
+            // <div class="home-product-item__sale-off">
+            //     <span class="home-product-item__sale-off-percent">10%</span>
+            //     <span class="home-product-item__sale-off-label">GIẢM</span>
+            // </div>
+function formatNumber(number) {
+    return parseFloat(number).toLocaleString('de-DE'); // Format the number with periods
+}
+// Fetch data from the endpoint
+function load() {
+    pg = pg + 1;
+    fetch('https://flask-shopee-video.vercel.app/items?page='+pg)
+        .then(response => response.json()) // Assuming the data is returned in JSON format
+        .then(data => {
+            // Select the parent element where the new item should be appended
+            const rowElement = document.querySelector('.home-product .row.sm-gutter');
+    
+            // Loop through the fetched products and append the new HTML element to the row
+            data.products.forEach(item => {
+                // Use the values from the fetched data to populate the template
+                const productHTML = createProductItem(item.img, item.name, item.price_x, item.price_y, item.sold, item.star, item.video_id);
+                rowElement.insertAdjacentHTML('beforeend', productHTML);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching items:', error);
+        });
+}
+function search_item(query) {
+    document.querySelector('.header__search-input').value = "";
+    document.querySelector('.home-product .row.sm-gutter').innerHTML = "";
+    document.querySelector('#sss').innerHTML = 'Tìm kiếm: "'+query+'"';
+    document.querySelector('.pagination-item.pagination-item--active').innerHTML = ""
+    fetch('https://flask-shopee-video.vercel.app/search?query='+query)
+        .then(response => response.json()) // Assuming the data is returned in JSON format
+        .then(data => {
+            // Select the parent element where the new item should be appended
+            const rowElement = document.querySelector('.home-product .row.sm-gutter');
+            if (data.products.length==0) {
+                alert("không có sp nào đc tìm thấy")
+            }
+            // Loop through the fetched products and append the new HTML element to the row
+            data.products.forEach(item => {
+                // Use the values from the fetched data to populate the template
+                const productHTML = createProductItem(item.img, item.name, item.price_x, item.price_y, item.sold, item.star, item.video_id);
+                rowElement.insertAdjacentHTML('beforeend', productHTML);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching items:', error);
+        });
+}
+
+function click_search() {
+    if (document.querySelector('.header__search-input').value.length < 3) {
+        alert("Vui lòng nhập tên sản phẩm để tìm kiếm")
+    } else {
+        search_item(document.querySelector('.header__search-input').value)
+    }
+}
+load();
+    </script>
+
+
+</body></html>
