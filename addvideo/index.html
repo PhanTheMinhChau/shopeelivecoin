@@ -251,16 +251,52 @@ function search_item(query) {
 }
 function videoed(checkbox) {
     if (checkbox.checked) {
-        alert('Checkbox is checked!');
+        fetch("https://flask-shopee-video.vercel.app/added", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: checkbox.value,
+                type: "checked"
+            })
+        })
     } else {
-        alert('Checkbox is not checked!');
+        fetch("https://flask-shopee-video.vercel.app/added", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: checkbox.value,
+                type: "removechecked"
+            })
+        })
     }
 }
 function added(checkbox) {
     if (checkbox.checked) {
-        alert('Checkbox is checked!');
+        fetch("https://flask-shopee-video.vercel.app/videoed", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: checkbox.value,
+                type: "checked"
+            })
+        })
     } else {
-        alert('Checkbox is not checked!');
+        fetch("https://flask-shopee-video.vercel.app/videoed", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: checkbox.value,
+                type: "removechecked"
+            })
+        })
     }
 }
 function click_search() {
