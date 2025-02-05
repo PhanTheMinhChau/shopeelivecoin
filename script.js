@@ -38,7 +38,7 @@ async function fetchData() {
           <div class="shop-name"> ${item.userName}</div>
           <div class="coin-section">${item.maxcoin} xu</div>
           <div class="button-section">
-            <button onclick="window.location.href='${item.sessionId}'">Vào ngay</button>
+            <button onclick="window.location.href='${item.shopId}'">Vào ngay</button>
           </div>
         </div>
         <div class="countdown" data-start-time="${item.startTime}"></div>
