@@ -42,7 +42,7 @@ async function fetchData() {
           </div>
         </div>
         <div style=" display: flex; justify-content: space-between; width: 61%; ">
-          <div style=" font-size: 0.9em; color: #777; margin-top: 8px; font-weight: normal; text-align: center; ">100 mắt</div>
+          <div style=" font-size: 0.9em; color: #777; margin-top: 8px; font-weight: normal; text-align: center; ">${item.viewer_count}</div>
           <div class="countdown" data-start-time="${item.startTime}"></div>
         </div>
       `;
