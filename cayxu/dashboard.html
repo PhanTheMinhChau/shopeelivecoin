@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang quản lý tài khoản</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="header">
+            <h1 class="logo">Home</h1>
+            <button id="logout-button" class="logout-button">Đăng xuất</button>
+        </header>
+        
+        <div class="search-container">
+            <div class="search-bar">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" placeholder="Nhập username để tìm kiếm">
+            </div>
+        </div>
+        
+        <h2 class="page-title">Trang quản lý tài các tài khoản</h2>
+        
+        <div class="account-list">
+            <div class="account-card add-account">
+                <div class="account-icon add-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </div>
+                <div class="account-info">
+                    <h3>Thêm tài khoản</h3>
+                </div>
+            </div>
+            
+            <!-- Account cards will be dynamically generated here -->
+            <div id="accounts-container"></div>
+        </div>
+    </div>
+    
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Quét QR Code</h2>
+            <div id="qr-container">
+                <div id="qr-loading" class="qr-state">
+                    <div class="spinner-container">
+                        <div class="spinner"></div>
+                    </div>
+                    <p>Đang tạo QR Code...</p>
+                </div>
+                
+                <div id="qr-display" class="qr-state hidden">
+                    <img id="qr-image" src="/placeholder.svg" alt="QR Code">
+                    <p>Quét mã QR code trên app shopee đã đăng nhập tài khoản của bạn</p>
+                </div>
+                
+                <div id="qr-scanned" class="qr-state hidden">
+                    <div class="notification">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        <h3>QR Code Scanned!</h3>
+                        <p>Vui lòng chấp nhận đăng nhập trên ứng dụng shopee</p>
+                    </div>
+                </div>
+                
+                <div id="qr-confirmed" class="qr-state hidden">
+                    <div class="success-message">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        <h3>Account Added Successfully!</h3>
+                    </div>
+                </div>
+                
+                <div id="qr-error" class="qr-state hidden">
+                    <div class="error-message">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <h3>Error</h3>
+                        <p id="error-message">Something went wrong. Please try again.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function formatDurationFromSeconds(seconds) {
+        if (seconds <= 0) return "đã hết hạn";
+        const days = Math.floor(seconds / (24 * 60 * 60));
+        if (days > 0) return `Hết hạn sau: ${days} ngày`;
+        const hours = Math.floor((seconds % (24 * 60 * 60)) / 3600);
+        if (hours > 0) return `Hết hạn sau: ${hours} giờ`;
+        const minutes = Math.floor((seconds % 3600) / 60);
+        return `Hết hạn sau: ${minutes} phút`;
+        }
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check if user is logged in
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'index.html';
+            }
+            
+            // Handle logout
+            document.getElementById('logout-button').addEventListener('click', function() {
+                localStorage.removeItem('token');
+                localStorage.removeItem('token_type');
+                window.location.href = 'index.html';
+            });
+            
+            // Sample account data (in a real app, this would be fetched from an API)
+            const response = await fetch(`http://localhost:8000/get_accounts`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'authorization': "Bearer " + localStorage.token
+                }
+            });
+            
+            const accountsData = await response.json();
+            
+            // Function to render account cards
+            function renderAccounts(accounts) {
+                const container = document.getElementById('accounts-container');
+                container.innerHTML = '';
+                
+                // Define icon types to cycle through
+                const iconTypes = ['plant-icon', 'basketball-icon', 'books-icon'];
+                
+                accounts.forEach((account, index) => {
+                    // Determine icon type based on index or userid
+                    const iconType = iconTypes[index % iconTypes.length];
+                    
+                    // Determine status display based on status_today
+                    const isActiveToday = account.status_today;
+                    const statusClass = isActiveToday ? 'available' : 'unavailable';
+                    const statusText = isActiveToday 
+                        ? `Nay đã săn được ${account.coin_today} xu` 
+                        : 'Nay không săn';
+                    
+                    // Determine toggle state based on status_nexday
+                    const isActiveNextDay = account.status_nexday;
+                    const toggleClass = isActiveNextDay ? 'on' : 'off';
+                    const toggleText = isActiveNextDay ? 'ON' : 'OFF';
+                    
+                    const accountCard = document.createElement('div');
+                    accountCard.className = 'account-card';
+                    accountCard.dataset.userid = account.userid;
+                    
+                    accountCard.innerHTML = `
+                        <div class="account-icon ${iconType}">
+                            <img src="https://cf.shopee.vn/file/${account.avata}" alt="Account icon" style="width: 50px;height: 50px;border-radius: 10px;">
+                        </div>
+                        <div class="account-info">
+                            <h3>${account.shopee_username}</h3>
+                            <div class="account-status ${statusClass}">
+                                <span class="status-dot"></span>
+                                <span>${statusText}</span>
+                            </div>
+                            <div class="time-expire">
+                                <p style="font-size:12px;">${formatDurationFromSeconds((account.login_time+4*24*60*60)-parseInt(Date.now()/1000))}</p>
+                            </div>
+                        </div>
+                        <div class="toggle-switch ${toggleClass}" data-userid="${account.userid}">
+                            <span class="toggle-label">${toggleText}</span>
+                            <div class="toggle-slider"></div>
+                        </div>
+                    `;
+                    
+                    container.appendChild(accountCard);
+                });
+                
+                // Add event listeners to toggle switches
+                document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                    toggle.addEventListener('click', async function() {
+                        const userid = this.dataset.userid;
+                        this.classList.toggle('on');
+                        this.classList.toggle('off');
+                        
+                        const label = this.querySelector('.toggle-label');
+                        const isOn = this.classList.contains('on');
+                        
+                        if (isOn) {
+                            label.textContent = 'ON';
+                        } else {
+                            label.textContent = 'OFF';
+                        }
+                        
+                        // Update the account's status_nexday in our data
+                        const accountIndex = accountsData.findIndex(acc => acc.userid.toString() === userid.toString());
+                        if (accountIndex !== -1) {
+                            accountsData[accountIndex].status_nexday = isOn;
+                            
+                            // In a real app, you would send an API request to update the status
+                            await fetch(`http://localhost:8000/update_status_nexday`, {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'content-type': 'application/json',
+                                    'authorization': "Bearer " + localStorage.token
+                                },
+                                body: JSON.stringify({
+                                    userid: parseInt(userid),
+                                    status_nexday: isOn
+                                })
+                            });
+                        }
+                    });
+                });
+            }
+            
+            // QR Code Modal functionality
+            const modal = document.getElementById('qr-modal');
+            const closeButton = document.querySelector('.close-button');
+            let qrcodeId = null;
+            let statusCheckInterval = null;
+            
+            // Show different states in the QR modal
+            function showQRState(state) {
+                document.querySelectorAll('.qr-state').forEach(el => {
+                    el.classList.add('hidden');
+                });
+                document.getElementById(state).classList.remove('hidden');
+            }
+            
+            // Generate QR Code
+            async function generateQRCode() {
+                showQRState('qr-loading');
+                
+                try {
+                    const response = await fetch('http://localhost:8000/gen_qrcode', {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+			    'authorization': "Bearer " + localStorage.token
+             		}
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data.error !== 0) {
+                        throw new Error(data.error_msg || 'Failed to generate QR code');
+                    }
+                    
+                    qrcodeId = data.data.qrcode_id;
+                    const qrcodeBase64 = data.data.qrcode_base64;
+                    
+                    // Display the QR code
+                    const qrImage = document.getElementById('qr-image');
+                    qrImage.src = `data:image/png;base64,${qrcodeBase64}`;
+                    
+                    // Make sure the image is loaded before showing
+                    qrImage.onload = function() {
+                        showQRState('qr-display');
+                        // Start polling for status
+                        startStatusCheck();
+                    };
+                    
+                    qrImage.onerror = function() {
+                        throw new Error('Failed to load QR code image');
+                    };
+                    
+                } catch (error) {
+                    console.error('Error generating QR code:', error);
+                    document.getElementById('error-message').textContent = error.message || 'Failed to generate QR code';
+                    showQRState('qr-error');
+                }
+            }
+            
+            // Check QR code status
+            async function checkQRCodeStatus() {
+                if (!qrcodeId) {
+                    stopStatusCheck();
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`http://localhost:8000/qrcode_status?qrcode_id=${encodeURIComponent(qrcodeId)}`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data.error !== 0) {
+                        throw new Error(data.error_msg || 'Failed to check QR code status');
+                    }
+                    
+                    const status = data.data.status;
+                    console.log('QR code status:', status);
+                    
+                    // Handle different statuses
+                    if (status === 'SCANNED') {
+                        showQRState('qr-scanned');
+                    } else if (status === 'CONFIRMED') {
+                        showQRState('qr-confirmed');
+                        // fetch post to login
+                        const response_login = await fetch(`http://localhost:8000/qrcode_login`, {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                "content-type": "application/json",
+                                'authorization': "Bearer " + localStorage.token
+                            },
+                            body: JSON.stringify({
+                                qrcode_token: data.data.qrcode_token
+                            })
+                        });                        
+                        stopStatusCheck();
+                        
+                        // Close the modal after a delay
+                        setTimeout(() => {
+                            modal.style.display = 'none';
+                            // refresh page
+                            window.location.reload();
+                            // In a real app, you would refresh the account list here
+                        }, 2000);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error checking QR code status:', error);
+                    document.getElementById('error-message').textContent = error.message || 'Failed to check QR code status';
+                    showQRState('qr-error');
+                    stopStatusCheck();
+                }
+            }
+            
+            // Start polling for status
+            function startStatusCheck() {
+                if (statusCheckInterval) {
+                    clearInterval(statusCheckInterval);
+                }
+                statusCheckInterval = setInterval(checkQRCodeStatus, 1000);
+            }
+            
+            // Stop polling for status
+            function stopStatusCheck() {
+                if (statusCheckInterval) {
+                    clearInterval(statusCheckInterval);
+                    statusCheckInterval = null;
+                }
+            }
+            
+            // Add account button
+            document.querySelector('.add-account').addEventListener('click', function() {
+                // Reset modal state
+                qrcodeId = null;
+                stopStatusCheck();
+                document.getElementById('qr-image').src = '';
+                
+                // Show modal and generate QR code
+                modal.style.display = 'block';
+                generateQRCode();
+            });
+            
+            // Close modal
+            closeButton.addEventListener('click', function() {
+                modal.style.display = 'none';
+                stopStatusCheck();
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    stopStatusCheck();
+                }
+            });
+            
+            // Initial render
+            renderAccounts(accountsData);
+            
+            // Search functionality
+            const searchInput = document.querySelector('.search-bar input');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const filteredAccounts = accountsData.filter(account => 
+                    account.shopee_username.toLowerCase().includes(searchTerm)
+                );
+                renderAccounts(filteredAccounts);
+            });
+        });
+    </script>
+</body>
+</html>
