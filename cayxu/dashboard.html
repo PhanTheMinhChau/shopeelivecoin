@@ -147,11 +147,11 @@
                     // Determine status display based on status_today
                     const isActiveToday = account.status_today;
 		    if (account.verify) {
-		    	const statusClass = 'unavailable';
-			const statusText = 'Đang xác thực';
+		    	statusClass = 'unavailable';
+			statusText = 'Đang xác thực';
 		    } else {
-	                    const statusClass = isActiveToday ? 'available' : 'unavailable';
-	                    const statusText = isActiveToday 
+	                statusClass = isActiveToday ? 'available' : 'unavailable';
+	                statusText = isActiveToday 
 	                        ? `Nay đã săn được ${account.coin_today} xu` 
 	                        : 'Nay không săn';
 		    }
