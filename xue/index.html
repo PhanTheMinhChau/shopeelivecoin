@@ -35,6 +35,81 @@
                 opacity: 0;
             }
         }
+        /* Zalo Groups Section */
+    .zalo-groups {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .zalo-groups h3 {
+      color: #333;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .group-card {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .group-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .group-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .group-icon {
+      width: 40px;
+      height: 40px;
+      background: #0068ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .group-info h4 {
+      margin: 0;
+      color: #333;
+      font-size: 16px;
+    }
+
+    .group-info p {
+      margin: 2px 0 0 0;
+      color: #666;
+      font-size: 12px;
+    }
+
+    .join-button {
+      background: #0068ff;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+    }
+
+    .join-button:hover {
+      background: #0056d6;
+    }
     </style>
 </head>
 <body style="background: url('/img/tetgif.gif') top left no-repeat, url('/img/tet.png') top right no-repeat;background-size: 30%, 50%;">
@@ -84,9 +159,71 @@
     text-decoration: none;
     color: #e2a90d;
 ">👇 vào nhóm 👇</a>
-<a href="https://t.me/xueshopee"><img src="/img/tele.png" alt="Girl in a jacket" width="100%"></a><div id="loading" class="loading" style="margin-top: 12px; display: none;">Đợi xíu...</div>
-  
+  <!-- Zalo Groups Selection -->
+  <div class="zalo-groups">
+    <h3>🎯 Chọn nhóm Zalo phù hợp:</h3>
+    
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-icon">Z1</div>
+        <div class="group-info">
+          <h4>Nhóm Xu Ế 1 🔥</h4>
+          <p>999 thành viên</p>
+        </div>
+      </div>
+      <button class="join-button" onclick="joinZaloGroup('group1')">
+        Tham gia cộng đồng
+      </button>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-icon">Z2</div>
+        <div class="group-info">
+          <h4>Nhóm Xu Ế 2 🔥</h4>
+          <p>900 thành viên</p>
+        </div>
+      </div>
+      <button class="join-button" onclick="joinZaloGroup('group2')">
+        Tham gia cộng đồng
+      </button>
+    </div>
+
+    <div class="group-card">
+      <div class="group-header">
+        <div class="group-icon">Z3</div>
+        <div class="group-info">
+          <h4>Nhóm Xu Ế 3 🔥</h4>
+          <p>20 thành viên (nhóm mới)</p>
+        </div>
+      </div>
+      <button class="join-button" onclick="joinZaloGroup('group3')">
+        Tham gia cộng đồng
+      </button>
+    </div>
+  </div>
       <script>
+        // Zalo group links (replace with actual links)
+        const zaloGroups = {
+          group1: 'https://zalo.me/g/vipgroup1',
+          group2: 'https://zalo.me/g/livegroup2', 
+          group3: 'https://zalo.me/g/community3'
+        };
+    
+        function joinZaloGroup(groupId) {
+          document.getElementById('loading').style.display = 'block';
+          
+          setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            
+            // Open Zalo group link
+            if (zaloGroups[groupId]) {
+              window.open(zaloGroups[groupId], '_blank');
+            } else {
+              alert('Đang cập nhật link nhóm!');
+            }
+          }, 1000);
+        }
         const snowContainer = document.querySelector('.snow-container');
         const snowflakes = 10; 
         function createSnowflake() {
