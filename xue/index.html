@@ -210,18 +210,11 @@
         };
     
         function joinZaloGroup(groupId) {
-          document.getElementById('loading').style.display = 'block';
-          
-          setTimeout(() => {
-            document.getElementById('loading').style.display = 'none';
-            
-            // Open Zalo group link
             if (zaloGroups[groupId]) {
               window.open(zaloGroups[groupId], '_blank');
             } else {
               alert('Đang cập nhật link nhóm!');
             }
-          }, 1000);
         }
         const snowContainer = document.querySelector('.snow-container');
         const snowflakes = 10; 
