@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOON100U VIETNAM - Shopee</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header Styles - Mobile Optimized */
+        .header {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-arrow {
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            color: #2d3748;
+            padding: 4px;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .back-arrow:active {
+            background-color: #f7fafc;
+        }
+
+        .store-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .store-logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+        }
+
+        .store-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .store-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .store-details h1 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #1a202c;
+            line-height: 1.2;
+        }
+
+        .store-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            flex-wrap: wrap;
+        }
+
+        .shopee-badge {
+            background: #ee4d2d;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .rating-item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            background: #fff7ed;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .star {
+            color: #f59e0b;
+            font-size: 14px;
+        }
+
+        .rating-number {
+            font-weight: 600;
+            color: #1a202c;
+            font-size: 12px;
+        }
+
+        .followers {
+            color: #6b7280;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .header-button {
+            background: white;
+            border: 2px solid #ee4d2d;
+            color: #ee4d2d;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            min-height: 44px;
+        }
+
+        .header-button:active {
+            background: #ee4d2d;
+            color: white;
+            transform: scale(0.98);
+        }
+
+        /* Description Styles */
+        .description {
+            background: white;
+            padding: 20px;
+            margin: 8px 0;
+            line-height: 1.6;
+            font-size: 15px;
+            color: #374151;
+            border-radius: 8px;
+            margin: 8px 12px;
+        }
+
+        /* Products Container */
+        .products-container {
+            background: white;
+            margin: 0 12px 20px 12px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .product-item {
+            display: block;
+            padding: 20px;
+            border-bottom: 1px solid #f3f4f6;
+            transition: background-color 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .product-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-item:active {
+            background-color: #f9fafb;
+        }
+
+        .product-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .product-main {
+            display: flex;
+            gap: 16px;
+        }
+
+        .product-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e5e7eb;
+            overflow: hidden;
+            background: #f9fafb;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .product-title {
+            font-size: 16px;
+            line-height: 1.4;
+            color: #1f2937;
+            font-weight: 500;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ee4d2d;
+            margin: 4px 0;
+        }
+
+        .product-stats {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #fef3c7;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .product-rating .star {
+            font-size: 14px;
+        }
+
+        .product-rating .rating-number {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 13px;
+        }
+
+        .product-sold {
+            color: #6b7280;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        /* Loading state */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #e5e7eb;
+            border-top: 2px solid #ee4d2d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Image loading fallback */
+        .image-fallback {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+            color: #6b7280;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* Click indicator */
+        .product-item::after {
+            content: '›';
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #d1d5db;
+            font-weight: bold;
+        }
+
+        .product-item {
+            position: relative;
+        }
+
+        /* Mobile specific improvements */
+        @media (max-width: 480px) {
+            .header {
+                padding: 12px 16px;
+            }
+            
+            .store-details h1 {
+                font-size: 16px;
+            }
+            
+            .description {
+                margin: 8px;
+                padding: 16px;
+                font-size: 14px;
+            }
+            
+            .products-container {
+                margin: 0 8px 16px 8px;
+            }
+            
+            .product-item {
+                padding: 16px;
+            }
+            
+            .product-image {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .product-title {
+                font-size: 15px;
+                -webkit-line-clamp: 2;
+            }
+            
+            .product-price {
+                font-size: 18px;
+            }
+
+            .product-item::after {
+                right: 16px;
+            }
+        }
+
+        /* Touch improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .back-arrow:hover,
+            .header-button:hover,
+            .product-item:hover {
+                background-color: initial;
+                color: initial;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="store-info">
+            <div class="store-logo" id="store-logo">
+                <div class="image-fallback">SOON</div>
+            </div>
+            <div class="store-details">
+                <h1 id="store-name">...</h1>
+                <div class="store-rating">
+                    <span class="shopee-badge">Shopee Mall</span>
+                    <div class="rating-item">
+                        <span class="star">★</span>
+                        <span class="rating-number" id="store-rating">...</span>
+                    </div>
+                    <span class="followers" id="store-followers">Người theo dõi ...</span>
+                </div>
+            </div>
+        </div>
+        
+        <a class="header-button" href="#">Xem trên app</a>
+    </div>
+
+    <div class="description" id="store-description">
+        SOON100U trân trọng để xuất hợp tác dựa trên sự trung thực và uy tín. Chúng tôi tin rằng cùng nhau, chúng ta có thể tạo nên giá trị lớn hơn. Mong đợi sự cộng hưởng hoàn hảo cùng thương hiệu của bạn.
+    </div>
+
+    <div class="products-container">
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            Đang tải sản phẩm...
+        </div>
+        <div id="products-list"></div>
+    </div>
+
+<div class="description">Trang này có chứa nội dung tài trợ. Việc bạn lựa chọn mua sản phẩm thông qua liên kết trên website là hoàn toàn tự nguyện, nhưng sẽ góp phần giúp chúng tôi có thêm kinh phí duy trì và phát triển cộng đồng XU Ế.</div>
+
+    <script>
+        // Sample JSON data with image URLs and product links
+        const storeData = {
+  "store": {
+    "name": "Unilever - Chăm sóc Gia đình",
+    "logo": "https://cf.shopee.vn/file/7f06ff7d933f5c32c1c96c5f36465678",
+    "rating": 4.9,
+    "followers": "1.3tr",
+    "description": "Được thành lập hơn 100 năm trước, chúng tôi là một trong những công ty hàng tiêu dùng lớn nhất thế giới. Chúng tôi được biết đến với những thương hiệu tuyệt vời và niềm tin của chúng tôi rằng kinh doanh đúng đắn sẽ mang lại hiệu quả vượt trội."
+  },
+  "products": [
+    {
+      "id": 1,
+      "title": "Combo 6 Hộp Viên Rửa Chén Bát Sunlight 5 in 1 Dành Cho Máy Rửa Chén (28 Viên/Hộp)",
+      "price": "đ650.000",
+      "rating": 4.8,
+      "sold": "269",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ra0g-maf1kqmoij6456",
+      "link": "https://shopee.vn/universal-link/product/26947756/5262396162?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkZExrZG1KbGNQZ3dJbEMwUStXSm5Zb3ZRQW5zRWV5aVVsbEhjM3M5WlQzbW51VThxdVU3dncyeHVEZDg1d1p2UVZ4NGdFY2NsTTdSUVVIUnpleWZhazJibVBNeWcyeFEwanJrSVczdndPNW5WNU0yQlZLTTNPeFlSRml5c2xXTHlBPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 2,
+      "title": "Combo 2 Nước lau đa năng Sunlight Chanh & Sả|Phiên bản nâng cấp từ Cif|Sạch bóng kin kít, không nhờn rít|Chai 500ml",
+      "price": "đ68.000",
+      "rating": 4.8,
+      "sold": "3k+",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ra0g-maf1vgppizkc2d",
+      "link": "https://shopee.vn/universal-link/product/26947756/18662336724?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYUUzVWgrVytnVlpEK01zUGJEdzhFS2JDUjRqanhQTVl2bzg1UnNJSDdUY0VQankweklMbE1TM1RKOGJZMGNJZ3hHMjUyYndUMGdERmF4cnMzVG9YWGZBPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 3,
+      "title": "Combo 2 Túi 5 Viên Treo Vệ Sinh Bồn Cầu Vim Power 5 | Sạch Thơm Đến 300 Lần Xả (50g/viên)",
+      "price": "đ235.000",
+      "rating": 4.9,
+      "sold": "472",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ra0g-maf274ctfkb0aa",
+      "link": "https://shopee.vn/universal-link/product/26947756/25878910431?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYTFmdURlNnprYzlqcGI1cFpldDAwSUtPYXBLMDUxU2txYkZjSTVneCt5MUw4Y0xaY3ZaVTJoMUdaUXZhTGtRRkdYL3VmaUdPR09xUFVNVXVqSHg4YVpBPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 4,
+      "title": "Combo 2 Bọt tuyết lau bếp Sunlight POWERFOAM - Đánh bay dầu mỡ 100%, siêu tiện trong 5 giây | 500ml",
+      "price": "đ68.000",
+      "rating": 4.8,
+      "sold": "3k+",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ra0g-maf1v9m5wy301c",
+      "link": "https://shopee.vn/universal-link/product/26947756/20862335301?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYTJqclRjRStYdXJ5YlNob2FtMHFUa0hMN3A2U1lNYVIzbjVLay9taTE5Yk1zdU1QNFJkdlhNYTlTbkpnd1dEQ2lRTnpOY0U3WGdkbVI0dTFiTS96Y0tnPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 5,
+      "title": "Combo 3 hộp viên rửa chén Sunlight 84 viên/3 hộp",
+      "price": "đ337.000",
+      "rating": 5.0,
+      "sold": "10k+",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ra0g-maf14itkukewb9",
+      "link": "https://shopee.vn/universal-link/product/26947756/28923548066?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYUl3bjQ5NXRNMmNyVDZ2WU0zcVF6VkZQZWdTQ3NLQ1B3K2Y1cXppVFp5cE9nMGNYb1Y4SUVFVERaQzJzVXNiTm02akx5WTVabStRN3JRUGFEOWtQQ09RPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 6,
+      "title": "Combo 3 VỈ Viên Thả Vệ Sinh Bồn Cầu Vim | Sạch Khuẩn, Sáng Bóng đến 1600 Lần Xả (3x180g/vỉ)",
+      "price": "đ147.000",
+      "rating": 4.9,
+      "sold": "427",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ras8-masb3fuw6zkc6c",
+      "link": "https://shopee.vn/universal-link/product/26947756/40851131114?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYW5lT1Q0RVJ2a2M0RHdzSnZ1b0h4Z3ZITjJUclJGOFRJeWpIZ3N3WjRubTl0UWtEdGJMRW9ZaE9YYTNiNFd0ck94MkJWMlI2d0VwNERCVHg0QWNoS0N3PT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 7,
+      "title": "Combo 2 Túi Viên Rửa Chén Bát Sunlight 14 in 1 Dành Cho Máy Rửa Chén (28 Viên/Túi)",
+      "price": "đ357.000",
+      "rating": 5.0,
+      "sold": "163",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ras8-mbx7f6o4015h35",
+      "link": "https://shopee.vn/universal-link/product/26947756/27629997118?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYVp2enQ3K2VSaE0zTjVMNzRhekdLbzUrV3crWnV1ayt4eXVRdUt5V1kwQmpxSHgvd1JhZzJSTkNaYXQ2L0ZrTmc3eWV2WnhsNy9nL0lpWDd1RS9ZOFB3PT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 8,
+      "title": "Combo 3 Túi Viên Rửa Chén Bát Sunlight 14 in 1 Dành Cho Máy Rửa Chén (28 Viên/Túi)",
+      "price": "đ536.000",
+      "rating": 4.9,
+      "sold": "76",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ras8-mbx7fr5lze6m4d",
+      "link": "https://shopee.vn/universal-link/product/26947756/26879992632?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYW83ZmpFRlU2NWMyQnRoMUF2My9FVTR3YWxkZFBtQ1JEdGNmYUhodlFVRENTTmxMRHh4Tjd6VUI3alJpNHRnNzRjMXVjY2Znb3F3R2tZSG1BQTcvdnNRPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 9,
+      "title": "Viên Thả Vệ Sinh Bồn Cầu Vim| Sạch Khuẩn, Sáng Bóng đến 1600 Lần Xả (4x45g/vỉ)",
+      "price": "đ48.000",
+      "rating": 4.9,
+      "sold": "1k+",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ras8-masb3a78h0ng16",
+      "link": "https://shopee.vn/universal-link/product/26947756/43751121386?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYW96RzRtenY4VGpKRnFyN1FER1VabDEyMmNxL3puZzhMS0R5UFBQT3hpNFBVYUdRSmFYREZTS0Z0bGo3aFFGU1BpSVY3c2ZOQXJNUjJwTWMwdndrQW5RPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 10,
+      "title": "Combo 5 VỈ Viên Thả Vệ Sinh Bồn Cầu Vim | Sạch Khuẩn, Sáng Bóng đến 1600 Lần Xả (3x180g/vỉ)",
+      "price": "đ245.000",
+      "rating": 5,
+      "sold": "110",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ras8-masb3lprmefg30",
+      "link": "https://shopee.vn/universal-link/product/26947756/40401140089?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYW1LN2NnYjN3bmQ5K1hnVjUwUUJHbStTcXdmRnV6cHVDOGJhcUF3dXJ1OTlDVFdVSjEwclByRTFscHBmRVdGWnB6WDVMNlhjUFJLbjdva3lUYWptTU13PT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 11,
+      "title": "Vỉ 3 viên Vim Treo Vệ Sinh Bồn Cầu Power 5 Tiết Kiệm Tiện Lợi | Sạch Thơm Đến 300 Lần Xả (3x50g/vỉ)",
+      "price": "đ75.000",
+      "rating": 4.9,
+      "sold": "1k+",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ras8-maz6zlfx3o473a",
+      "link": "https://shopee.vn/universal-link/product/26947756/24440244903?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYWF0eTNqd0YwSkpaZnFxSzIxTXFCNU5uSlEzUDlZYThPejJtbzhpeURkQmNFL1pySlFyRzNNL2s4ZVJOZ0luUnhXaFRpbDdPbTE0MFQ5MGQ2eXVwZWJnPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 12,
+      "title": "Bộ2 CB5 Viên Treo Vệ Sinh Bồn Cầu Vim Power5|Sạch Thơm Đến 300 Lần Xả(55g/viên)HươngLavender",
+      "price": "đ235.000",
+      "rating": 5.0,
+      "sold": "11",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ra0g-maf19zs6mbiv6f",
+      "link": "https://shopee.vn/universal-link/product/26947756/29405907317?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkUzJYdkg4SUFId3huV3BOemxRSlQvRDdaU0xNcy9ZeFlKNStGdWZlektnYTlTWGZwM3NNbnFib0NERjJsbmFHbzB6YnFYUkI4Wld2ZzFhNGRwNW56bVF4OWM0QmFZbHhpMEpLV0JmVVAwOThFRzRqUHZaWEZtaFFqQ2Q4L0c2RTlRPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    },
+    {
+      "id": 13,
+      "title": "Viên Treo Vệ Sinh Bồn Cầu Vim Power 5 | Sạch Thơm Đến 300 Lần Xả (50- 55g/viên)",
+      "price": "đ28.000",
+      "rating": 4.9,
+      "sold": "10k+",
+      "image": "https://cf.shopee.vn/file/vn-11134207-7ra0g-maf1w1lmymkh3d",
+      "link": "https://shopee.vn/universal-link/product/26947756/6479896522?gads_t_sig=VTJGc2RHVmtYMTlxTFVSVVRrdENkZExrZG1KbGNQZ3dJbEMwUStXSm5Zb3ZRQW5zRWV5aVVsbEhjM3M5WlQzbTJ0b1BNTTFoY2xIcDFVQzNnTjZRSDZPOTY3UXBPY1VBNGFJdWVkeDAzSDYrSS9Mcys1MlcraWRERHZFY2wxNWpFejVrNGtjdC9YaXhPRm10T0x5T05BPT0&utm_campaign=-&utm_content=----&utm_medium=affiliates&utm_source=an_17396220028"
+    }
+  ]
+}
+
+        // Function to create image element with fallback
+        function createImageElement(src, alt, fallbackText) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = alt;
+            img.onerror = function() {
+                // If image fails to load, show fallback
+                this.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.className = 'image-fallback';
+                fallback.textContent = fallbackText;
+                fallback.style.width = '100%';
+                fallback.style.height = '100%';
+                this.parentNode.appendChild(fallback);
+            };
+            return img;
+        }
+
+        // Function to load store data
+        function loadStoreData() {
+            const store = storeData.store;
+            
+            document.getElementById('store-name').textContent = store.name;
+            document.getElementById('store-rating').textContent = store.rating;
+            document.getElementById('store-followers').textContent = `Người theo dõi ${store.followers}`;
+            document.getElementById('store-description').textContent = store.description;
+            
+            // Load store logo
+            const logoContainer = document.getElementById('store-logo');
+            logoContainer.innerHTML = '';
+            const logoImg = createImageElement(store.logo, store.name + ' logo', 'SOON');
+            logoContainer.appendChild(logoImg);
+        }
+
+        // Function to create product HTML
+        function createProductHTML(product) {
+            return `
+                <a href="${product.link}" class="product-item" target="_blank" rel="noopener noreferrer">
+                    <div class="product-main">
+                        <div class="product-image" id="product-image-${product.id}">
+                            <div class="image-fallback">${product.code}</div>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">${product.title}</div>
+                            <div class="product-price">${product.price}</div>
+                            <div class="product-stats">
+                                <div class="product-rating">
+                                    <span class="star">★</span>
+                                    <span class="rating-number">${product.rating}</span>
+                                </div>
+                                <span class="product-sold">${product.sold}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }
+
+        // Function to load product images
+        function loadProductImages() {
+            storeData.products.forEach(product => {
+                const imageContainer = document.getElementById(`product-image-${product.id}`);
+                if (imageContainer) {
+                    const img = createImageElement(product.image, product.title, product.code);
+                    imageContainer.innerHTML = '';
+                    imageContainer.appendChild(img);
+                }
+            });
+        }
+
+        // Function to load products
+        function loadProducts() {
+            const loadingElement = document.getElementById('loading');
+            const productsListElement = document.getElementById('products-list');
+            
+            // Show loading state
+            loadingElement.style.display = 'flex';
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                const products = storeData.products;
+                let productsHTML = '';
+                
+                products.forEach(product => {
+                    productsHTML += createProductHTML(product);
+                });
+                
+                // Hide loading and show products
+                loadingElement.style.display = 'none';
+                productsListElement.innerHTML = productsHTML;
+                
+                // Load product images after HTML is rendered
+                setTimeout(() => {
+                    loadProductImages();
+                }, 100);
+            }, 1000); // 1 second delay to simulate loading
+        }
+
+        // Function to simulate loading data from external JSON file
+        async function loadDataFromJSON() {
+            try {
+                // In real app, you would fetch from an actual API endpoint
+                // const response = await fetch('store-data.json');
+                // const data = await response.json();
+                
+                // For demo purposes, we'll use the local data
+                loadStoreData();
+                loadProducts();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('loading').innerHTML = 'Lỗi khi tải dữ liệu';
+            }
+        }
+
+        // Initialize the page when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDataFromJSON();
+        });
+
+    </script>
+</body>
+</html>
