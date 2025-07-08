@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>được tài trợ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <div class="store-info">
+            <div class="store-logo" id="store-logo">
+                <div class="image-fallback">SOON</div>
+            </div>
+            <div class="store-details">
+                <h1 id="store-name">...</h1>
+                <div class="store-rating">
+                    <span class="shopee-badge">Shopee Mall</span>
+                    <div class="rating-item">
+                        <span class="star">★</span>
+                        <span class="rating-number" id="store-rating">...</span>
+                    </div>
+                    <span class="followers" id="store-followers">Người theo dõi ...</span>
+                </div>
+            </div>
+        </div>
+        
+        <a class="header-button" id="store-link" href="#">Xem trên app</a>
+    </div>
+
+    <div class="description" id="store-description">
+        ...
+    </div>
+
+    <div class="products-container">
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            Đang tải sản phẩm...
+        </div>
+        <div id="products-list"></div>
+    </div>
+
+<div class="description">
+<p>Trang này có chứa nội dung tài trợ. Việc bạn lựa chọn mua sản phẩm thông qua liên kết trên website là hoàn toàn tự nguyện, nhưng sẽ góp phần giúp chúng tôi có thêm kinh phí duy trì và phát triển cộng đồng XU Ế.</p>
+	<div class="home-button">
+	        <a class="header-button" href="https://shopeelivecoin.com/">
+        	    TRANG CHỦ XU Ế
+        	</a>
+	</div>
+</div>
+  
+  <script>
+    function createImageElement(src, alt, fallbackText) {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = alt;
+      img.onerror = function () {
+        this.style.display = 'none';
+        const fallback = document.createElement('div');
+        fallback.className = 'image-fallback';
+        fallback.textContent = fallbackText;
+        fallback.style.width = '100%';
+        fallback.style.height = '100%';
+        this.parentNode.appendChild(fallback);
+      };
+      return img;
+    }
+
+    function loadStoreData() {
+      const store = window.storeData.store;
+      document.getElementById('store-name').textContent = store.name;
+      document.getElementById('store-rating').textContent = store.rating;
+      document.getElementById('store-followers').textContent = `Người theo dõi ${store.followers}`;
+      document.getElementById('store-description').textContent = store.description;
+      document.getElementById("store-link").href = store.link;
+
+      const logoContainer = document.getElementById('store-logo');
+      logoContainer.innerHTML = '';
+      const logoImg = createImageElement(store.logo, store.name + ' logo', 'SOON');
+      logoContainer.appendChild(logoImg);
+    }
+
+    function createProductHTML(product) {
+      return `
+        <a href="${product.link}" class="product-item" target="_blank" rel="noopener noreferrer">
+          <div class="product-main">
+            <div class="product-image" id="product-image-${product.id}">
+              <div class="image-fallback">${product.code || ''}</div>
+            </div>
+            <div class="product-info">
+              <div class="product-title">${product.title}</div>
+              <div class="product-price">${product.price}</div>
+              <div class="product-stats">
+                <div class="product-rating">
+                  <span class="star">★</span>
+                  <span class="rating-number">${product.rating}</span>
+                </div>
+                <span class="product-sold">${product.sold}</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      `;
+    }
+
+    function loadProductImages() {
+      window.storeData.products.forEach(product => {
+        const imageContainer = document.getElementById(`product-image-${product.id}`);
+        if (imageContainer) {
+          const img = createImageElement(product.image, product.title, product.code || '');
+          imageContainer.innerHTML = '';
+          imageContainer.appendChild(img);
+        }
+      });
+    }
+
+    function loadProducts() {
+      const loadingElement = document.getElementById('loading');
+      const productsListElement = document.getElementById('products-list');
+
+      loadingElement.style.display = 'flex';
+
+      setTimeout(() => {
+        const products = window.storeData.products;
+        let productsHTML = '';
+
+        products.forEach(product => {
+          productsHTML += createProductHTML(product);
+        });
+
+        loadingElement.style.display = 'none';
+        productsListElement.innerHTML = productsHTML;
+
+        setTimeout(() => {
+          loadProductImages();
+        }, 100);
+      }, 1000);
+    }
+
+    async function loadDataFromJSON() {
+      try {
+        const response = await fetch('data/unilever.json');
+        const data = await response.json();
+        window.storeData = data;
+        loadStoreData();
+        loadProducts();
+      } catch (error) {
+        console.error('Error loading data:', error);
+        document.getElementById('loading').innerHTML = 'Lỗi khi tải dữ liệu';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      loadDataFromJSON();
+    });
+  </script>
+</body>
+</html>
