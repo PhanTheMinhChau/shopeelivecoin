@@ -139,7 +139,7 @@
 
     async function loadDataFromJSON() {
       try {
-        const response = await fetch('data/unilever.json');
+        const response = await fetch('data/'+window.location.search.replace("?","")+'.json');
         const data = await response.json();
         window.storeData = data;
         loadStoreData();
