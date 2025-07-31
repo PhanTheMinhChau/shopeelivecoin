@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Check-in Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 16px;
+      background-color: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    #loading {
+      text-align: center;
+      color: #555;
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px 8px;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+      font-size: 14px;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    .btn {
+      padding: 6px 12px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .copyable {
+      user-select: all;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      thead {
+        display: none;
+      }
+      tr {
+        margin-bottom: 15px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        padding: 10px;
+      }
+      td {
+        text-align: right;
+        padding: 8px;
+        position: relative;
+      }
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        font-weight: bold;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Account Check-in Manager</h2>
+  <div id="loading">Loading data...</div>
+  <table id="accountTable">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Last Check-in</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const API_BASE = 'https://script.google.com/macros/s/AKfycbyNp9U1rDx2OKsNCWBHsc-muum0ZtKgv9UdRSK6vaPmUrKuR5C0jcyt1-jtMr_sgL5gTQ/exec';
+
+    function epochToDate(epoch) {
+      const date = new Date(epoch * 1000);
+      return date.toLocaleString('en-GB');
+    }
+
+    async function loadAccounts() {
+      const loading = document.getElementById('loading');
+      loading.style.display = 'block';
+
+      const res = await fetch(`${API_BASE}?action=list`);
+      const data = await res.json();
+
+      const tbody = document.querySelector('#accountTable tbody');
+      tbody.innerHTML = '';
+      data.forEach(acc => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td data-label="Username"><span class="copyable" onclick="copyToClipboard('${acc.username}')">${acc.username}</span></td>
+          <td data-label="Password"><span class="copyable" onclick="copyToClipboard('${acc.password}')">${acc.password}</span></td>
+          <td data-label="Last Check-in">${epochToDate(acc.last_checkin)}</td>
+          <td data-label="Status" style="color: ${acc.eligible ? 'green' : 'red'}">
+            ${acc.eligible ? 'Eligible' : 'Not yet'}
+          </td>
+          <td data-label="Action">
+            <button class="btn" onclick="checkin('${acc.username}', this)" ${!acc.eligible ? 'disabled' : ''}>
+              Check In
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      loading.style.display = 'none';
+    }
+
+    async function checkin(username, button) {
+      button.disabled = true;
+      const originalText = button.innerText;
+      button.innerText = 'Checking...';
+
+      const res = await fetch(`${API_BASE}?action=checkin&username=${encodeURIComponent(username)}`);
+      const result = await res.json();
+      alert(result.message);
+      await loadAccounts();
+
+      button.innerText = originalText;
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert(`Copied: ${text}`);
+      });
+    }
+
+    loadAccounts();
+  </script>
+</body>
+</html>
