@@ -116,6 +116,8 @@
       const res = await fetch(`${API_BASE}?action=list`);
       const data = await res.json();
 
+      data.sort((a, b) => a.last_checkin - b.last_checkin);
+
       const tbody = document.querySelector('#accountTable tbody');
       tbody.innerHTML = '';
       data.forEach(acc => {
