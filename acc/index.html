@@ -92,6 +92,7 @@
       <tr>
         <th>Username</th>
         <th>Password</th>
+        <th>Device</th>
         <th>Last Check-in</th>
         <th>Status</th>
         <th>Action</th>
@@ -101,7 +102,7 @@
   </table>
 
   <script>
-    const API_BASE = 'https://script.google.com/macros/s/AKfycbyNp9U1rDx2OKsNCWBHsc-muum0ZtKgv9UdRSK6vaPmUrKuR5C0jcyt1-jtMr_sgL5gTQ/exec';
+    const API_BASE = 'https://script.google.com/macros/s/AKfycbwsG70S6dAazg1AOGYzQCcTYW9J1DU5IE4bnf020wXpNKx7nx2DNUu2akcsQo5EkIXhYg/exec';
 
     function epochToDate(epoch) {
       const date = new Date(epoch * 1000);
@@ -122,6 +123,7 @@
         tr.innerHTML = `
           <td data-label="Username"><span class="copyable" onclick="copyToClipboard('${acc.username}')">${acc.username}</span></td>
           <td data-label="Password"><span class="copyable" onclick="copyToClipboard('${acc.password}')">${acc.password}</span></td>
+          <td data-label="Device">${acc.device || '-'}</td>
           <td data-label="Last Check-in">${epochToDate(acc.last_checkin)}</td>
           <td data-label="Status" style="color: ${acc.eligible ? 'green' : 'red'}">
             ${acc.eligible ? 'Eligible' : 'Not yet'}
