@@ -87,7 +87,7 @@
           const res = await fetch(API_URL, {
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json'
+              'Content-Type': 'text/plain;charset=UTF-8'
             },
             body: JSON.stringify({
               action: mode === 'login' ? 'login' : 'register',
@@ -107,7 +107,7 @@
               // Demo: gọi /me
               const me = await fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
                 body: JSON.stringify({ action: 'me', token: data.token })
               }).then(r => r.json()).catch(() => ({}));
               if (me && me.ok) {
