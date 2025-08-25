@@ -34,7 +34,7 @@
     <div id="message"></div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwe2U_0xzrYubXBv8UeV8vpqoh5TnmPeKhybDmeKwzkK4-gIqs-Ye2oHVUwN32ftS-wGA/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzHgm1lb4BpAznT-cWd0bFyI1qxVbbAe4OIawqtVrSWLAWkN24EGV6JX_V7CP5Y1DzgVQ/exec';
 
         const messageEl = document.getElementById('message');
 
@@ -44,18 +44,22 @@
         }
 
         async function submitForm(url, action, username, password) {
-            const params = new URLSearchParams();
-            params.append('action', action);
-            params.append('username', username);
-            params.append('password', password);
+            const data = {
+                action: action,
+                username: username,
+                password: password
+            };
 
             try {
                 const response = await fetch(url, {
                     method: 'POST',
-                    body: params
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
                 });
-                const data = await response.json();
-                showMessage(data.message, data.status);
+                const result = await response.json();
+                showMessage(result.message, result.status);
             } catch (error) {
                 showMessage('Có lỗi xảy ra. Vui lòng thử lại.', 'error');
                 console.error('Lỗi:', error);
