@@ -1,84 +1,286 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập & Đăng ký</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        h2 { text-align: center; }
-        form { display: flex; flex-direction: column; gap: 10px; }
-        input[type="text"], input[type="password"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        button { padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-        #message { margin-top: 15px; text-align: center; font-weight: bold; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Đăng ký / Đăng nhập (JSONP + doGet)</title>
+  <style>
+    :root{
+      --bg:#0f172a; /* slate-900 */
+      --card:#111827; /* gray-900 */
+      --muted:#94a3b8; /* slate-400 */
+      --text:#e5e7eb; /* gray-200 */
+      --accent:#22c55e; /* green-500 */
+      --accent-2:#3b82f6; /* blue-500 */
+      --danger:#ef4444; /* red-500 */
+      --border:#1f2937; /* gray-800 */
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, #1f2937 0%, transparent 60%),
+                  radial-gradient(800px 600px at -10% 20%, #0b1220 0%, transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      display:grid; place-items:center;
+    }
+    .container{
+      width:min(960px, 92vw);
+      display:grid; gap:16px;
+      grid-template-columns: 1.3fr 1fr;
+      align-items:stretch;
+    }
+    @media (max-width: 880px){
+      .container{ grid-template-columns: 1fr; }
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid var(--border);
+      border-radius:20px; padding:20px; backdrop-filter: blur(6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    h1{font-size:24px; margin:0 0 6px}
+    .muted{color:var(--muted); font-size:14px}
+    label{display:block; font-size:14px; margin:12px 0 6px}
+    input[type="email"],input[type="password"],input[type="text"]{
+      width:100%; background:#0b1020; border:1px solid var(--border); color:var(--text);
+      padding:12px 14px; border-radius:12px; outline:none; transition:border-color .2s, box-shadow .2s;
+    }
+    input:focus{border-color:#334155; box-shadow: 0 0 0 3px rgba(59,130,246,.15)}
+    .row{display:flex; gap:10px; align-items:center;}
+    .actions{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+    button{
+      border:1px solid var(--border); background:#0b1020; color:var(--text);
+      padding:10px 14px; border-radius:12px; cursor:pointer; transition: transform .05s ease, background .2s;
+    }
+    button.primary{ background:linear-gradient(180deg, rgba(34,197,94,0.15), rgba(34,197,94,0.05)); border-color:#1e293b }
+    button.secondary{ background:linear-gradient(180deg, rgba(59,130,246,0.15), rgba(59,130,246,0.05)); border-color:#1e293b }
+    button:active{ transform: scale(.98) }
+    button[disabled]{ opacity:.6; cursor:not-allowed }
+    .status{
+      margin-top:12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:13px; line-height:1.5; white-space:pre-wrap; background:#0a0f1a; border:1px dashed var(--border);
+      border-radius:12px; padding:12px; max-height:240px; overflow:auto;
+    }
+    .badge{ display:inline-block; padding:3px 8px; border-radius:999px; font-size:12px; border:1px solid var(--border); background:#0b1020 }
+    .ok{ color:#86efac }
+    .err{ color:#fecaca }
+    .grid{ display:grid; gap:12px; grid-template-columns: 1fr 1fr }
+    @media (max-width: 620px){ .grid{ grid-template-columns: 1fr } }
+    .tiny{ font-size:12px; color:var(--muted) }
+    .tokenBox{
+      background:#0a0f1a; border:1px solid var(--border); border-radius:12px; padding:12px; word-break:break-all;
+      max-height:120px; overflow:auto; font-size:12px
+    }
+    .hl{ color:#93c5fd }
+    .footer{ margin-top:10px }
+    a{ color:#93c5fd }
+  </style>
 </head>
 <body>
-    <h2>Đăng ký</h2>
-    <form id="register-form">
-        <input type="text" id="reg-username" placeholder="Tên đăng nhập" required>
-        <input type="password" id="reg-password" placeholder="Mật khẩu" required>
-        <button type="submit">Đăng ký</button>
-    </form>
+  <div class="container">
+    <section class="card">
+      <h1>Đăng ký / Đăng nhập</h1>
+      <div class="muted">Frontend thuần HTML + JSONP gọi <span class="badge">doGet</span> của Apps Script (không CORS).</div>
 
-    <hr style="margin: 20px 0;">
+      <div class="grid" style="margin-top:14px">
+        <div>
+          <label for="sheetUrl">Web App URL</label>
+          <input id="sheetUrl" type="text" placeholder="https://script.google.com/macros/s/AKfycbzHrlGsI6hBcB592wDvAZsIEtN7QnadRlt7WImO9xOscNXRU0hDPUaqfjDYILfwcmw_1w/exec" />
+          <div class="tiny">Dán URL Web App (Deployment) của Apps Script vào đây.</div>
+        </div>
+        <div>
+          <label for="remember">Tùy chọn</label>
+          <div class="row">
+            <button id="btnHealth" class="secondary">Health check</button>
+            <button id="btnLogout">Đăng xuất</button>
+          </div>
+          <div class="tiny">Health test gọi <span class="badge">action=health</span>.</div>
+        </div>
+      </div>
 
-    <h2>Đăng nhập</h2>
-    <form id="login-form">
-        <input type="text" id="log-username" placeholder="Tên đăng nhập" required>
-        <input type="password" id="log-password" placeholder="Mật khẩu" required>
-        <button type="submit">Đăng nhập</button>
-    </form>
+      <div class="grid" style="margin-top:10px">
+        <div class="card" style="background:#0b1020">
+          <h2 style="margin:0 0 8px; font-size:18px">Đăng ký</h2>
+          <label for="regEmail">Email</label>
+          <input id="regEmail" type="email" placeholder="you@example.com" />
+          <label for="regPass">Mật khẩu</label>
+          <input id="regPass" type="password" placeholder="••••••••" />
+          <div class="actions">
+            <button id="btnRegister" class="primary">Tạo tài khoản</button>
+          </div>
+        </div>
 
-    <div id="message"></div>
+        <div class="card" style="background:#0b1020">
+          <h2 style="margin:0 0 8px; font-size:18px">Đăng nhập</h2>
+          <label for="logEmail">Email</label>
+          <input id="logEmail" type="email" placeholder="you@example.com" />
+          <label for="logPass">Mật khẩu</label>
+          <input id="logPass" type="password" placeholder="••••••••" />
+          <div class="actions">
+            <button id="btnLogin" class="primary">Vào hệ thống</button>
+          </div>
+        </div>
+      </div>
 
-    <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzHgm1lb4BpAznT-cWd0bFyI1qxVbbAe4OIawqtVrSWLAWkN24EGV6JX_V7CP5Y1DzgVQ/exec';
+      <div class="footer tiny">
+        <strong>Lưu ý bảo mật:</strong> Demo này dùng <span class="badge">GET + JSONP</span>, tham số lộ trên URL. Chỉ dùng cho POC; bản thật nên chuyển <span class="hl">doPost + JWT</span>.
+      </div>
 
-        const messageEl = document.getElementById('message');
+      <div id="status" class="status" aria-live="polite">Chưa có yêu cầu…</div>
+    </section>
 
-        function showMessage(msg, type = 'success') {
-            messageEl.textContent = msg;
-            messageEl.style.color = (type === 'success') ? 'green' : 'red';
+    <aside class="card">
+      <h2 style="margin:0 0 8px; font-size:18px">Phiên hiện tại</h2>
+      <div class="row" style="margin-bottom:8px">
+        <div class="badge">localStorage</div>
+      </div>
+      <div class="tiny">Email</div>
+      <div id="curEmail" class="tokenBox">(chưa có)</div>
+      <div class="tiny" style="margin-top:8px">Token</div>
+      <div id="curToken" class="tokenBox">(chưa có)</div>
+      <div class="actions" style="margin-top:10px">
+        <button id="btnCopyToken">Copy token</button>
+        <button id="btnClearToken">Xóa token</button>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // ======= Helpers =======
+    const $ = (sel) => document.querySelector(sel);
+
+    function setBusy(isBusy){
+      ["btnRegister","btnLogin","btnHealth"].forEach(id=>{
+        const el = document.getElementById(id); if(!el) return; el.disabled = !!isBusy;
+      })
+      $('#status').style.opacity = isBusy ? .7 : 1;
+    }
+
+    function show(obj, level = 'info'){
+      const pre = (typeof obj === 'string') ? obj : JSON.stringify(obj, null, 2);
+      const tag = level === 'error' ? '❌' : (level === 'ok' ? '✅' : 'ℹ️');
+      $('#status').textContent = `${tag} ${pre}`;
+      $('#status').classList.toggle('ok', level==='ok');
+      $('#status').classList.toggle('err', level==='error');
+    }
+
+    function readBaseUrl(){
+      return ($('#sheetUrl').value || '').trim();
+    }
+
+    function saveSession(email, token){
+      if(email) localStorage.setItem('demo_email', email);
+      if(token) localStorage.setItem('demo_token', token);
+      renderSession();
+    }
+
+    function clearSession(){
+      localStorage.removeItem('demo_email');
+      localStorage.removeItem('demo_token');
+      renderSession();
+    }
+
+    function renderSession(){
+      const email = localStorage.getItem('demo_email');
+      const token = localStorage.getItem('demo_token');
+      $('#curEmail').textContent = email || '(chưa có)';
+      $('#curToken').textContent = token || '(chưa có)';
+    }
+
+    function copy(text){
+      if(!text) return;
+      navigator.clipboard?.writeText(text).then(()=>{
+        show('Đã copy token vào clipboard.', 'ok')
+      }).catch(()=>{
+        show('Không thể copy tự động.', 'error')
+      })
+    }
+
+    // JSONP fetcher: create <script> with unique callback
+    function jsonpFetch(baseUrl, params){
+      return new Promise((resolve, reject)=>{
+        try{
+          if(!/^https:\/\//.test(baseUrl)){
+            reject(new Error('Thiếu hoặc sai Web App URL')); return;
+          }
+          const cbName = `cb_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+          const url = new URL(baseUrl);
+          Object.entries(params || {}).forEach(([k,v])=> url.searchParams.set(k, v));
+          url.searchParams.set('callback', cbName);
+
+          const s = document.createElement('script');
+          s.src = url.toString();
+          s.async = true;
+          s.onerror = () => { cleanup(); reject(new Error('Tải JSONP thất bại (network/CSP).')) };
+
+          function cleanup(){
+            delete window[cbName];
+            s.remove();
+          }
+          window[cbName] = (data)=>{ cleanup(); resolve(data) };
+
+          document.body.appendChild(s);
+        }catch(err){ reject(err) }
+      });
+    }
+
+    // ======= Actions =======
+    async function doRegister(){
+      const base = readBaseUrl();
+      const email = $('#regEmail').value.trim();
+      const password = $('#regPass').value;
+      if(!email || !password) return show('Nhập email & mật khẩu để đăng ký.', 'error');
+      setBusy(true);
+      try{
+        const res = await jsonpFetch(base, { action:'register', email, password });
+        if(res?.success){
+          show(res, 'ok');
+        }else{
+          show(res, 'error');
         }
+      }catch(err){ show(String(err), 'error') }
+      finally{ setBusy(false) }
+    }
 
-        async function submitForm(url, action, username, password) {
-            const data = {
-                action: action,
-                username: username,
-                password: password
-            };
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
-                    },
-                });
-                const result = await response.json();
-                showMessage(result.message, result.status);
-            } catch (error) {
-                showMessage('Có lỗi xảy ra. Vui lòng thử lại.', 'error');
-                console.error('Lỗi:', error);
-            }
+    async function doLogin(){
+      const base = readBaseUrl();
+      const email = $('#logEmail').value.trim();
+      const password = $('#logPass').value;
+      if(!email || !password) return show('Nhập email & mật khẩu để đăng nhập.', 'error');
+      setBusy(true);
+      try{
+        const res = await jsonpFetch(base, { action:'login', email, password });
+        if(res?.success){
+          show(res, 'ok');
+          saveSession(res.data?.email, res.data?.token);
+        }else{
+          show(res, 'error');
         }
+      }catch(err){ show(String(err), 'error') }
+      finally{ setBusy(false) }
+    }
 
-        document.getElementById('register-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('reg-username').value;
-            const password = document.getElementById('reg-password').value;
-            submitForm(API_URL, 'register', username, password);
-        });
+    async function doHealth(){
+      const base = readBaseUrl();
+      setBusy(true);
+      try{
+        const res = await jsonpFetch(base, { action:'health' });
+        if(res?.success){ show(res, 'ok') } else { show(res, 'error') }
+      }catch(err){ show(String(err), 'error') }
+      finally{ setBusy(false) }
+    }
 
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('log-username').value;
-            const password = document.getElementById('log-password').value;
-            submitForm(API_URL, 'login', username, password);
-        });
-    </script>
+    // ======= Wire up =======
+    document.getElementById('btnRegister').addEventListener('click', doRegister);
+    document.getElementById('btnLogin').addEventListener('click', doLogin);
+    document.getElementById('btnHealth').addEventListener('click', doHealth);
+    document.getElementById('btnLogout').addEventListener('click', ()=>{ clearSession(); show('Đã đăng xuất cục bộ (xóa token localStorage).', 'ok') });
+    document.getElementById('btnCopyToken').addEventListener('click', ()=> copy(localStorage.getItem('demo_token')));
+    document.getElementById('btnClearToken').addEventListener('click', ()=>{ clearSession(); show('Đã xóa token.', 'ok') });
+
+    // Prefill from last run if you want
+    renderSession();
+  </script>
 </body>
 </html>
