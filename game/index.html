@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Đăng nhập (Frontend thuần HTML)</title>
+<style>
+body{margin:0;font-family:system-ui,Segoe UI,Roboto,Inter,Arial;background:#f7fafc;color:#0f172a}
+.wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
+.card{width:100%;max-width:420px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 10px 24px rgba(2,6,23,.06)}
+h1{margin:0 0 8px;font-size:24px}
+p.sub{margin:0 0 16px;color:#475569;font-size:14px}
+label{display:block;margin:12px 0 6px;font-weight:600;font-size:14px}
+input{width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:15px}
+button{width:100%;margin-top:16px;padding:10px 14px;border:0;border-radius:10px;font-weight:700;font-size:15px;background:#111827;color:#fff;cursor:pointer}
+.msg{margin-top:12px;font-size:14px}
+.ok{color:#16a34a}.err{color:#dc2626}
+details{margin-top:18px}
+</style>
+</head>
+<div class="wrap">
+<div class="card">
+<h1>Đăng nhập</h1>
+<p class="sub">Frontend thuần HTML + gọi API Apps Script</p>
+
+
+<form id="loginForm">
+<label for="username">Tên đăng nhập</label>
+<input id="username" name="username" required>
+<label for="password">Mật khẩu</label>
+<input id="password" name="password" type="password" required>
+<button type="submit">Đăng nhập</button>
+<div id="loginMsg" class="msg"></div>
+</form>
+
+
+<details>
+<summary>Tạo tài khoản (dành cho admin)</summary>
+<form id="regForm">
+<label>Username mới</label>
+<input id="ruser" required>
+<label>Mật khẩu</label>
+<input id="rpass" type="password" required>
+<label>Role (tuỳ chọn)</label>
+<input id="rrole" placeholder="user/admin...">
+<button type="submit">Tạo</button>
+<div id="regMsg" class="msg"></div>
+</form>
+</details>
+
+
+<div id="welcome" style="display:none;margin-top:12px;padding:12px;border:1px dashed #e2e8f0;border-radius:10px"></div>
+</div>
+</div>
+
+
+<script>
+// 1) ĐỔI giá trị này thành URL web app sau khi bạn deploy Apps Script
+const API = 'https://script.google.com/macros/s/AKfycbw2BcEt_J6dVpzfVv0j9XGSVEVWyGXMURrinibuhai8VtbwLk3ceIKjlQR5y-ELZ1P1QA/exec';
+
+
+const $ = (s, r=document)=>r.querySelector(s);
+const toForm = (obj)=> new URLSearchParams(obj).toString();
+
+
+// Helper gọi API dạng "simple request" (tránh preflight)
+async function apiPost(action, data){
+const body = toForm({ action, ...data });
+const res = await fetch(API, {
+method: 'POST',
+headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+body,
+// mode: 'cors' // mặc định là cors; Apps Script sẽ trả JSON
+});
+return res.json();
+}
+
+
+$('#loginForm').addEventListener('submit', async (e)=>{
+e.preventDefault();
+const loginMsg = $('#loginMsg');
+loginMsg.textContent = 'Đang đăng nhập...'; loginMsg.className = 'msg';
+try{
+const res = await apiPost('login', {
+username: $('#username').value.trim(),
+password: $('#password').value
+});
+if (res.ok) {
+loginMsg.textContent = 'Đăng nhập thành công!'; loginMsg.className = 'msg ok';
+$('#welcome').style.display = 'block';
+$('#welcome').textContent = `Xin chào ${res.user.username} (role: ${res.user.role}) | token: ${res.token}`;
+// Lưu token nếu cần
+localStorage.setItem('demo_token', res.token);
+} else {
+loginMsg.textContent = res.error || 'Đăng nhập thất bại'; loginMsg.className = 'msg err';
+}
+} catch(err){
+loginMsg.textContent = 'Lỗi: '+err; loginMsg.className = 'msg err';
+}
+});
+
+
+$('#regForm').addEventListener('submit', async (e)=>{
+e.preventDefault();
+const regMsg = $('#regMsg');
+regMsg.textContent = 'Đang tạo...'; regMsg.className = 'msg';
+try{
+const res = await apiPost('register', {
+username: $('#ruser').value.trim(),
+password: $('#rpass').value,
+role: $('#rrole').value.trim()
+});
+if (res.ok) { regMsg.textContent='Đã tạo tài khoản'; regMsg.className='msg ok'; e.target.reset(); }
+else { regMsg.textContent = res.error || 'Không tạo được'; regMsg.className='msg err'; }
+} catch(err){ regMsg.textContent='Lỗi: '+err; regMsg.className='msg err'; }
+});
+</script>
+</body>
+</html>
