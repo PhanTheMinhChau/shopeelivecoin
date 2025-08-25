@@ -1,142 +1,151 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Đăng nhập (JSONP, không proxy)</title>
-  <style>
-    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Inter,Arial;background:#f7fafc;color:#0f172a}
-    .wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
-    .card{width:100%;max-width:420px;background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:24px;box-shadow:0 10px 24px rgba(2,6,23,.06)}
-    h1{margin:0 0 8px;font-size:24px}
-    p.sub{margin:0 0 16px;color:#475569;font-size:14px}
-    label{display:block;margin:12px 0 6px;font-weight:600;font-size:14px}
-    input{width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:15px}
-    button{width:100%;margin-top:16px;padding:10px 14px;border:0;border-radius:10px;font-weight:700;font-size:15px;background:#111827;color:#fff;cursor:pointer}
-    .msg{margin-top:12px;font-size:14px}
-    .ok{color:#16a34a}.err{color:#dc2626}
-  </style>
-</head>
-<body>
-  <div class="wrap">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Đăng nhập / Đăng ký</title>
+    <style>
+      :root { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial; }
+      body { display: grid; place-items: center; min-height: 100vh; background: #f7f7fb; margin: 0; }
+      .card { width: 360px; background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,.08); }
+      h2 { margin: 0 0 16px; }
+      label { display: block; font-size: 14px; margin-bottom: 6px; color: #333; }
+      input { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #ddd; outline: none; }
+      input:focus { border-color: #7c6cff; box-shadow: 0 0 0 3px #7c6cff22; }
+      .row { margin-bottom: 12px; }
+      .btn { width: 100%; padding: 10px 12px; background: #7c6cff; color: #fff; border: 0; border-radius: 10px; cursor: pointer; font-weight: 600; }
+      .btn:disabled { opacity: .6; cursor: not-allowed; }
+      .muted { color: #666; font-size: 13px; text-align: center; margin-top: 10px; }
+      .link { color: #7c6cff; cursor: pointer; }
+      .msg { margin-top: 10px; font-size: 14px; }
+      .ok { color: #0a7d21; }
+      .err { color: #b00020; }
+      .tiny { font-size: 12px; color: #888; word-break: break-all; }
+    </style>
+  </head>
+  <body>
     <div class="card">
-      <h1>Đăng nhập</h1>
-      <p class="sub">Frontend khác origin → JSONP tới Apps Script</p>
+      <h2 id="title">Đăng nhập</h2>
 
-      <form id="loginForm" autocomplete="on">
-        <label for="username">Tên đăng nhập</label>
-        <input id="username" required autocomplete="username">
-        <label for="password">Mật khẩu</label>
-        <input id="password" type="password" required autocomplete="current-password">
-        <button type="submit">Đăng nhập</button>
-        <div id="loginMsg" class="msg"></div>
-      </form>
+      <div class="row">
+        <label>Email</label>
+        <input id="email" type="email" placeholder="you@example.com" />
+      </div>
+      <div class="row">
+        <label>Mật khẩu</label>
+        <input id="password" type="password" placeholder="••••••••" />
+      </div>
+      <button id="submit" class="btn">Đăng nhập</button>
 
-      <details>
-        <summary>Tạo tài khoản (demo)</summary>
-        <form id="regForm" autocomplete="off">
-          <label>Username mới</label>
-          <input id="ruser" required>
-          <label>Mật khẩu</label>
-          <input id="rpass" type="password" required>
-          <label>Role (tuỳ chọn)</label>
-          <input id="rrole" placeholder="user/admin...">
-          <button type="submit">Tạo</button>
-          <div id="regMsg" class="msg"></div>
-        </form>
-      </details>
+      <div class="muted">
+        <span id="toggle">Chưa có tài khoản? <span class="link">Đăng ký</span></span>
+      </div>
 
-      <div id="welcome" style="display:none;margin-top:12px;padding:12px;border:1px dashed #e2e8f0;border-radius:10px"></div>
+      <div id="msg" class="msg"></div>
+      <div id="token" class="tiny"></div>
     </div>
-  </div>
 
-<script>
-  // Thay URL này bằng URL Web App của bạn (…/exec)
-  const GAS = 'https://script.google.com/macros/s/AKfycbxCq7a04qDXzDO58d8pD00GPA_dLIGR4lGX9sY65v_cgJGwV1uffc9ZF6yI3NMN2u_DuQ/exec';
+    <script>
+      const API_URL = 'https://script.google.com/macros/s/AKfycbwNqG9wPC9mUdxL63vcbmUJ4JsJMHUcw8jsbu6TXgZXYQcos7Uu0kLJgfJyFzdLC8WTgg/exec'; // ví dụ: https://script.google.com/macros/s/xxx/exec
+      let mode = 'login';
 
-  // JSONP helper: trả Promise theo tên callback ngẫu nhiên
-  function jsonp(url, params = {}, timeoutMs = 12000) {
-    return new Promise((resolve, reject) => {
-      const cbName = '__jsonp_cb_' + Math.random().toString(36).slice(2);
-      const q = new URLSearchParams({ ...params, callback: cbName }).toString();
-      const src = url + (url.includes('?') ? '&' : '?') + q;
+      const $ = sel => document.querySelector(sel);
+      const emailEl = $('#email');
+      const passEl = $('#password');
+      const submitBtn = $('#submit');
+      const titleEl = $('#title');
+      const toggleEl = $('#toggle');
+      const msgEl = $('#msg');
+      const tokenEl = $('#token');
 
-      const s = document.createElement('script');
-      let timer;
-
-      window[cbName] = (data) => {
-        clearTimeout(timer);
-        cleanup();
-        resolve(data);
-      };
-      function cleanup() {
-        delete window[cbName];
-        if (s.parentNode) s.parentNode.removeChild(s);
+      function setMode(next) {
+        mode = next;
+        titleEl.textContent = mode === 'login' ? 'Đăng nhập' : 'Đăng ký';
+        submitBtn.textContent = mode === 'login' ? 'Đăng nhập' : 'Đăng ký';
+        toggleEl.innerHTML = mode === 'login'
+          ? 'Chưa có tài khoản? <span class="link">Đăng ký</span>'
+          : 'Đã có tài khoản? <span class="link">Đăng nhập</span>';
+        msgEl.textContent = '';
+        msgEl.className = 'msg';
+        tokenEl.textContent = '';
       }
 
-      s.onerror = () => {
-        clearTimeout(timer);
-        cleanup();
-        reject(new Error('JSONP load error'));
-      };
+      toggleEl.addEventListener('click', () => setMode(mode === 'login' ? 'register' : 'login'));
 
-      timer = setTimeout(() => {
-        cleanup();
-        reject(new Error('JSONP timeout'));
-      }, timeoutMs);
+      submitBtn.addEventListener('click', async () => {
+        const email = emailEl.value.trim();
+        const password = passEl.value;
+        if (!email || !password) {
+          showErr('Vui lòng nhập đầy đủ email và mật khẩu');
+          return;
+        }
+        submitBtn.disabled = true;
+        msgEl.textContent = 'Đang xử lý...';
+        msgEl.className = 'msg';
 
-      s.src = src;
-      document.head.appendChild(s);
-    });
-  }
+        try {
+          const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              action: mode === 'login' ? 'login' : 'register',
+              email,
+              password
+            })
+          });
+          const data = await res.json().catch(() => ({}));
 
-  const $ = (s, r=document)=>r.querySelector(s);
-
-  $('#loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const loginMsg = $('#loginMsg');
-    loginMsg.textContent = 'Đang đăng nhập...'; loginMsg.className = 'msg';
-    try {
-      const res = await jsonp(GAS, {
-        action: 'login',
-        username: $('#username').value.trim(),
-        password: $('#password').value
+          if (!data.ok) {
+            showErr(data.message || 'Có lỗi xảy ra');
+          } else {
+            showOk(data.message || (mode === 'login' ? 'Đăng nhập thành công' : 'Đăng ký thành công'));
+            if (data.token) {
+              localStorage.setItem('auth_token', data.token);
+              tokenEl.textContent = 'Token: ' + data.token;
+              // Demo: gọi /me
+              const me = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'me', token: data.token })
+              }).then(r => r.json()).catch(() => ({}));
+              if (me && me.ok) {
+                showOk('Xin chào: ' + me.email);
+              }
+            }
+          }
+        } catch (err) {
+          showErr('Network error: ' + err.message);
+        } finally {
+          submitBtn.disabled = false;
+        }
       });
-      if (res.ok) {
-        loginMsg.textContent = 'Đăng nhập thành công!'; loginMsg.className = 'msg ok';
-        const w = $('#welcome');
-        w.style.display = 'block';
-        w.textContent = `Xin chào ${res.user.username} (role: ${res.user.role}) | token: ${res.token}`;
-        localStorage.setItem('demo_token', res.token);
-      } else {
-        loginMsg.textContent = res.error || 'Đăng nhập thất bại'; loginMsg.className = 'msg err';
-      }
-    } catch (err) {
-      loginMsg.textContent = 'Lỗi: ' + err.message; loginMsg.className = 'msg err';
-    }
-  });
 
-  $('#regForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const regMsg = $('#regMsg');
-    regMsg.textContent = 'Đang tạo...'; regMsg.className = 'msg';
-    try {
-      const res = await jsonp(GAS, {
-        action: 'register',
-        username: $('#ruser').value.trim(),
-        password: $('#rpass').value,
-        role: $('#rrole').value.trim()
-      });
-      if (res.ok) {
-        regMsg.textContent = 'Đã tạo tài khoản'; regMsg.className = 'msg ok';
-        e.target.reset();
-      } else {
-        regMsg.textContent = res.error || 'Không tạo được'; regMsg.className = 'msg err';
+      function showOk(t) {
+        msgEl.textContent = t;
+        msgEl.className = 'msg ok';
       }
-    } catch (err) {
-      regMsg.textContent = 'Lỗi: ' + err.message; regMsg.className = 'msg err';
-    }
-  });
-</script>
-</body>
+      function showErr(t) {
+        msgEl.textContent = t;
+        msgEl.className = 'msg err';
+      }
+
+      // Nếu đã có token thì hiển thị
+      (async function boot(){
+        const t = localStorage.getItem('auth_token');
+        if (t) {
+          tokenEl.textContent = 'Token: ' + t;
+          try {
+            const me = await fetch(API_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'me', token: t })
+            }).then(r => r.json());
+            if (me.ok) showOk('Đã đăng nhập: ' + me.email);
+          } catch {}
+        }
+      })();
+    </script>
+  </body>
 </html>
