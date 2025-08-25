@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Đăng nhập (Frontend thuần HTML)</title>
+  <title>Đăng nhập (JSONP, không proxy)</title>
   <style>
     body{margin:0;font-family:system-ui,Segoe UI,Roboto,Inter,Arial;background:#f7fafc;color:#0f172a}
     .wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
@@ -15,38 +15,32 @@
     button{width:100%;margin-top:16px;padding:10px 14px;border:0;border-radius:10px;font-weight:700;font-size:15px;background:#111827;color:#fff;cursor:pointer}
     .msg{margin-top:12px;font-size:14px}
     .ok{color:#16a34a}.err{color:#dc2626}
-    details{margin-top:18px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <h1>Đăng nhập</h1>
-      <p class="sub">Frontend thuần HTML + gọi API Apps Script</p>
+      <p class="sub">Frontend khác origin → JSONP tới Apps Script</p>
 
       <form id="loginForm" autocomplete="on">
         <label for="username">Tên đăng nhập</label>
-        <input id="username" name="username" required autocomplete="username">
-
+        <input id="username" required autocomplete="username">
         <label for="password">Mật khẩu</label>
-        <input id="password" name="password" type="password" required autocomplete="current-password">
-
+        <input id="password" type="password" required autocomplete="current-password">
         <button type="submit">Đăng nhập</button>
         <div id="loginMsg" class="msg"></div>
       </form>
 
       <details>
-        <summary>Tạo tài khoản (dành cho admin)</summary>
+        <summary>Tạo tài khoản (demo)</summary>
         <form id="regForm" autocomplete="off">
-          <label for="ruser">Username mới</label>
+          <label>Username mới</label>
           <input id="ruser" required>
-
-          <label for="rpass">Mật khẩu</label>
+          <label>Mật khẩu</label>
           <input id="rpass" type="password" required>
-
-          <label for="rrole">Role (tuỳ chọn)</label>
+          <label>Role (tuỳ chọn)</label>
           <input id="rrole" placeholder="user/admin...">
-
           <button type="submit">Tạo</button>
           <div id="regMsg" class="msg"></div>
         </form>
@@ -57,30 +51,54 @@
   </div>
 
 <script>
-  // 1) Thay URL dưới đây bằng URL Web App của bạn
-  const API = 'https://script.google.com/macros/s/REPLACE_WITH_DEPLOY_ID/exec';
+  // Thay URL này bằng URL Web App của bạn (…/exec)
+  const GAS = 'https://script.google.com/macros/s/AKfycbxCq7a04qDXzDO58d8pD00GPA_dLIGR4lGX9sY65v_cgJGwV1uffc9ZF6yI3NMN2u_DuQ/exec';
+
+  // JSONP helper: trả Promise theo tên callback ngẫu nhiên
+  function jsonp(url, params = {}, timeoutMs = 12000) {
+    return new Promise((resolve, reject) => {
+      const cbName = '__jsonp_cb_' + Math.random().toString(36).slice(2);
+      const q = new URLSearchParams({ ...params, callback: cbName }).toString();
+      const src = url + (url.includes('?') ? '&' : '?') + q;
+
+      const s = document.createElement('script');
+      let timer;
+
+      window[cbName] = (data) => {
+        clearTimeout(timer);
+        cleanup();
+        resolve(data);
+      };
+      function cleanup() {
+        delete window[cbName];
+        if (s.parentNode) s.parentNode.removeChild(s);
+      }
+
+      s.onerror = () => {
+        clearTimeout(timer);
+        cleanup();
+        reject(new Error('JSONP load error'));
+      };
+
+      timer = setTimeout(() => {
+        cleanup();
+        reject(new Error('JSONP timeout'));
+      }, timeoutMs);
+
+      s.src = src;
+      document.head.appendChild(s);
+    });
+  }
 
   const $ = (s, r=document)=>r.querySelector(s);
-  const toForm = (obj)=> new URLSearchParams(obj).toString();
-
-  // Gọi API kiểu "simple request" để tránh preflight
-  async function apiPost(action, data) {
-    const body = toForm({ action, ...data });
-    const res = await fetch(API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-      body
-      // mode: 'cors' // mặc định là cors
-    });
-    return res.json();
-  }
 
   $('#loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const loginMsg = $('#loginMsg');
     loginMsg.textContent = 'Đang đăng nhập...'; loginMsg.className = 'msg';
     try {
-      const res = await apiPost('login', {
+      const res = await jsonp(GAS, {
+        action: 'login',
         username: $('#username').value.trim(),
         password: $('#password').value
       });
@@ -89,12 +107,12 @@
         const w = $('#welcome');
         w.style.display = 'block';
         w.textContent = `Xin chào ${res.user.username} (role: ${res.user.role}) | token: ${res.token}`;
-        localStorage.setItem('demo_token', res.token); // lưu token demo
+        localStorage.setItem('demo_token', res.token);
       } else {
         loginMsg.textContent = res.error || 'Đăng nhập thất bại'; loginMsg.className = 'msg err';
       }
     } catch (err) {
-      loginMsg.textContent = 'Lỗi: ' + err; loginMsg.className = 'msg err';
+      loginMsg.textContent = 'Lỗi: ' + err.message; loginMsg.className = 'msg err';
     }
   });
 
@@ -103,7 +121,8 @@
     const regMsg = $('#regMsg');
     regMsg.textContent = 'Đang tạo...'; regMsg.className = 'msg';
     try {
-      const res = await apiPost('register', {
+      const res = await jsonp(GAS, {
+        action: 'register',
         username: $('#ruser').value.trim(),
         password: $('#rpass').value,
         role: $('#rrole').value.trim()
@@ -115,7 +134,7 @@
         regMsg.textContent = res.error || 'Không tạo được'; regMsg.className = 'msg err';
       }
     } catch (err) {
-      regMsg.textContent = 'Lỗi: ' + err; regMsg.className = 'msg err';
+      regMsg.textContent = 'Lỗi: ' + err.message; regMsg.className = 'msg err';
     }
   });
 </script>
