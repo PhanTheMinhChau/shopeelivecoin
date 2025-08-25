@@ -1,151 +1,93 @@
-<!doctype html>
-<html lang="vi">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Đăng nhập / Đăng ký</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập & Đăng ký</title>
     <style>
-      :root { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial; }
-      body { display: grid; place-items: center; min-height: 100vh; background: #f7f7fb; margin: 0; }
-      .card { width: 360px; background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,.08); }
-      h2 { margin: 0 0 16px; }
-      label { display: block; font-size: 14px; margin-bottom: 6px; color: #333; }
-      input { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #ddd; outline: none; }
-      input:focus { border-color: #7c6cff; box-shadow: 0 0 0 3px #7c6cff22; }
-      .row { margin-bottom: 12px; }
-      .btn { width: 100%; padding: 10px 12px; background: #7c6cff; color: #fff; border: 0; border-radius: 10px; cursor: pointer; font-weight: 600; }
-      .btn:disabled { opacity: .6; cursor: not-allowed; }
-      .muted { color: #666; font-size: 13px; text-align: center; margin-top: 10px; }
-      .link { color: #7c6cff; cursor: pointer; }
-      .msg { margin-top: 10px; font-size: 14px; }
-      .ok { color: #0a7d21; }
-      .err { color: #b00020; }
-      .tiny { font-size: 12px; color: #888; word-break: break-all; }
+        body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        h2 { text-align: center; }
+        form { display: flex; flex-direction: column; gap: 10px; }
+        input[type="text"], input[type="password"] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        #message { margin-top: 15px; text-align: center; font-weight: bold; }
     </style>
-  </head>
-  <body>
-    <div class="card">
-      <h2 id="title">Đăng nhập</h2>
+</head>
+<body>
+    <h2>Đăng ký</h2>
+    <form id="register-form">
+        <input type="text" id="reg-username" placeholder="Tên đăng nhập" required>
+        <input type="password" id="reg-password" placeholder="Mật khẩu" required>
+        <button type="submit">Đăng ký</button>
+    </form>
 
-      <div class="row">
-        <label>Email</label>
-        <input id="email" type="email" placeholder="you@example.com" />
-      </div>
-      <div class="row">
-        <label>Mật khẩu</label>
-        <input id="password" type="password" placeholder="••••••••" />
-      </div>
-      <button id="submit" class="btn">Đăng nhập</button>
+    ---
 
-      <div class="muted">
-        <span id="toggle">Chưa có tài khoản? <span class="link">Đăng ký</span></span>
-      </div>
+    <h2>Đăng nhập</h2>
+    <form id="login-form">
+        <input type="text" id="log-username" placeholder="Tên đăng nhập" required>
+        <input type="password" id="log-password" placeholder="Mật khẩu" required>
+        <button type="submit">Đăng nhập</button>
+    </form>
 
-      <div id="msg" class="msg"></div>
-      <div id="token" class="tiny"></div>
-    </div>
+    <div id="message"></div>
 
     <script>
-      const API_URL = 'https://script.google.com/macros/s/AKfycbwNqG9wPC9mUdxL63vcbmUJ4JsJMHUcw8jsbu6TXgZXYQcos7Uu0kLJgfJyFzdLC8WTgg/exec'; // ví dụ: https://script.google.com/macros/s/xxx/exec
-      let mode = 'login';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxOLvyAV_j-St_pNe0Q9TBlpX1FAuNgdSpMvw8Jq09JIPfks8F8lUX5vHelY31bnto4/exec';
 
-      const $ = sel => document.querySelector(sel);
-      const emailEl = $('#email');
-      const passEl = $('#password');
-      const submitBtn = $('#submit');
-      const titleEl = $('#title');
-      const toggleEl = $('#toggle');
-      const msgEl = $('#msg');
-      const tokenEl = $('#token');
+        const messageEl = document.getElementById('message');
 
-      function setMode(next) {
-        mode = next;
-        titleEl.textContent = mode === 'login' ? 'Đăng nhập' : 'Đăng ký';
-        submitBtn.textContent = mode === 'login' ? 'Đăng nhập' : 'Đăng ký';
-        toggleEl.innerHTML = mode === 'login'
-          ? 'Chưa có tài khoản? <span class="link">Đăng ký</span>'
-          : 'Đã có tài khoản? <span class="link">Đăng nhập</span>';
-        msgEl.textContent = '';
-        msgEl.className = 'msg';
-        tokenEl.textContent = '';
-      }
-
-      toggleEl.addEventListener('click', () => setMode(mode === 'login' ? 'register' : 'login'));
-
-      submitBtn.addEventListener('click', async () => {
-        const email = emailEl.value.trim();
-        const password = passEl.value;
-        if (!email || !password) {
-          showErr('Vui lòng nhập đầy đủ email và mật khẩu');
-          return;
+        function showMessage(msg, type = 'success') {
+            messageEl.textContent = msg;
+            messageEl.style.color = (type === 'success') ? 'green' : 'red';
         }
-        submitBtn.disabled = true;
-        msgEl.textContent = 'Đang xử lý...';
-        msgEl.className = 'msg';
 
-        try {
-          const res = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'text/plain;charset=UTF-8'
-            },
-            body: JSON.stringify({
-              action: mode === 'login' ? 'login' : 'register',
-              email,
-              password
-            })
-          });
-          const data = await res.json().catch(() => ({}));
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
 
-          if (!data.ok) {
-            showErr(data.message || 'Có lỗi xảy ra');
-          } else {
-            showOk(data.message || (mode === 'login' ? 'Đăng nhập thành công' : 'Đăng ký thành công'));
-            if (data.token) {
-              localStorage.setItem('auth_token', data.token);
-              tokenEl.textContent = 'Token: ' + data.token;
-              // Demo: gọi /me
-              const me = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-                body: JSON.stringify({ action: 'me', token: data.token })
-              }).then(r => r.json()).catch(() => ({}));
-              if (me && me.ok) {
-                showOk('Xin chào: ' + me.email);
-              }
+            const params = new URLSearchParams();
+            params.append('action', 'register');
+            params.append('username', username);
+            params.append('password', password);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: params
+                });
+                const data = await response.json();
+                showMessage(data.message, data.status);
+            } catch (error) {
+                showMessage('Có lỗi xảy ra. Vui lòng thử lại.', 'error');
+                console.error('Lỗi:', error);
             }
-          }
-        } catch (err) {
-          showErr('Network error: ' + err.message);
-        } finally {
-          submitBtn.disabled = false;
-        }
-      });
+        });
 
-      function showOk(t) {
-        msgEl.textContent = t;
-        msgEl.className = 'msg ok';
-      }
-      function showErr(t) {
-        msgEl.textContent = t;
-        msgEl.className = 'msg err';
-      }
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('log-username').value;
+            const password = document.getElementById('log-password').value;
 
-      // Nếu đã có token thì hiển thị
-      (async function boot(){
-        const t = localStorage.getItem('auth_token');
-        if (t) {
-          tokenEl.textContent = 'Token: ' + t;
-          try {
-            const me = await fetch(API_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ action: 'me', token: t })
-            }).then(r => r.json());
-            if (me.ok) showOk('Đã đăng nhập: ' + me.email);
-          } catch {}
-        }
-      })();
+            const params = new URLSearchParams();
+            params.append('action', 'login');
+            params.append('username', username);
+            params.append('password', password);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: params
+                });
+                const data = await response.json();
+                showMessage(data.message, data.status);
+            } catch (error) {
+                showMessage('Có lỗi xảy ra. Vui lòng thử lại.', 'error');
+                console.error('Lỗi:', error);
+            }
+        });
     </script>
-  </body>
+</body>
 </html>
