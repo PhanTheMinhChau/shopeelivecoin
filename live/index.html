@@ -115,7 +115,7 @@
         </div>
 
         <div id="extraLinks" class="hidden">
-          <div class="row"><label for="f_link2">Liên kết #3</label><div class="field"><input id="f_link2" type="url" placeholder="https://..."></div></div>
+          <div class="row"><label for="f_link2">Liên kết #2</label><div class="field"><input id="f_link2" type="url" placeholder="https://..."></div></div>
           <div class="row"><label for="f_link3">Liên kết #3</label><div class="field"><input id="f_link3" type="url" placeholder="https://..."></div></div>
           <div class="row"><label for="f_link4">Liên kết #4</label><div class="field"><input id="f_link4" type="url" placeholder="https://..."></div></div>
         </div>
@@ -164,8 +164,7 @@
       const renderTop=setCountdown("#countdownTop"),renderModal=setCountdown("#countdownModal");
       setInterval(()=>{let p=diffParts(LIVE_TARGET);renderTop(p);renderModal(p);},1000);
       const map=[{ui:"#f_link1",entry:"#e_356638578",required:true},{ui:"#f_link2",entry:"#e_2045085207"},
-        {ui:"#f_link3",entry:"#e_2106269907"},{ui:"#f_link4",entry:"#e_29577489"},
-        {ui:"#f_link5",entry:"#e_31272726"},{ui:null,entry:"#e_129859293"}];
+        {ui:"#f_link3",entry:"#e_2106269907"},{ui:"#f_link4",entry:"#e_29577489"},{ui:null,entry:"#e_129859293"}];
       const form=$("#gForm"),iframe=$("#hidden_iframe"),addBtn=$("#addLinkBtn"),extra=$("#extraLinks"),
             submit=$("#submitBtn"),modal=$("#modalBackdrop"),okBtn=$("#okBtn");
       let submitting=false;
