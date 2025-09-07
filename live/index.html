@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Gửi link để gắn giỏ Shopee Live</title>
+  <style>
+    :root{
+      --bg:#f6f7f9; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
+      --border:#e5e7eb; --ring:2px;
+      --brand:#ee4d2d; --brand-2:#ff7a59; --brand-weak:#fff2ef;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,ui-sans-serif}
+    .wrap{max-width:760px;margin:0 auto;padding:clamp(16px,4vw,32px)}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+      padding:clamp(16px,4vw,28px);box-shadow:0 10px 30px rgba(0,0,0,.05)}
+    .hdr{display:flex;gap:14px;align-items:center;margin-bottom:8px}
+    .logo{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;font-weight:800}
+    h1{font-size:clamp(20px,5vw,28px);margin:0}
+    .sub{margin:6px 0 14px;color:var(--muted);background:var(--brand-weak);
+      border:1px dashed #ffd5cb;padding:10px 12px;border-radius:12px}
+    .sub b{color:#b4230a}
+    .shop-link{margin-top:8px;font-size:14px}
+    .shop-link a{color:var(--brand);font-weight:600;text-decoration:none}
+    .shop-link a:hover{text-decoration:underline}
+    .count-wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 18px}
+    .count-title{font-weight:600;color:#374151}
+    .countdown{display:flex;gap:8px;flex-wrap:wrap}
+    .box{min-width:70px;padding:10px 12px;background:#fff;border:1px solid var(--border);
+      border-radius:12px;text-align:center}
+    .num{font-weight:800;font-size:22px}
+    .lbl{font-size:12px;color:#6b7280;margin-top:2px}
+    .row{margin-bottom:14px}
+    label{display:block;font-size:13px;color:#374151;margin:0 0 6px;font-weight:600}
+    .field{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);
+      border-radius:12px;padding:12px 12px;transition:.15s border-color,.15s box-shadow,.15s transform}
+    .field:focus-within{border-color:var(--brand);
+      box-shadow:0 0 0 var(--ring) color-mix(in oklab,var(--brand) 35%,transparent);
+      transform:translateY(-1px)}
+    input{width:100%;border:0;outline:0;background:transparent;color:var(--text);font:inherit}
+    .btn{appearance:none;border:0;cursor:pointer;user-select:none;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;font-weight:800;
+      padding:12px 18px;border-radius:12px;box-shadow:0 10px 20px rgba(238,77,45,.25);
+      transition:.15s transform,.15s box-shadow,.15s opacity}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn[disabled]{opacity:.65;cursor:not-allowed;box-shadow:none}
+    .btn.secondary{background:#fff;color:#374151;border:1px solid var(--border);box-shadow:none;font-weight:700}
+    .actions-center{display:flex;justify-content:center;margin-top:10px}
+    .actions-left{display:flex;justify-content:flex-start;margin-top:10px}
+    .loader{width:16px;height:16px;border-radius:50%;border:3px solid rgba(255,255,255,.35);border-top-color:#fff;
+      animation:spin 1s linear infinite;display:none}
+    .btn.loading .loader{display:inline-block;margin-right:8px}
+    .btn.loading .txt{opacity:.9}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(17,24,39,.45);
+      display:none;align-items:center;justify-content:center;padding:16px;z-index:1000}
+    .modal-backdrop.show{display:flex}
+    .modal{width:min(560px,100%);background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;
+      box-shadow:0 30px 60px rgba(0,0,0,.2);text-align:center}
+    .modal h3{margin:0 0 8px;font-size:22px}
+    .modal p{margin:0 0 12px;color:#374151}
+    .ok-wrap{display:flex;justify-content:center;margin-top:8px}
+    .modal-sub{margin:8px auto 10px;color:#6b7280;background:#fff7f5;border:1px dashed #ffd5cb;
+      padding:8px 10px;border-radius:10px;max-width:90%}
+    .modal .countdown{justify-content:center}
+    .modal .shop-link{margin-top:8px}
+    .modal .shop-link a{color:var(--brand)}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="hdr">
+        <div>
+          <h1>Gửi link để gắn giỏ Shopee Live</h1>
+          <div class="sub">
+            <b>Hướng dẫn:</b> Điền tối thiểu <b>1 link sản phẩm</b>. Nếu cần thêm, bấm <b>“+ Thêm link”</b>.
+          </div>
+          <div class="shop-link">Phiên live sẽ thực hiện bởi shop <a href="https://s.shopee.vn/4fmdsQhXkS" target="_blank">https://s.shopee.vn/4fmdsQhXkS</a></div>
+        </div>
+      </div>
+
+      <div class="count-wrap">
+        <div class="count-title">Live sẽ bắt đầu vào: <b>20:00 - 08/09/2025</b></div>
+        <div class="countdown" id="countdownTop">
+          <div class="box"><div class="num" data-k="d">--</div><div class="lbl">Ngày</div></div>
+          <div class="box"><div class="num" data-k="h">--</div><div class="lbl">Giờ</div></div>
+          <div class="box"><div class="num" data-k="m">--</div><div class="lbl">Phút</div></div>
+          <div class="box"><div class="num" data-k="s">--</div><div class="lbl">Giây</div></div>
+        </div>
+      </div>
+
+      <iframe name="hidden_iframe" id="hidden_iframe" class="sr-only"></iframe>
+
+      <form id="gForm"
+        action="https://docs.google.com/forms/d/e/1FAIpQLScxHf4W5bplnzTBM__OK6NVQTIUlE0tAYGna9XIa1rNG4Nhsw/formResponse"
+        method="POST" target="hidden_iframe">
+
+        <input type="hidden" name="entry.356638578"  id="e_356638578">
+        <input type="hidden" name="entry.2045085207" id="e_2045085207">
+        <input type="hidden" name="entry.2106269907" id="e_2106269907">
+        <input type="hidden" name="entry.29577489"   id="e_29577489">
+        <input type="hidden" name="entry.31272726"   id="e_31272726">
+        <input type="hidden" name="entry.129859293"  id="e_129859293">
+
+        <div class="row">
+          <label for="f_link1">Liên kết #1 (bắt buộc)</label>
+          <div class="field"><input id="f_link1" type="url" placeholder="https://..." required></div>
+        </div>
+        <div class="row">
+          <label for="f_link2">Liên kết #2</label>
+          <div class="field"><input id="f_link2" type="url" placeholder="https://..."></div>
+        </div>
+
+        <div id="extraLinks" class="hidden">
+          <div class="row"><label for="f_link3">Liên kết #3</label><div class="field"><input id="f_link3" type="url" placeholder="https://..."></div></div>
+          <div class="row"><label for="f_link4">Liên kết #4</label><div class="field"><input id="f_link4" type="url" placeholder="https://..."></div></div>
+          <div class="row"><label for="f_link5">Liên kết #5</label><div class="field"><input id="f_link5" type="url" placeholder="https://..."></div></div>
+        </div>
+
+        <div class="actions-left">
+          <button type="button" id="addLinkBtn" class="btn secondary">+ Thêm link</button>
+        </div>
+
+        <div class="actions-center">
+          <button class="btn" id="submitBtn" type="submit">
+            <span class="loader"></span><span class="txt">Gửi</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="modalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <h3>Đã gửi thành công 🎉</h3>
+      <p>Mình đã nhận được liên kết của bạn.</p>
+      <div class="modal-sub">Phiên live dự kiến bắt đầu lúc <b>20:00 - 08/09/2025</b>. Đếm ngược:</div>
+      <div class="countdown" id="countdownModal">
+        <div class="box"><div class="num" data-k="d">--</div><div class="lbl">Ngày</div></div>
+        <div class="box"><div class="num" data-k="h">--</div><div class="lbl">Giờ</div></div>
+        <div class="box"><div class="num" data-k="m">--</div><div class="lbl">Phút</div></div>
+        <div class="box"><div class="num" data-k="s">--</div><div class="lbl">Giây</div></div>
+      </div>
+      <div class="shop-link">tại live của shop <a href="https://s.shopee.vn/4fmdsQhXkS" target="_blank">https://s.shopee.vn/4fmdsQhXkS</a></div>
+      <div class="ok-wrap"><button id="okBtn" class="btn">OK</button></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const $=s=>document.querySelector(s);
+      const LIVE_TARGET=new Date(2025,8,8,20,0,0); // 8 = tháng 9
+      function diffParts(t){let ms=t.getTime()-Date.now();if(ms<0)ms=0;
+        let s=Math.floor(ms/1000),d=Math.floor(s/86400),h=Math.floor((s%86400)/3600),m=Math.floor((s%3600)/60),sec=s%60;
+        return {d,h,m,s:sec};}
+      function setCountdown(id){const root=$(id);return(p)=>{if(!root)return;
+        root.querySelector('.num[data-k="d"]').textContent=p.d;
+        root.querySelector('.num[data-k="h"]').textContent=String(p.h).padStart(2,'0');
+        root.querySelector('.num[data-k="m"]').textContent=String(p.m).padStart(2,'0');
+        root.querySelector('.num[data-k="s"]').textContent=String(p.s).padStart(2,'0');};}
+      const renderTop=setCountdown("#countdownTop"),renderModal=setCountdown("#countdownModal");
+      setInterval(()=>{let p=diffParts(LIVE_TARGET);renderTop(p);renderModal(p);},1000);
+      const map=[{ui:"#f_link1",entry:"#e_356638578",required:true},{ui:"#f_link2",entry:"#e_2045085207"},
+        {ui:"#f_link3",entry:"#e_2106269907"},{ui:"#f_link4",entry:"#e_29577489"},
+        {ui:"#f_link5",entry:"#e_31272726"},{ui:null,entry:"#e_129859293"}];
+      const form=$("#gForm"),iframe=$("#hidden_iframe"),addBtn=$("#addLinkBtn"),extra=$("#extraLinks"),
+            submit=$("#submitBtn"),modal=$("#modalBackdrop"),okBtn=$("#okBtn");
+      let submitting=false;
+      async function fetchIP(){try{const r=await fetch("https://api.ipify.org?format=json");
+        const {ip}=await r.json();$("#e_129859293").value=ip||"";}catch{$("#e_129859293").value="";}}
+      fetchIP();
+      addBtn.addEventListener("click",()=>{extra.classList.remove("hidden");addBtn.style.display="none";});
+      function setBtnLoading(b){submit.classList.toggle("loading",b);submit.disabled=b;}
+      form.addEventListener("submit",e=>{
+        map.forEach(m=>{if(m.ui)$(m.entry).value=$(m.ui).value.trim();});
+        setBtnLoading(true);submitting=true;setTimeout(()=>{if(submitting)setBtnLoading(false);},15000);
+      });
+      iframe.addEventListener("load",()=>{if(!submitting)return;submitting=false;setBtnLoading(false);
+        form.reset();extra.classList.add("hidden");addBtn.style.display="";fetchIP();modal.classList.add("show");okBtn.focus();});
+      okBtn.addEventListener("click",()=>modal.classList.remove("show"));
+    })();
+  </script>
+</body>
+</html>
