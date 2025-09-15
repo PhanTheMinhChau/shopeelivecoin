@@ -10,7 +10,7 @@
       --card:#ffffff;
       --text:#0f172a; /* slate-900 */
       --muted:#475569; /* slate-600 */
-      --brand:#ee4d2d; /* red-500 */
+      --brand:#ee4d2d; /* Shopee orange */
       --brand-600:#dc2626;
       --accent:#06b6d4; /* cyan-500 */
       --ring:#e2e8f0; /* slate-200 */
@@ -58,6 +58,11 @@
     @keyframes pulse{0%{background-position:200% 0}100%{background-position:-200% 0}}
     .empty{padding:32px;text-align:center;color:var(--muted)}
     .hint{font-size:12px;color:var(--muted)}
+
+    @media(max-width:480px){
+      .toolbar{grid-template-columns:1fr}
+      .select{width:100%}
+    }
   </style>
 </head>
 <body>
@@ -81,9 +86,11 @@
   <div class="container">
     <div id="grid" class="grid" aria-live="polite"></div>
     <div id="empty" class="empty" style="display:none">Không có sản phẩm phù hợp.</div>
+    <!-- Sentinel để auto-load khi kéo xuống -->
+    <div id="sentinel" aria-hidden="true" style="height:1px;"></div>
   </div>
 
-  <div class="loadmore-wrap">
+  <div class="loadmore-wrap" style=" display: none; ">
     <button id="moreBtn" class="loadmore">Xem thêm</button>
   </div>
 
@@ -111,6 +118,7 @@
     const moreBtn = document.getElementById('moreBtn');
     const kwInput = document.getElementById('kw');
     const sortSelect = document.getElementById('sort');
+    const sentinel = document.getElementById('sentinel');
 
     // Prefill search & sort from DEFAULT_QUERY
     kwInput.value = state.params.keyword || '';
@@ -122,12 +130,6 @@
       // Shopee price is typically *100000. Adjust if your API differs.
       const v = Math.round(n / 100000);
       return v.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-    };
-
-    const timeToText = (sec) => {
-      if (!sec) return '';
-      const d = new Date(sec * 1000);
-      return d.toLocaleString('vi-VN');
     };
 
     const makeQS = (obj) => new URLSearchParams(obj).toString();
@@ -162,11 +164,12 @@
         image, shopid, itemid, name,
         price, price_before_discount, raw_discount,
         is_shop_official, is_shop_preferred, is_shop_preferred_plus, is_shopee_choice,
-        stock, start_time, end_time
+        stock
       } = item;
 
       const a = document.createElement('a');
       a.className = 'card';
+      // Giữ link affiliate của bạn (có UTM/trackid). Thay đổi nếu cần.
       a.href = `https://shopee.vn/product/${shopid}/${itemid}??uls_trackid=53n3265c00ld&utm_campaign=id_WbhZJD6lyu&utm_content=flashsale----&utm_medium=affiliates&utm_source=an_17333510032&utm_term=do1jziv8wy6o`;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
@@ -189,10 +192,10 @@
         </div>`;
 
       const labels = a.querySelector('.labels');
-      if (is_shop_official) labels.appendChild(label('Mall'));
-      if (is_shop_preferred_plus) labels.appendChild(label('Preferred+'));
-      else if (is_shop_preferred) labels.appendChild(label('Preferred'));
-      if (is_shopee_choice) labels.appendChild(label('Choice'));
+      if (item.is_shop_official) labels.appendChild(label('Mall'));
+      if (item.is_shop_preferred_plus) labels.appendChild(label('Preferred+'));
+      else if (item.is_shop_preferred) labels.appendChild(label('Preferred'));
+      if (item.is_shopee_choice) labels.appendChild(label('Choice'));
 
       return a;
     }
@@ -213,7 +216,7 @@
       moreBtn.disabled = true;
       moreBtn.textContent = 'Đang tải…';
 
-      // add some skeletons for better UX
+      // skeletons
       const skeletons = [...Array(6)].map(skeletonCard);
       skeletons.forEach(s => grid.appendChild(s));
 
@@ -227,11 +230,10 @@
         // remove skeletons
         skeletons.forEach(s => s.remove());
 
-        // Only append items with stock > 0
+        // Only append items with stock > 0 (nếu API luôn trả số, giữ như vậy)
         const valid = items.filter(x => (typeof x.stock === 'number' ? x.stock > 0 : true));
 
         if (page === 1) grid.innerHTML = '';
-
         valid.forEach(item => grid.appendChild(itemCard(item)));
 
         if (page === 1 && valid.length === 0){
@@ -240,6 +242,7 @@
           emptyEl.style.display = 'none';
         }
 
+        // Kiểm soát kết thúc dữ liệu
         if (items.length < (state.params.items_per_page || 16)){
           state.ended = true;
           moreBtn.textContent = 'Hết dữ liệu';
@@ -269,18 +272,41 @@
       state.page_number = 1;
       state.ended = false;
       grid.innerHTML = '';
+      setupInfiniteScroll();
       fetchPage(state.page_number);
+    }
+
+    // ====== INFINITE SCROLL (IntersectionObserver) ======
+    let io;
+    function setupInfiniteScroll() {
+      // Hủy observer cũ để tránh nhân đôi khi reset
+      if (io) { try { io.disconnect(); } catch(_){} }
+
+      io = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        if (!entry || !entry.isIntersecting) return;
+        if (state.loading || state.ended) return;
+        state.page_number += 1;
+        fetchPage(state.page_number);
+      }, {
+        root: null,
+        rootMargin: '800px 0px 0px 0px', // preload sớm cho mượt
+        threshold: 0
+      });
+
+      if (sentinel) io.observe(sentinel);
     }
 
     // ====== EVENTS ======
     moreBtn.addEventListener('click', () => {
-      if (state.loading) return;
+      if (state.loading || state.ended) return;
       state.page_number += 1;
       fetchPage(state.page_number);
     });
 
-    kwInput.addEventListener('change', () => {
+    kwInput.addEventListener('input', () => {
       state.params.keyword = kwInput.value.trim();
+      // Có thể thêm debounce nếu cần
       resetAndLoad();
     });
 
@@ -292,6 +318,7 @@
     });
 
     // ====== INIT ======
+    setupInfiniteScroll();
     fetchPage(state.page_number);
   </script>
 </body>
