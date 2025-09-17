@@ -150,14 +150,14 @@
 
     function resetAndLoad(){ state.page_number=1; state.ended=false; grid.innerHTML=''; setupInfiniteScroll(); fetchPage(state.page_number); }
 
-    // Promotion bar
+    // ===== Promotion bar =====
     function renderPromotions(){
       promoBar.innerHTML='';
       if(!Array.isArray(state.promotions)||state.promotions.length===0){
         const btn=document.createElement('button'); btn.className='promo-btn'; btn.textContent='—'; btn.disabled=true; promoBar.appendChild(btn); return;
       }
       state.promotions.forEach((p,idx)=>{
-        const btn=document.createElement('button'); btn.className='promo-btn'; btn.textContent=fmtHour(p.start_time); btn.dataset.pid=p.promotionid;
+        const btn=document.createElement('button'); btn.className='promo-btn'; btn.textContent=fmtHour(p.start_time); btn.dataset.pid=String(p.promotionid);
         if(String(p.promotionid)===String(state.params.promotionid)||(idx===0&&!state.params.promotionid)){
           btn.classList.add('active'); state.params.promotionid=p.promotionid;
         }
@@ -169,24 +169,63 @@
       });
     }
 
-    // Sort segmented
+    // ===== Auto switch by local time =====
+    function getPidByLocalTime(){
+      if(!state.promotions.length) return null;
+      const nowSec=Math.floor(Date.now()/1000);
+      // ưu tiên khung đang diễn ra
+      const cur=state.promotions.find(p=>nowSec>=p.start_time && nowSec<p.end_time);
+      if(cur) return cur.promotionid;
+      // nếu chưa tới khung tiếp theo → chọn khung kế tiếp
+      const next=state.promotions.find(p=>nowSec<p.start_time);
+      return next? next.promotionid : null;
+    }
+
+    function activatePromoButton(pid){
+      document.querySelectorAll('.promo-btn').forEach(b=>{
+        b.classList.toggle('active', b.dataset.pid===String(pid));
+      });
+    }
+
+    function checkAutoPromotion(force=false){
+      const pid=getPidByLocalTime();
+      if(!pid) return;
+      if(force || String(pid)!==String(state.params.promotionid)){
+        state.params.promotionid=pid;
+        activatePromoButton(pid);
+        resetAndLoad();
+      }
+    }
+
+    let autoTimer; 
+    function startAutoWatcher(){
+      if(autoTimer) clearInterval(autoTimer);
+      autoTimer=setInterval(()=>checkAutoPromotion(false),15000); // 15s kiểm tra một lần
+      document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkAutoPromotion(false); });
+    }
+
+    // ===== Sort segmented =====
     function applySortUI(val){ const btns=sortSeg.querySelectorAll('.seg'); btns.forEach(b=>{ if(b.dataset.sort===val){ b.classList.add('active'); } else { b.classList.remove('active'); } }); }
     function setSort(val){ const [field,order]=val.split('|'); state.params.sort_field=field; state.params.sort_order=Number(order); applySortUI(val); resetAndLoad(); }
     sortSeg.addEventListener('click',e=>{ const btn=e.target.closest('.seg'); if(!btn) return; const val=btn.dataset.sort; if(!val||btn.classList.contains('active')) return; setSort(val); });
     function initSortDefault(){ applySortUI(`${DEFAULT_QUERY.sort_field}|${DEFAULT_QUERY.sort_order}`); }
 
-    // Infinite scroll
+    // ===== Infinite scroll =====
     let io; function setupInfiniteScroll(){ if(io){ try{ io.disconnect(); }catch(_){} } io=new IntersectionObserver((entries)=>{ const entry=entries[0]; if(!entry||!entry.isIntersecting) return; if(state.loading||state.ended) return; state.page_number+=1; fetchPage(state.page_number); },{root:null,rootMargin:'800px 0px 0px 0px',threshold:0}); const sent=document.getElementById('sentinel'); if(sent) io.observe(sent); }
 
-    // Bootstrap
+    // ===== Bootstrap =====
     async function bootstrap(){
-      try{ const res=await fetch(PROMO_API); const promos=await res.json(); if(Array.isArray(promos)&&promos.length>0){ state.promotions=promos; state.params.promotionid=promos[0].promotionid; }
-        renderPromotions(); }
+      try{ const res=await fetch(PROMO_API); const promos=await res.json(); if(Array.isArray(promos)&&promos.length>0){ state.promotions=promos; }
+        // render trước, rồi auto chọn theo thời gian local
+        renderPromotions();
+        const autoPid=getPidByLocalTime();
+        if(autoPid){ state.params.promotionid=autoPid; activatePromoButton(autoPid); }
+      }
       catch(e){ console.error('Lỗi promotions',e); }
-      finally{ initSortDefault(); setupInfiniteScroll(); fetchPage(state.page_number); }
+      finally{ initSortDefault(); setupInfiniteScroll(); fetchPage(state.page_number); startAutoWatcher(); checkAutoPromotion(true); }
     }
 
-    // Events
+    // ===== Events =====
     searchBtn.addEventListener('click',()=>{ state.params.keyword=kwInput.value.trim(); resetAndLoad(); });
     kwInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); state.params.keyword=kwInput.value.trim(); resetAndLoad(); }});
     moreBtn.addEventListener('click',()=>{ if(state.loading||state.ended) return; state.page_number+=1; fetchPage(state.page_number); });
