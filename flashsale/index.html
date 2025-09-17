@@ -6,37 +6,33 @@
   <title>⚡️Flash Sale Shopee</title>
   <style>
     :root{
-      --bg:#f8fafc; /* slate-50 */
-      --card:#ffffff;
-      --text:#0f172a; /* slate-900 */
-      --muted:#475569; /* slate-600 */
-      --brand:#ee4d2d; /* Shopee orange */
-      --brand-600:#dc2626;
-      --accent:#06b6d4; /* cyan-500 */
-      --ring:#e2e8f0; /* slate-200 */
+      --bg:#f8fafc; --card:#ffffff; --text:#0f172a; --muted:#475569;
+      --brand:#ee4d2d; --brand-600:#dc2626; --accent:#06b6d4; --ring:#e2e8f0;
       --shadow: 0 4px 20px rgba(2,6,23,.08);
     }
     *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial}
     a{color:inherit;text-decoration:none}
 
     .container{max-width:1000px;margin:0 auto;padding:16px;}
     header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg,#fff,rgba(255,255,255,.9));backdrop-filter:saturate(140%) blur(6px);border-bottom:1px solid var(--ring)}
 
-    /* === Toolbar === */
     .toolbar{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:12px 16px}
     .pill{display:flex;gap:8px;align-items:center;background:var(--card);border:1px solid var(--ring);border-radius:999px;padding:10px 12px;box-shadow:var(--shadow)}
     .pill input{border:none;outline:none;background:transparent;width:100%}
     .btn{display:inline-flex;justify-content:center;align-items:center;gap:6px;background:var(--brand);color:#fff;border:none;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(238,77,45,.25)}
     .btn:active{transform:translateY(1px)}
 
-    /* Segmented sort */
     .seg-wrap{padding:0 16px 12px}
     .segmented{display:flex;gap:8px;background:var(--card);border:1px solid var(--ring);border-radius:999px;padding:6px;box-shadow:var(--shadow);overflow:auto}
     .seg{flex:1;white-space:nowrap;border:none;background:transparent;padding:8px 14px;border-radius:999px;font-weight:700;color:var(--muted);cursor:pointer}
     .seg.active{background:var(--text);color:#fff}
 
-    /* Grid & card */
+    /* Promotion horizontal bar */
+    .promo-bar{display:flex;overflow-x:auto;gap:8px;padding:10px 16px;max-width:1000px;margin:0 auto}
+    .promo-btn{flex:0 0 auto;padding:8px 12px;border-radius:12px;border:1px solid var(--ring);background:var(--card);cursor:pointer;font-weight:700;box-shadow:var(--shadow);color:var(--muted)}
+    .promo-btn.active{background:var(--brand);color:#fff;border-color:var(--brand)}
+
     .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     @media(min-width:720px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
     .card{background:var(--card);border:1px solid var(--ring);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column}
@@ -57,14 +53,9 @@
     .loadmore{width:100%;border-radius:999px;background:var(--brand);color:#fff;font-weight:800;border:none;padding:14px 18px;box-shadow:0 8px 24px rgba(239,68,68,.35);cursor:pointer}
     .loadmore:active{transform:translateY(1px)}
 
-    .skeleton{animation:pulse 1.2s ease-in-out infinite;background:linear-gradient(90deg,#f1f5f9, #e2e8f0, #f1f5f9);background-size:200% 100%}
+    .skeleton{animation:pulse 1.2s ease-in-out infinite;background:linear-gradient(90deg,#f1f5f9,#e2e8f0,#f1f5f9);background-size:200% 100%}
     @keyframes pulse{0%{background-position:200% 0}100%{background-position:-200% 0}}
     .empty{padding:32px;text-align:center;color:var(--muted)}
-    .hint{font-size:12px;color:var(--muted)}
-
-    @media(max-width:480px){
-      .toolbar{grid-template-columns:1fr auto}
-    }
   </style>
 </head>
 <body>
@@ -72,6 +63,10 @@
     <h2 style="margin: 10px 0;">⚡️ Flash Sale Shopee ⚡️</h2>
     <p style="margin: 5px 0;color: red;">Giá bên dưới là giá lúc chưa áp mã</p>
   </center>
+
+  <!-- Thanh khung giờ ngang -->
+  <div id="promoBar" class="promo-bar"></div>
+
   <header>
     <div class="toolbar">
       <div class="pill" style="min-width:0">
@@ -82,9 +77,9 @@
     </div>
     <div class="seg-wrap">
       <div id="sortSeg" class="segmented" role="tablist" aria-label="Sắp xếp">
-        <button class="seg" data-sort="price|1" role="tab" aria-selected="false">Giá ↑</button>
-        <button class="seg" data-sort="price|-1" role="tab" aria-selected="false">Giá ↓</button>
-        <button class="seg" data-sort="raw_discount|-1" role="tab" aria-selected="false">Giảm nhiều</button>
+        <button class="seg" data-sort="price|1">Giá ↑</button>
+        <button class="seg" data-sort="price|-1">Giá ↓</button>
+        <button class="seg" data-sort="raw_discount|-1">Giảm nhiều</button>
       </div>
     </div>
   </header>
@@ -92,260 +87,150 @@
   <div class="container">
     <div id="grid" class="grid" aria-live="polite"></div>
     <div id="empty" class="empty" style="display:none">Không có sản phẩm phù hợp.</div>
-    <!-- Sentinel để auto-load khi kéo xuống -->
     <div id="sentinel" aria-hidden="true" style="height:1px;"></div>
   </div>
 
-  <div class="loadmore-wrap" style="display: none;">
+  <div class="loadmore-wrap">
     <button id="moreBtn" class="loadmore">Xem thêm</button>
   </div>
 
   <script>
-    // ====== CẤU HÌNH API ======
-    const API_BASE = 'https://sharelink-kappa.vercel.app/flash_sale';
-    const DEFAULT_QUERY = {
-      keyword: '',
-      search_field: 'name',
-      sort_field: 'price',
-      sort_order: 1,
-      items_per_page: 16
-    };
+    const PROMO_API='https://sharelink-kappa.vercel.app/promotions';
+    const API_BASE='https://sharelink-kappa.vercel.app/flash_sale_test';
+    const DEFAULT_QUERY={keyword:'',search_field:'name',sort_field:'price',sort_order:1,items_per_page:16,promotionid:''};
 
-    // ====== STATE ======
-    let state = {
-      page_number: 1,
-      loading: false,
-      ended: false,
-      params: { ...DEFAULT_QUERY }
-    };
+    let state={page_number:1,loading:false,ended:false,params:{...DEFAULT_QUERY},promotions:[]};
 
-    const grid = document.getElementById('grid');
-    const emptyEl = document.getElementById('empty');
-    const moreBtn = document.getElementById('moreBtn');
-    const kwInput = document.getElementById('kw');
-    const searchBtn = document.getElementById('searchBtn');
-    const sentinel = document.getElementById('sentinel');
+    const grid=document.getElementById('grid');
+    const emptyEl=document.getElementById('empty');
+    const moreBtn=document.getElementById('moreBtn');
+    const kwInput=document.getElementById('kw');
+    const searchBtn=document.getElementById('searchBtn');
+    const promoBar=document.getElementById('promoBar');
+    const sortSeg=document.getElementById('sortSeg');
 
-    // ====== HELPERS ======
-    const toVND = (n) => {
-      if (typeof n !== 'number') return '';
-      // Shopee price is typically *100000. Adjust if your API differs.
-      const v = Math.round(n / 100000);
-      return v.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-    };
+    const toVND=n=>{if(typeof n!=='number')return'';return Math.round(n/100000).toLocaleString('vi-VN',{style:'currency',currency:'VND'})};
+    const makeQS=obj=>new URLSearchParams(obj).toString();
+    const fmtHour=t=>{const d=new Date(t*1000);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+    const escapeHtml=str=>String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
 
-    const makeQS = (obj) => new URLSearchParams(obj).toString();
+    function buildURL(page){const qs=makeQS({...state.params,page_number:page});return `${API_BASE}?${qs}`}
 
-    function buildURL(page){
-      const qs = makeQS({ ...state.params, page_number: page });
-      return `${API_BASE}?${qs}`;
-    }
-
-    function skeletonCard(){
-      const wrap = document.createElement('div');
-      wrap.className = 'card';
-      wrap.innerHTML = `
-        <div class="thumb skeleton"></div>
-        <div class="content">
-          <div class="skeleton" style="height:18px;width:90%"></div>
-          <div class="skeleton" style="height:14px;width:60%"></div>
-          <div class="skeleton" style="height:12px;width:40%"></div>
-        </div>`;
-      return wrap;
-    }
-
-    function label(text){
-      const el = document.createElement('span');
-      el.className = 'label';
-      el.textContent = text;
-      return el;
-    }
+    function skeletonCard(){const d=document.createElement('div');d.className='card';d.innerHTML=`<div class="thumb skeleton"></div><div class="content"><div class="skeleton" style="height:18px;width:90%"></div><div class="skeleton" style="height:14px;width:60%"></div><div class="skeleton" style="height:12px;width:40%"></div></div>`;return d}
 
     function itemCard(item){
-      const {
-        image, shopid, itemid, name,
-        price, price_before_discount, raw_discount,
-        is_shop_official, is_shop_preferred, is_shop_preferred_plus, is_shopee_choice,
-        stock
-      } = item;
-
-      const a = document.createElement('a');
-      a.className = 'card';
-      a.href = `https://shopee.vn/product/${shopid}/${itemid}??uls_trackid=53n3265c00ld&utm_campaign=id_WbhZJD6lyu&utm_content=flashsale----&utm_medium=affiliates&utm_source=an_17333510032&utm_term=do1jziv8wy6o`;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-
-      const imgURL = `https://cf.shopee.vn/file/${image}`;
-
-      a.innerHTML = `
-        <div class="thumb">
-          <img loading="lazy" src="${imgURL}" alt="${escapeHtml(name)}" />
-          ${raw_discount ? `<div class="badge">-${raw_discount}%</div>` : ''}
-          <div class="labels"></div>
-        </div>
-        <div class="content">
-          <div class="name" title="${escapeHtml(name)}">${escapeHtml(name)}</div>
-          <div class="price">
-            <div class="now">${toVND(price)}</div>
-            ${price_before_discount ? `<div class="before">${toVND(price_before_discount)}</div>` : ''}
-          </div>
-          <div class="stock">Còn: ${Number.isFinite(stock) ? stock : '—'}</div>
-        </div>`;
-
-      const labels = a.querySelector('.labels');
-      if (is_shop_official) labels.appendChild(label('Mall'));
-      if (is_shop_preferred_plus) labels.appendChild(label('Yêu thích+'));
-      else if (is_shop_preferred) labels.appendChild(label('Yêu thích'));
-      if (is_shopee_choice) labels.appendChild(label('Choice'));
-
+      const {image,shopid,itemid,name,price,price_before_discount,raw_discount,stock}=item;
+      const a=document.createElement('a'); a.className='card'; a.href=`https://shopee.vn/product/${shopid}/${itemid}`; a.target='_blank';
+      const imgURL=`https://cf.shopee.vn/file/${image}`;
+      a.innerHTML=`<div class="thumb"><img loading="lazy" src="${imgURL}" alt="${escapeHtml(name)}"/>${raw_discount?`<div class='badge'>-${raw_discount}%</div>`:''}<div class='labels'></div></div><div class='content'><div class='name' title='${escapeHtml(name)}'>${escapeHtml(name)}</div><div class='price'><div class='now'>${toVND(price)}</div>${price_before_discount?`<div class='before'>${toVND(price_before_discount)}</div>`:''}</div><div class='stock'>Còn: ${Number.isFinite(stock)?stock:'—'}</div></div>`;
       return a;
     }
 
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll('&','&amp;')
-        .replaceAll('<','&lt;')
-        .replaceAll('>','&gt;')
-        .replaceAll('"','&quot;')
-        .replaceAll("'",'&#39;');
-    }
-
-    // ====== FETCH & RENDER ======
     async function fetchPage(page){
-      if (state.loading || state.ended) return [];
-      state.loading = true;
-      moreBtn.disabled = true;
-      moreBtn.textContent = 'Đang tải…';
-
-      const skeletons = [...Array(6)].map(skeletonCard);
-      skeletons.forEach(s => grid.appendChild(s));
-
+      if(state.loading||state.ended) return[];
+      state.loading=true; moreBtn.disabled=true; moreBtn.textContent='Đang tải…';
+      const skeletons=[...Array(6)].map(skeletonCard); skeletons.forEach(s=>grid.appendChild(s));
       try{
-        const url = buildURL(page);
-        const res = await fetch(url, { mode: 'cors' });
-        if (!res.ok) throw new Error('HTTP '+res.status);
-        const data = await res.json();
-        const items = Array.isArray(data) ? data : [];
-
-        skeletons.forEach(s => s.remove());
-
-        const valid = items.filter(x => (typeof x.stock === 'number' ? x.stock > 0 : true));
-
-        if (page === 1) grid.innerHTML = '';
-        valid.forEach(item => grid.appendChild(itemCard(item)));
-
-        if (page === 1 && valid.length === 0){
-          emptyEl.style.display = 'block';
-        } else {
-          emptyEl.style.display = 'none';
-        }
-
-        if (items.length < (state.params.items_per_page || 16)){
-          state.ended = true;
-          moreBtn.textContent = 'Hết dữ liệu';
-          moreBtn.disabled = true;
-        } else {
-          moreBtn.textContent = 'Xem thêm';
-          moreBtn.disabled = false;
-        }
-
+        const url=buildURL(page); const res=await fetch(url);
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const data=await res.json(); const items=Array.isArray(data)?data:[];
+        skeletons.forEach(s=>s.remove());
+        const valid=items.filter(x=>typeof x.stock==='number'?x.stock>0:true);
+        if(page===1) grid.innerHTML='';
+        valid.forEach(i=>grid.appendChild(itemCard(i)));
+        emptyEl.style.display=(page===1&&valid.length===0)?'block':'none';
+        if(items.length<(state.params.items_per_page||16)){
+          state.ended=true; moreBtn.textContent='Hết dữ liệu'; moreBtn.disabled=true;
+        }else{ moreBtn.textContent='Xem thêm'; moreBtn.disabled=false; }
         return valid;
-      }catch(err){
-        console.error(err);
-        skeletons.forEach(s => s.remove());
-        moreBtn.textContent = 'Thử lại';
-        moreBtn.disabled = false;
-        if (grid.children.length === 0){
-          emptyEl.style.display = 'block';
-          emptyEl.textContent = 'Lỗi tải dữ liệu. Kiểm tra CORS/API và thử lại.';
+      }catch(e){
+        console.error(e); skeletons.forEach(s=>s.remove()); emptyEl.style.display='block'; emptyEl.textContent='Lỗi tải dữ liệu'; moreBtn.textContent='Thử lại'; moreBtn.disabled=false; return [];
+      }finally{ state.loading=false; }
+    }
+
+    function resetAndLoad(){ state.page_number=1; state.ended=false; grid.innerHTML=''; setupInfiniteScroll(); fetchPage(state.page_number); }
+
+    // ===== Promotion bar =====
+    function renderPromotions(){
+      promoBar.innerHTML='';
+      if(!Array.isArray(state.promotions)||state.promotions.length===0){
+        const btn=document.createElement('button'); btn.className='promo-btn'; btn.textContent='—'; btn.disabled=true; promoBar.appendChild(btn); return;
+      }
+      state.promotions.forEach((p,idx)=>{
+        const btn=document.createElement('button'); btn.className='promo-btn'; btn.textContent=fmtHour(p.start_time); btn.dataset.pid=String(p.promotionid);
+        if(String(p.promotionid)===String(state.params.promotionid)||(idx===0&&!state.params.promotionid)){
+          btn.classList.add('active'); state.params.promotionid=p.promotionid;
         }
-        return [];
-      } finally{
-        state.loading = false;
+        btn.addEventListener('click',()=>{
+          document.querySelectorAll('.promo-btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active'); state.params.promotionid=p.promotionid; resetAndLoad();
+        });
+        promoBar.appendChild(btn);
+      });
+    }
+
+    // ===== Auto switch by local time =====
+    function getPidByLocalTime(){
+      if(!state.promotions.length) return null;
+      const nowSec=Math.floor(Date.now()/1000);
+      // ưu tiên khung đang diễn ra
+      const cur=state.promotions.find(p=>nowSec>=p.start_time && nowSec<p.end_time);
+      if(cur) return cur.promotionid;
+      // nếu chưa tới khung tiếp theo → chọn khung kế tiếp
+      const next=state.promotions.find(p=>nowSec<p.start_time);
+      return next? next.promotionid : null;
+    }
+
+    function activatePromoButton(pid){
+      document.querySelectorAll('.promo-btn').forEach(b=>{
+        b.classList.toggle('active', b.dataset.pid===String(pid));
+      });
+    }
+
+    function checkAutoPromotion(force=false){
+      const pid=getPidByLocalTime();
+      if(!pid) return;
+      if(force || String(pid)!==String(state.params.promotionid)){
+        state.params.promotionid=pid;
+        activatePromoButton(pid);
+        resetAndLoad();
       }
     }
 
-    function resetAndLoad(){
-      state.page_number = 1;
-      state.ended = false;
-      grid.innerHTML = '';
-      setupInfiniteScroll();
-      fetchPage(state.page_number);
+    let autoTimer; 
+    function startAutoWatcher(){
+      if(autoTimer) clearInterval(autoTimer);
+      autoTimer=setInterval(()=>checkAutoPromotion(false),15000); // 15s kiểm tra một lần
+      document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkAutoPromotion(false); });
     }
 
-    // ====== INFINITE SCROLL (IntersectionObserver) ======
-    let io;
-    function setupInfiniteScroll() {
-      if (io) { try { io.disconnect(); } catch(_){} }
-      io = new IntersectionObserver((entries) => {
-        const entry = entries[0];
-        if (!entry || !entry.isIntersecting) return;
-        if (state.loading || state.ended) return;
-        state.page_number += 1;
-        fetchPage(state.page_number);
-      }, {
-        root: null,
-        rootMargin: '800px 0px 0px 0px',
-        threshold: 0
-      });
-      if (sentinel) io.observe(sentinel);
-    }
+    // ===== Sort segmented =====
+    function applySortUI(val){ const btns=sortSeg.querySelectorAll('.seg'); btns.forEach(b=>{ if(b.dataset.sort===val){ b.classList.add('active'); } else { b.classList.remove('active'); } }); }
+    function setSort(val){ const [field,order]=val.split('|'); state.params.sort_field=field; state.params.sort_order=Number(order); applySortUI(val); resetAndLoad(); }
+    sortSeg.addEventListener('click',e=>{ const btn=e.target.closest('.seg'); if(!btn) return; const val=btn.dataset.sort; if(!val||btn.classList.contains('active')) return; setSort(val); });
+    function initSortDefault(){ applySortUI(`${DEFAULT_QUERY.sort_field}|${DEFAULT_QUERY.sort_order}`); }
 
-    // ====== SORT (segmented buttons) ======
-    const sortSeg = document.getElementById('sortSeg');
-    function applySortUI(val){
-      const btns = sortSeg.querySelectorAll('.seg');
-      btns.forEach(b=>{
-        if (b.dataset.sort === val){
-          b.classList.add('active');
-          b.setAttribute('aria-selected','true');
-        } else {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected','false');
-        }
-      });
-    }
-    function setSort(val){
-      const [field, order] = val.split('|');
-      state.params.sort_field = field;
-      state.params.sort_order = Number(order);
-      applySortUI(val);
-      resetAndLoad();
-    }
-    // init default sort UI
-    applySortUI(`${DEFAULT_QUERY.sort_field}|${DEFAULT_QUERY.sort_order}`);
-    sortSeg.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.seg');
-      if (!btn) return;
-      const val = btn.dataset.sort;
-      if (!val) return;
-      if (btn.classList.contains('active')) return; // không gọi lại nếu đã chọn
-      setSort(val);
-    });
+    // ===== Infinite scroll =====
+    let io; function setupInfiniteScroll(){ if(io){ try{ io.disconnect(); }catch(_){} } io=new IntersectionObserver((entries)=>{ const entry=entries[0]; if(!entry||!entry.isIntersecting) return; if(state.loading||state.ended) return; state.page_number+=1; fetchPage(state.page_number); },{root:null,rootMargin:'800px 0px 0px 0px',threshold:0}); const sent=document.getElementById('sentinel'); if(sent) io.observe(sent); }
 
-    // ====== SEARCH (click button / Enter) ======
-    function doSearch(){
-      state.params.keyword = kwInput.value.trim();
-      resetAndLoad();
-    }
-    searchBtn.addEventListener('click', doSearch);
-    kwInput.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        doSearch();
+    // ===== Bootstrap =====
+    async function bootstrap(){
+      try{ const res=await fetch(PROMO_API); const promos=await res.json(); if(Array.isArray(promos)&&promos.length>0){ state.promotions=promos; }
+        // render trước, rồi auto chọn theo thời gian local
+        renderPromotions();
+        const autoPid=getPidByLocalTime();
+        if(autoPid){ state.params.promotionid=autoPid; activatePromoButton(autoPid); }
       }
-    });
+      catch(e){ console.error('Lỗi promotions',e); }
+      finally{ initSortDefault(); setupInfiniteScroll(); fetchPage(state.page_number); startAutoWatcher(); checkAutoPromotion(true); }
+    }
 
-    // ====== LOAD MORE (fallback button) ======
-    moreBtn.addEventListener('click', () => {
-      if (state.loading || state.ended) return;
-      state.page_number += 1;
-      fetchPage(state.page_number);
-    });
+    // ===== Events =====
+    searchBtn.addEventListener('click',()=>{ state.params.keyword=kwInput.value.trim(); resetAndLoad(); });
+    kwInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); state.params.keyword=kwInput.value.trim(); resetAndLoad(); }});
+    moreBtn.addEventListener('click',()=>{ if(state.loading||state.ended) return; state.page_number+=1; fetchPage(state.page_number); });
 
-    // ====== INIT ======
-    setupInfiniteScroll();
-    fetchPage(state.page_number);
+    bootstrap();
   </script>
 </body>
 </html>
