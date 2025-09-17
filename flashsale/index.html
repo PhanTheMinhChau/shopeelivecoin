@@ -120,7 +120,7 @@
 
     function itemCard(item){
       const {image,shopid,itemid,name,price,price_before_discount,raw_discount,stock}=item;
-      const a=document.createElement('a'); a.className='card'; a.href=`https://shopee.vn/product/${shopid}/${itemid}`; a.target='_blank';
+      const a=document.createElement('a'); a.className='card'; a.href=`https://shopee.vn/product/${shopid}/${itemid}?uls_trackid=53ngrs1m00md&utm_campaign=id_106GHhuqnWi&utm_content=----&utm_medium=affiliates&utm_source=an_17333510032&utm_term=dobjx6gsucq5`; a.target='_blank';
       const imgURL=`https://cf.shopee.vn/file/${image}`;
       a.innerHTML=`<div class="thumb"><img loading="lazy" src="${imgURL}" alt="${escapeHtml(name)}"/>${raw_discount?`<div class='badge'>-${raw_discount}%</div>`:''}<div class='labels'></div></div><div class='content'><div class='name' title='${escapeHtml(name)}'>${escapeHtml(name)}</div><div class='price'><div class='now'>${toVND(price)}</div>${price_before_discount?`<div class='before'>${toVND(price_before_discount)}</div>`:''}</div><div class='stock'>Còn: ${Number.isFinite(stock)?stock:'—'}</div></div>`;
       return a;
