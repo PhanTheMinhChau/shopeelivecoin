@@ -188,13 +188,7 @@
     }
 
     function checkAutoPromotion(force=false){
-      const pid=getPidByLocalTime();
-      if(!pid) return;
-      if(force || String(pid)!==String(state.params.promotionid)){
-        state.params.promotionid=pid;
-        activatePromoButton(pid);
-        resetAndLoad();
-      }
+      return
     }
 
     let autoTimer; 
