@@ -119,6 +119,43 @@
       font-weight:600;
       color:var(--text);
     }
+
+    /* Back to top button */
+    .back-to-top{
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      width:48px;
+      height:48px;
+      background:var(--brand);
+      color:#fff;
+      border:none;
+      border-radius:50%;
+      box-shadow:0 4px 20px rgba(238,77,45,.3);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:20px;
+      z-index:1000;
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(20px);
+      transition:all 0.3s ease;
+    }
+    .back-to-top.visible{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(0);
+    }
+    .back-to-top:hover{
+      background:var(--brand-600);
+      transform:translateY(-2px);
+      box-shadow:0 6px 25px rgba(238,77,45,.4);
+    }
+    .back-to-top:active{
+      transform:translateY(0);
+    }
   </style>
 </head>
 <body>
@@ -170,6 +207,13 @@
     <button id="moreBtn" class="loadmore">Xem thêm</button>
   </div>
 
+  <!-- Back to top button -->
+  <button id="backToTop" class="back-to-top" title="Lên đầu trang">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 19V5M5 12L12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
   <script>
     const PROMO_API='https://sharelink-kappa.vercel.app/promotions';
     const API_BASE='https://sharelink-kappa.vercel.app/flash_sale_test';
@@ -186,6 +230,7 @@
     const sortSeg=document.getElementById('sortSeg');
     const countdownEl=document.getElementById('countdown');
     const loadingOverlay=document.getElementById('loadingOverlay');
+    const backToTopBtn=document.getElementById('backToTop');
 
     const toVND=n=>{if(typeof n!=='number')return'';return Math.round(n/100000).toLocaleString('vi-VN',{style:'currency',currency:'VND'})};
     const makeQS=obj=>new URLSearchParams(obj).toString();
@@ -399,10 +444,29 @@
       }
     }
 
+    // ===== Back to top functionality =====
+    function toggleBackToTop(){
+      const scrollY = window.scrollY;
+      if(scrollY > 300){
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    }
+    
+    function scrollToTop(){
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
     // ===== Events =====
     searchBtn.addEventListener('click',()=>{ state.params.keyword=kwInput.value.trim(); resetAndLoad(); });
     kwInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); state.params.keyword=kwInput.value.trim(); resetAndLoad(); }});
     moreBtn.addEventListener('click',()=>{ if(state.loading||state.ended) return; state.page_number+=1; fetchPage(state.page_number); });
+    backToTopBtn.addEventListener('click', scrollToTop);
+    window.addEventListener('scroll', toggleBackToTop);
 
     bootstrap();
   </script>
