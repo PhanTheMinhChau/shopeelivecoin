@@ -28,34 +28,30 @@
     .seg{flex:1;white-space:nowrap;border:none;background:transparent;padding:8px 14px;border-radius:999px;font-weight:700;color:var(--muted);cursor:pointer}
     .seg.active{background:var(--text);color:#fff}
 
-    /* Countdown (nền mờ) */
-/* Countdown (nhỏ, căn giữa, nền mờ) */
-.countdown-wrap{
-  padding:4px 0 12px;
-  display:flex;
-  justify-content:center; /* căn giữa */
-}
-
-#countdown{
-  display:none;
-  font-size:13px;
-  font-weight:600;
-  line-height:1.2;
-  padding:2px 6px; /* giảm padding để khít chữ */
-  border-radius:999px; /* bo tròn pill */
-  color:var(--text);
-  background:rgba(255,255,255,0.5); /* nền mờ */
-  backdrop-filter:blur(6px) saturate(150%);
-  box-shadow:0 1px 4px rgba(0,0,0,0.08);
-
-  display:inline-flex;   /* chỉ dài bằng nội dung */
-  align-items:center;
-  justify-content:center;
-  white-space:nowrap;    /* không xuống dòng */
-  width:auto;            /* bỏ chiếm ngang */
-  max-width:max-content; /* khít chữ */
-}
-
+    /* Countdown (nhỏ, căn giữa, nền mờ) */
+    .countdown-wrap{
+      padding:4px 0 12px;
+      display:flex;
+      justify-content:center;
+    }
+    #countdown{
+      display:none;
+      font-size:13px;
+      font-weight:600;
+      line-height:1.2;
+      padding:2px 6px;
+      border-radius:999px;
+      color:var(--text);
+      background:rgba(255,255,255,0.5);
+      backdrop-filter:blur(6px) saturate(150%);
+      box-shadow:0 1px 4px rgba(0,0,0,0.08);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      white-space:nowrap;
+      width:auto;
+      max-width:max-content;
+    }
 
     /* Promotion horizontal bar */
     .promo-bar{display:flex;overflow-x:auto;gap:8px;padding:10px 16px;max-width:1000px;margin:0 auto}
@@ -70,6 +66,20 @@
     .badge{position:absolute;top:8px;left:8px;background:var(--brand);color:#fff;font-size:12px;font-weight:700;border-radius:10px;padding:4px 8px}
     .labels{position:absolute;bottom:8px;left:8px;display:flex;gap:6px;flex-wrap:wrap}
     .label{background:rgba(255,255,255,.9);color:var(--text);border:1px solid var(--ring);font-size:11px;font-weight:700;padding:2px 6px;border-radius:8px}
+
+    /* === thêm overlay cho sản phẩm hết hàng === */
+    .soldout{
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,.55);
+      color:#fff;
+      font-weight:800;
+      font-size:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-transform:uppercase;
+    }
 
     .content{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
     .name{font-size:14px;line-height:1.3;height:2.6em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
@@ -88,74 +98,24 @@
 
     /* Loading overlay */
     .loading-overlay{
-      position:fixed;
-      top:0;
-      left:0;
-      right:0;
-      bottom:0;
-      background:rgba(255,255,255,0.95);
+      position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,0.95);
       backdrop-filter:blur(8px);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      z-index:9999;
-      gap:16px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      z-index:9999;gap:16px;
     }
-    .loading-spinner{
-      width:40px;
-      height:40px;
-      border:3px solid var(--ring);
-      border-top:3px solid var(--brand);
-      border-radius:50%;
-      animation:spin 1s linear infinite;
-    }
-    @keyframes spin{
-      0%{transform:rotate(0deg)}
-      100%{transform:rotate(360deg)}
-    }
-    .loading-text{
-      font-size:16px;
-      font-weight:600;
-      color:var(--text);
-    }
+    .loading-spinner{width:40px;height:40px;border:3px solid var(--ring);border-top:3px solid var(--brand);border-radius:50%;animation:spin 1s linear infinite;}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .loading-text{font-size:16px;font-weight:600;color:var(--text);}
 
     /* Back to top button */
     .back-to-top{
-      position:fixed;
-      bottom:20px;
-      right:20px;
-      width:48px;
-      height:48px;
-      background:var(--brand);
-      color:#fff;
-      border:none;
-      border-radius:50%;
-      box-shadow:0 4px 20px rgba(238,77,45,.3);
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:20px;
-      z-index:1000;
-      opacity:0;
-      visibility:hidden;
-      transform:translateY(20px);
-      transition:all 0.3s ease;
+      position:fixed;bottom:20px;right:20px;width:48px;height:48px;background:var(--brand);color:#fff;border:none;border-radius:50%;
+      box-shadow:0 4px 20px rgba(238,77,45,.3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;z-index:1000;
+      opacity:0;visibility:hidden;transform:translateY(20px);transition:all .3s ease;
     }
-    .back-to-top.visible{
-      opacity:1;
-      visibility:visible;
-      transform:translateY(0);
-    }
-    .back-to-top:hover{
-      background:var(--brand-600);
-      transform:translateY(-2px);
-      box-shadow:0 6px 25px rgba(238,77,45,.4);
-    }
-    .back-to-top:active{
-      transform:translateY(0);
-    }
+    .back-to-top.visible{opacity:1;visibility:visible;transform:translateY(0);}
+    .back-to-top:hover{background:var(--brand-600);transform:translateY(-2px);box-shadow:0 6px 25px rgba(238,77,45,.4);}
+    .back-to-top:active{transform:translateY(0);}
   </style>
 </head>
 <body>
@@ -244,9 +204,24 @@
 
     function itemCard(item){
       const {image,shopid,itemid,name,price,price_before_discount,raw_discount,stock}=item;
-      const a=document.createElement('a'); a.className='card'; a.href=`https://shopee.vn/product/${shopid}/${itemid}?uls_trackid=53nvku3b00p8&utm_campaign=id_13DH2fLLToO&utm_content=flashsale----&utm_medium=affiliates&utm_source=an_17396220028&utm_term=don9zxk76jwm`; a.target='_blank';
+      const a=document.createElement('a'); a.className='card';
+      a.href=`https://shopee.vn/product/${shopid}/${itemid}?uls_trackid=53nvku3b00p8&utm_campaign=id_13DH2fLLToO&utm_content=flashsale----&utm_medium=affiliates&utm_source=an_17396220028&utm_term=don9zxk76jwm`; 
+      a.target='_blank';
       const imgURL=`https://cf.shopee.vn/file/${image}`;
-      a.innerHTML=`<div class="thumb"><img loading="lazy" src="${imgURL}" alt="${escapeHtml(name)}"/>${raw_discount?`<div class='badge'>-${raw_discount}%</div>`:''}<div class='labels'></div></div><div class='content'><div class='name' title='${escapeHtml(name)}'>${escapeHtml(name)}</div><div class='price'><div class='now'>${toVND(price)}</div>${price_before_discount?`<div class='before'>${toVND(price_before_discount)}</div>`:''}</div><div class='stock'>Còn: ${Number.isFinite(stock)?stock:'—'}</div></div>`;
+      a.innerHTML=`<div class="thumb">
+          <img loading="lazy" src="${imgURL}" alt="${escapeHtml(name)}"/>
+          ${raw_discount?`<div class='badge'>-${raw_discount}%</div>`:''}
+          ${stock===0?`<div class="soldout">Đã hết</div>`:''}
+          <div class='labels'></div>
+        </div>
+        <div class='content'>
+          <div class='name' title='${escapeHtml(name)}'>${escapeHtml(name)}</div>
+          <div class='price'>
+            <div class='now'>${toVND(price)}</div>
+            ${price_before_discount?`<div class='before'>${toVND(price_before_discount)}</div>`:''}
+          </div>
+          <div class='stock'>Còn: ${Number.isFinite(stock)?stock:'—'}</div>
+        </div>`;
       return a;
     }
 
@@ -259,7 +234,7 @@
         if(!res.ok) throw new Error('HTTP '+res.status);
         const data=await res.json(); const items=Array.isArray(data)?data:[];
         skeletons.forEach(s=>s.remove());
-        const valid=items.filter(x=>typeof x.stock==='number'?x.stock>0:true);
+        const valid=items; // Giữ NGUYÊN logic lọc
         if(page===1) grid.innerHTML='';
         valid.forEach(i=>grid.appendChild(itemCard(i)));
         emptyEl.style.display=(page===1&&valid.length===0)?'block':'none';
@@ -289,14 +264,14 @@
           document.querySelectorAll('.promo-btn').forEach(b=>b.classList.remove('active'));
           btn.classList.add('active');
           state.params.promotionid=p.promotionid;
-          setURLPid(p.promotionid);  // cập nhật URL khi người dùng đổi khung
+          setURLPid(p.promotionid);
           resetAndLoad();
         });
         promoBar.appendChild(btn);
       });
     }
 
-    // ===== Auto switch by local time (giữ nguyên hành vi cũ) =====
+    // Auto theo giờ local (giữ nguyên)
     function getPidByLocalTime(){
       if(!state.promotions.length) return null;
       const nowSec=Math.floor(Date.now()/1000);
@@ -313,7 +288,7 @@
     }
 
     function checkAutoPromotion(force=false){
-      return; // vẫn giữ nguyên như bạn đang để
+      return; // giữ nguyên như bạn đang để
     }
 
     let autoTimer; 
@@ -323,146 +298,93 @@
       document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkAutoPromotion(false); });
     }
 
-    // ===== Sort segmented =====
+    // Sort segmented
     function applySortUI(val){ const btns=sortSeg.querySelectorAll('.seg'); btns.forEach(b=>{ if(b.dataset.sort===val){ b.classList.add('active'); } else { b.classList.remove('active'); } }); }
     function setSort(val){ const [field,order]=val.split('|'); state.params.sort_field=field; state.params.sort_order=Number(order); applySortUI(val); resetAndLoad(); }
     sortSeg.addEventListener('click',e=>{ const btn=e.target.closest('.seg'); if(!btn) return; const val=btn.dataset.sort; if(!val||btn.classList.contains('active')) return; setSort(val); });
     function initSortDefault(){ applySortUI(`${DEFAULT_QUERY.sort_field}|${DEFAULT_QUERY.sort_order}`); }
 
-    // ===== Infinite scroll =====
+    // Infinite scroll
     let io; function setupInfiniteScroll(){ if(io){ try{ io.disconnect(); }catch(_){} } io=new IntersectionObserver((entries)=>{ const entry=entries[0]; if(!entry||!entry.isIntersecting) return; if(state.loading||state.ended) return; state.page_number+=1; fetchPage(state.page_number); },{root:null,rootMargin:'800px 0px 0px 0px',threshold:0}); const sent=document.getElementById('sentinel'); if(sent) io.observe(sent); }
 
-    // ===== URL helpers (promotionid) =====
-    function getURLPid(){
-      const sp = new URLSearchParams(location.search);
-      const v = sp.get('promotionid');
-      return v ? v.trim() : null;
+    // URL helpers
+    function getURLPid(){ const sp=new URLSearchParams(location.search); const v=sp.get('promotionid'); return v?v.trim():null; }
+    function setURLPid(pid,replace=false){
+      const sp=new URLSearchParams(location.search);
+      if(pid==null||pid===''){ sp.delete('promotionid'); } else { sp.set('promotionid', String(pid)); }
+      const newUrl=location.pathname+(sp.toString()?'?'+sp.toString():'')+location.hash;
+      if(replace){ history.replaceState(null,'',newUrl); } else { history.pushState(null,'',newUrl); }
     }
-    function setURLPid(pid, replace=false){
-      const sp = new URLSearchParams(location.search);
-      if(pid==null || pid===''){
-        sp.delete('promotionid');
-      }else{
-        sp.set('promotionid', String(pid));
-      }
-      const newUrl = location.pathname + (sp.toString() ? '?' + sp.toString() : '') + location.hash;
-      if(replace){ history.replaceState(null, '', newUrl); }
-      else{ history.pushState(null, '', newUrl); }
-    }
-    // Đồng bộ khi người dùng back/forward
     window.addEventListener('popstate', ()=>{
-      const pid = getURLPid();
+      const pid=getURLPid();
       if(pid && String(state.params.promotionid)!==String(pid)){
-        state.params.promotionid = pid;
+        state.params.promotionid=pid;
         activatePromoButton(pid);
         resetAndLoad();
       }
     });
 
-    // ===== Countdown helpers =====
-    function getSelectedPromo(){
-      const pid = String(state.params.promotionid || '');
-      return state.promotions.find(p => String(p.promotionid)===pid) || null;
-    }
-    function getNextPromoAfter(ts){
-      return state.promotions.find(p => p.start_time > ts) || null;
-    }
-    function formatDHMS(sec){
-      if(sec < 0) sec = 0;
-      const d = Math.floor(sec/86400);
-      const h = Math.floor((sec%86400)/3600);
-      const m = Math.floor((sec%3600)/60);
-      const s = Math.floor(sec%60);
-      const pad = n => String(n).padStart(2,'0');
-      return (d>0 ? `${d}d ` : '') + `${pad(h)}:${pad(m)}:${pad(s)}`;
-    }
-    let countdownTimer = null;
+    // Countdown
+    function getSelectedPromo(){ const pid=String(state.params.promotionid||''); return state.promotions.find(p=>String(p.promotionid)===pid)||null; }
+    function getNextPromoAfter(ts){ return state.promotions.find(p=>p.start_time>ts)||null; }
+    function formatDHMS(sec){ if(sec<0) sec=0; const d=Math.floor(sec/86400); const h=Math.floor((sec%86400)/3600); const m=Math.floor((sec%3600)/60); const s=Math.floor(sec%60); const pad=n=>String(n).padStart(2,'0'); return (d>0?`${d}d `:'')+`${pad(h)}:${pad(m)}:${pad(s)}`; }
+    let countdownTimer=null;
     function updateCountdownOnce(){
-      const sel = getSelectedPromo();
+      const sel=getSelectedPromo();
       if(!sel){ countdownEl.style.display='none'; return; }
-      const now = Math.floor(Date.now()/1000);
-      // đang trong khung → ẩn
-      if(now >= sel.start_time && now < sel.end_time){
-        countdownEl.style.display='none';
-        return;
-      }
-      let target = null, label = '';
-      if(now < sel.start_time){
-        target = sel.start_time;
-        label = 'Bắt đầu sau';
-      }else{
-        const next = getNextPromoAfter(now);
-        if(!next){ countdownEl.style.display='none'; return; }
-        target = next.start_time;
-        label = 'Khung kế tiếp sau';
-      }
-      const remain = target - now;
+      const now=Math.floor(Date.now()/1000);
+      if(now>=sel.start_time && now<sel.end_time){ countdownEl.style.display='none'; return; }
+      let target=null,label='';
+      if(now<sel.start_time){ target=sel.start_time; label='Bắt đầu sau'; }
+      else{ const next=getNextPromoAfter(now); if(!next){ countdownEl.style.display='none'; return; } target=next.start_time; label='Khung kế tiếp sau'; }
+      const remain=target-now;
       countdownEl.textContent = `${label}: ${formatDHMS(remain)}`;
-      countdownEl.style.display = 'block';
+      countdownEl.style.display='block';
     }
-    function startCountdown(){
-      if(countdownTimer) clearInterval(countdownTimer);
-      updateCountdownOnce();
-      countdownTimer = setInterval(updateCountdownOnce, 1000);
-    }
+    function startCountdown(){ if(countdownTimer) clearInterval(countdownTimer); updateCountdownOnce(); countdownTimer=setInterval(updateCountdownOnce,1000); }
 
-    // ===== Bootstrap =====
+    // Bootstrap
     async function bootstrap(){
       try{
         const res=await fetch(PROMO_API);
         const promos=await res.json();
         if(Array.isArray(promos)&&promos.length>0){ state.promotions=promos; }
-        // render trước
         renderPromotions();
 
-        // Ưu tiên promotionid từ URL (nếu có)
-        const urlPid = getURLPid();
+        const urlPid=getURLPid();
         if(urlPid){
-          state.params.promotionid = urlPid;
+          state.params.promotionid=urlPid;
           activatePromoButton(urlPid);
-          setURLPid(urlPid, true); // chuẩn hóa URL
+          setURLPid(urlPid,true);
         }else{
-          // Không có trên URL thì auto chọn theo local time
           const autoPid=getPidByLocalTime();
           if(autoPid){
             state.params.promotionid=autoPid;
             activatePromoButton(autoPid);
-            setURLPid(autoPid, true);
+            setURLPid(autoPid,true);
           }
         }
-      }
-      catch(e){ console.error('Lỗi promotions',e); }
+      }catch(e){ console.error('Lỗi promotions',e); }
       finally{
-        // Ẩn loading overlay
         loadingOverlay.style.display='none';
-        
         initSortDefault();
         setupInfiniteScroll();
         fetchPage(state.page_number);
         startAutoWatcher();
         checkAutoPromotion(true);
-        startCountdown(); // khởi chạy đồng hồ
+        startCountdown();
       }
     }
 
-    // ===== Back to top functionality =====
+    // Back to top
     function toggleBackToTop(){
-      const scrollY = window.scrollY;
-      if(scrollY > 300){
-        backToTopBtn.classList.add('visible');
-      } else {
-        backToTopBtn.classList.remove('visible');
-      }
+      const y=window.scrollY;
+      if(y>300) backToTopBtn.classList.add('visible');
+      else backToTopBtn.classList.remove('visible');
     }
-    
-    function scrollToTop(){
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
+    function scrollToTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
 
-    // ===== Events =====
+    // Events
     searchBtn.addEventListener('click',()=>{ state.params.keyword=kwInput.value.trim(); resetAndLoad(); });
     kwInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); state.params.keyword=kwInput.value.trim(); resetAndLoad(); }});
     moreBtn.addEventListener('click',()=>{ if(state.loading||state.ended) return; state.page_number+=1; fetchPage(state.page_number); });
