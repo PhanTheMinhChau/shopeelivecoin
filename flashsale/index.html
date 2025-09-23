@@ -352,7 +352,9 @@
         renderPromotions();
 
         const urlPid=getURLPid();
-        if(urlPid){
+        const validPids = state.promotions.map(p=>String(p.promotionid));
+        
+        if(urlPid && validPids.includes(urlPid)){
           state.params.promotionid=urlPid;
           activatePromoButton(urlPid);
           setURLPid(urlPid,true);
