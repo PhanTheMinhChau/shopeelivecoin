@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Đang chuyển hướng...</title>
+  <meta name="robots" content="noindex,nofollow">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: #fefefe;
+      color: #333;
+      text-align: center;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #ddd;
+      border-top: 4px solid #ff5722;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    a {
+      color: #ff5722;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <p>Đang chuyển hướng, vui lòng chờ...</p>
+  <p>Nếu không được tự động, <a id="manualLink" href="#">bấm vào đây</a>.</p>
+
+  <script>
+    (function() {
+      const ua = navigator.userAgent || "";
+      let targetUrl = "";
+
+      // ⚙️ Cấu hình các link
+      const linkShopee = "https://shopee.vn/product/123456789"; // Link thật của bạn
+      const linkLanding = "https://yourlandingpage.vn/khuyen-mai"; // Link khác khi mở ngoài
+      const linkZalo = "https://zalo.me/g/abcdef123"; // tuỳ chọn
+
+      // 🧠 Xác định môi trường
+      if (/FBAN|FBAV|FB_IAB|FB4A|Facebook|Messenger/i.test(ua)) {
+        targetUrl = linkShopee; // Mở trong app Facebook → Shopee
+      } 
+      else if (/Zalo|ZBrowser/i.test(ua)) {
+        targetUrl = linkZalo; // Mở trong Zalo → vào nhóm Zalo
+      }
+      else {
+        targetUrl = linkLanding; // Mở bằng Chrome/Safari → trang landing khác
+      }
+
+      // Chuyển hướng sau 800ms để hiển thị hiệu ứng
+      document.getElementById("manualLink").href = targetUrl;
+      setTimeout(() => { window.location.href = targetUrl; }, 800);
+    })();
+  </script>
+</body>
+</html>
