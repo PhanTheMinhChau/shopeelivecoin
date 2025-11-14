@@ -365,7 +365,7 @@
     function renderThumbsBox(){
       thumbsBox.innerHTML = '';
       // 5 màu đầu
-      GALLERY.slice(0,5).forEach((it, i)=>{
+      GALLERY.slice(0,4).forEach((it, i)=>{
         const btn = document.createElement('button');
         btn.className = 'thumb';
         btn.setAttribute('aria-selected', i===currentColorIndex ? 'true':'false');
