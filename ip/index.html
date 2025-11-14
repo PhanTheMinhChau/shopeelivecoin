@@ -375,20 +375,20 @@
         thumbsBox.appendChild(btn);
       });
       // ô +n
-      const remaining = Math.max(GALLERY.length - 5, 0);
+      const remaining = Math.max(GALLERY.length - 4, 0);
       if(remaining > 0){
         const thumbMore = document.createElement('button');
         thumbMore.className = 'thumb';
         thumbMore.setAttribute('aria-label', `Xem thêm ${remaining} ảnh`);
-        thumbMore.innerHTML = `<img src="${GALLERY[5].src}" alt="Ảnh chi tiết"><div class="overlay-count">+${remaining}</div>`;
-        thumbMore.addEventListener('click', ()=> openLightbox(5));
+        thumbMore.innerHTML = `<img src="${GALLERY[4].src}" alt="Ảnh chi tiết"><div class="overlay-count">+${remaining}</div>`;
+        thumbMore.addEventListener('click', ()=> openLightbox(4));
         thumbsBox.appendChild(thumbMore);
       }
       // badge +n trên ảnh chính
       if(remaining > 0){
         imgCount.textContent = `+${remaining}`;
         imgCount.setAttribute('aria-hidden','false');
-        imgCount.onclick = ()=> openLightbox(5);
+        imgCount.onclick = ()=> openLightbox(4);
       }else{
         imgCount.setAttribute('aria-hidden','true');
       }
@@ -403,8 +403,8 @@
     }
 
     // Prev/Next giữa 5 màu
-    function goPrev(){ currentColorIndex = (currentColorIndex + 5 - 1) % 5; selectColor(currentColorIndex); }
-    function goNext(){ currentColorIndex = (currentColorIndex + 1) % 5; selectColor(currentColorIndex); }
+    function goPrev(){ currentColorIndex = (currentColorIndex + 4 - 1) % 4; selectColor(currentColorIndex); }
+    function goNext(){ currentColorIndex = (currentColorIndex + 1) % 4; selectColor(currentColorIndex); }
 
     document.getElementById('prevBtn').addEventListener('click', goPrev);
     document.getElementById('nextBtn').addEventListener('click', goNext);
@@ -428,9 +428,9 @@
     const lbClose   = document.getElementById('lbClose');
     const lbPrev    = document.getElementById('lbPrev');
     const lbNext    = document.getElementById('lbNext');
-    let lbIndex = 5;
+    let lbIndex = 4;
 
-    function openLightbox(startIndex=5){
+    function openLightbox(startIndex=4){
       lbIndex = startIndex;
       renderLbThumbs();
       setLbImage(lbIndex);
@@ -450,7 +450,7 @@
         ? (it.caption || '')
         : (it.name || '');
       [...lbThumbs.children].forEach((el, idx)=>
-        el.setAttribute('aria-selected', (5+idx)===i ? 'true':'false')
+        el.setAttribute('aria-selected', (4+idx)===i ? 'true':'false')
       );
     }
     function renderLbThumbs(){
