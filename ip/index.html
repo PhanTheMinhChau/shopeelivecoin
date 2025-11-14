@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iPhone Air – Mua ngay</title>
+  <meta name="description" content="Trang bán iPhone Air, tối ưu mobile. 5 ảnh đầu đổi màu, các ảnh sau hiển thị +n giống kiểu album trên Facebook, bấm mở popup xem ảnh." />
+  <style>
+    /* ===== Monochrome mobile-first ===== */
+    :root{ --bg:#fff; --text:#111; --muted:#6b7280; --border:#e5e7eb; --elev:#f8fafc; --black:#111; --radius:16px; --shadow:0 10px 28px rgba(0,0,0,.06); }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:720px;margin-inline:auto;padding:16px}
+
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .badge{width:30px;height:30px;border-radius:9px;background:#111;color:#fff;display:grid;place-items:center;font-weight:800}
+    .sub{color:var(--muted);font-size:12px}
+
+    .card{border:1px solid var(--border);background:var(--elev);border-radius:var(--radius);box-shadow:var(--shadow)}
+
+    /* --- Preview main image --- */
+    .preview{position:relative;overflow:hidden;border-bottom:1px solid var(--border);background:#fff}
+    .preview img{display:block;width:100%;height:auto;object-fit:cover}
+    .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);color:#fff;border:0;border-radius:999px;width:36px;height:36px;display:grid;place-items:center}
+    .nav-btn.left{left:8px}
+    .nav-btn.right{right:8px}
+    .img-count-badge{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.7);color:#fff;border:0;border-radius:999px;padding:6px 10px;font-weight:800;letter-spacing:.2px;display:none}
+    .img-count-badge[aria-hidden="false"]{display:inline-flex;align-items:center;justify-content:center}
+
+    .info{padding:14px}
+    .title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .title h1{margin:0;font-size:20px}
+    .price{font-weight:800}
+    .muted{color:var(--muted)}
+
+    /* --- Thumbs box kiểu Facebook --- */
+    .block-title{margin:14px 0 8px;font-weight:700}
+    .thumbs-box{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+    .thumb{position:relative;aspect-ratio:1/1;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:#fff;padding:0}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .thumb[aria-selected="true"]{outline:2px solid var(--black);outline-offset:2px}
+    .overlay-count{position:absolute;inset:0;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center;font-weight:800;font-size:18px}
+    @media(min-width:600px){ .thumbs-box{grid-template-columns:repeat(6,1fr);} }
+
+    .actions{display:flex;gap:10px;margin-top:12px}
+    .btn{flex:1;display:inline-flex;justify-content:center;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid #111;background:#111;color:#fff;font-weight:700}
+    .btn.ghost{flex:0 0 auto;background:#fff;color:#111;border-color:var(--border)}
+
+    footer{margin:18px 0 6px;color:var(--muted);font-size:12px;text-align:center}
+
+    /* --- Contact Modal --- */
+    .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:16px}
+    .modal{width:100%;max-width:520px;background:#111;color:#fff;border-radius:18px;box-shadow:var(--shadow);padding:18px;border:1px solid rgba(255,255,255,.08)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .contact{display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:12px 10px}
+    .close{margin-top:12px;width:100%;background:#fff;color:#111;border:0;border-radius:10px;padding:10px 12px}
+
+    /* --- Lightbox xem ảnh (giống album Facebook) --- */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:10px;z-index:50}
+    .lightbox-inner{width:100%;max-width:900px;display:grid;gap:10px}
+    .lightbox-main{position:relative}
+    .lightbox-main img{width:100%;height:auto;display:block}
+    .lb-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:999px;width:40px;height:40px;display:grid;place-items:center}
+    .lb-btn.left{left:8px}
+    .lb-btn.right{right:8px}
+    .lb-caption{color:#e5e7eb;text-align:center;font-size:13px}
+    .lb-close{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:10px;padding:8px 10px}
+    .lb-thumbs{display:flex;gap:8px;overflow:auto;padding:4px}
+    .lb-thumb{flex:0 0 auto;width:70px;height:70px;border-radius:8px;border:1px solid rgba(255,255,255,.2);overflow:hidden}
+    .lb-thumb img{width:100%;height:100%;object-fit:cover}
+    .lb-thumb[aria-selected="true"]{outline:2px solid #fff;outline-offset:2px}
+
+    @media(min-width:768px){ .title h1{font-size:22px} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="badge"></div>
+        <div>
+          <div>iPhone Air</div>
+          <div class="sub">Tối ưu mobile • 1 sản phẩm • 5 màu</div>
+        </div>
+      </div>
+      <div class="sub">Bảo hành 12T • Đổi mới 30 ngày</div>
+    </header>
+
+    <section class="card" aria-label="Sản phẩm iPhone Air">
+      <div class="preview" id="preview">
+        <button class="nav-btn left" id="prevBtn" aria-label="Ảnh trước">‹</button>
+        <img id="mainImg" alt="Ảnh iPhone Air" src="https://placehold.co/1200x1600/png" />
+        <button class="nav-btn right" id="nextBtn" aria-label="Ảnh sau">›</button>
+        <button class="img-count-badge" id="imgCount" aria-hidden="true" aria-label="Xem thêm ảnh">+0</button>
+      </div>
+
+      <div class="info">
+        <div class="title">
+          <h1>iPhone Air</h1>
+          <div class="price" id="price">17.990.000 ₫</div>
+        </div>
+        <div class="muted" id="colorLabel">Màu hiện tại: Đen Graphite</div>
+
+        <div class="block-title">Ảnh sản phẩm</div>
+        <div class="thumbs-box" id="thumbsBox" aria-label="Chọn ảnh và đổi màu"></div>
+
+        <div class="actions">
+          <button id="buy" class="btn" aria-label="Mua ngay">Mua ngay</button>
+          <button id="more" class="btn ghost" aria-label="Xem thông số">Thông số</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>© <span id="year"></span> iPhone Air Store</footer>
+  </div>
+
+  <!-- Modal liên hệ -->
+  <div class="backdrop" id="backdrop" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <h2>Liên hệ đặt hàng</h2>
+      <p>Bạn đang chọn <strong id="picked"></strong>. Chọn kênh liên hệ để trao đổi nhanh.</p>
+      <div class="row">
+        <a id="messenger" class="contact" href="#" target="_blank" rel="noopener">Messenger</a>
+        <a id="zalo" class="contact" href="#" target="_blank" rel="noopener">Zalo</a>
+      </div>
+      <button class="close" id="close">Đóng</button>
+    </div>
+  </div>
+
+  <!-- Lightbox xem ảnh -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="lightbox-inner">
+      <div class="lightbox-main">
+        <button class="lb-close" id="lbClose" aria-label="Đóng">✕</button>
+        <button class="lb-btn left" id="lbPrev" aria-label="Ảnh trước">‹</button>
+        <img id="lbImg" alt="Ảnh xem lớn" src="" />
+        <button class="lb-btn right" id="lbNext" aria-label="Ảnh sau">›</button>
+      </div>
+      <div class="lb-caption" id="lbCaption"></div>
+      <div class="lb-thumbs" id="lbThumbs"></div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Liên hệ (thay bằng link thật) =====
+    const MESSENGER_LINK = "https://m.me/yourpage";
+    const ZALO_LINK = "https://zalo.me/0123456789";
+
+    // ===== Dữ liệu ảnh =====
+    // 5 ảnh đầu là ảnh màu (type: 'color'), các ảnh sau là ảnh chi tiết (type: 'detail')
+    const GALLERY = [
+      { type:'color', name:'Đen Graphite',   color:'#2b2f36', src:'https://placehold.co/1200x1600/2b2f36/ffffff/png?text=Black' },
+      { type:'color', name:'Trắng Ngọc',     color:'#f3f5f7', src:'https://placehold.co/1200x1600/f3f5f7/111111/png?text=White' },
+      { type:'color', name:'Xanh Ocean',     color:'#1f6aa5', src:'https://placehold.co/1200x1600/1f6aa5/ffffff/png?text=Ocean' },
+      { type:'color', name:'Hồng Rose',      color:'#e58db3', src:'https://placehold.co/1200x1600/e58db3/111111/png?text=Rose' },
+      { type:'color', name:'Vàng Champagne', color:'#d4b571', src:'https://placehold.co/1200x1600/d4b571/111111/png?text=Gold' },
+      // Detail images
+      { type:'detail', caption:'Cụm camera', src:'https://placehold.co/1200x1600/png?text=Camera' },
+      { type:'detail', caption:'Màn hình 120Hz', src:'https://placehold.co/1200x1600/png?text=120Hz' },
+      { type:'detail', caption:'Khung viền', src:'https://placehold.co/1200x1600/png?text=Frame' },
+      { type:'detail', caption:'Hộp & phụ kiện', src:'https://placehold.co/1200x1600/png?text=Box+%26+Accessories' },
+    ];
+
+    const mainImg = document.getElementById('mainImg');
+    const preview = document.getElementById('preview');
+    const thumbsBox = document.getElementById('thumbsBox');
+    const imgCount = document.getElementById('imgCount');
+    const colorLabel = document.getElementById('colorLabel');
+    const year = document.getElementById('year');
+
+    function formatVND(x){ return new Intl.NumberFormat('vi-VN', {style:'currency', currency:'VND'}).format(x); }
+    document.getElementById('price').textContent = formatVND(17990000);
+    year.textContent = new Date().getFullYear();
+
+    let currentColorIndex = 0; // 0..4
+
+    function renderThumbsBox(){
+      thumbsBox.innerHTML = '';
+      // 5 màu đầu hiển thị như 5 ô đầu của grid
+      GALLERY.slice(0,5).forEach((it, i)=>{
+        const btn = document.createElement('button');
+        btn.className = 'thumb';
+        btn.setAttribute('aria-selected', i===currentColorIndex ? 'true':'false');
+        btn.title = it.name;
+        btn.innerHTML = `<img src="${it.src}" alt="${it.name}">`;
+        btn.addEventListener('click', ()=> selectColor(i));
+        thumbsBox.appendChild(btn);
+      });
+      // Ô cuối cùng kiểu "+n" giống Facebook
+      const remaining = Math.max(GALLERY.length - 5, 0);
+      if(remaining > 0){
+        const thumbMore = document.createElement('button');
+        thumbMore.className = 'thumb';
+        thumbMore.setAttribute('aria-label', `Xem thêm ${remaining} ảnh`);
+        thumbMore.innerHTML = `<img src="${GALLERY[5].src}" alt="Ảnh chi tiết"><div class="overlay-count">+${remaining}</div>`;
+        thumbMore.addEventListener('click', ()=> openLightbox(5));
+        thumbsBox.appendChild(thumbMore);
+      }
+      // Badge +n trên ảnh chính
+      if(remaining > 0){
+        imgCount.textContent = `+${remaining}`;
+        imgCount.setAttribute('aria-hidden','false');
+        imgCount.onclick = ()=> openLightbox(5);
+      } else {
+        imgCount.setAttribute('aria-hidden','true');
+      }
+    }
+
+    function selectColor(i){
+      currentColorIndex = i;
+      const item = GALLERY[i];
+      mainImg.src = item.src;
+      colorLabel.textContent = 'Màu hiện tại: ' + item.name;
+      [...thumbsBox.children].forEach((el, idx)=> el.setAttribute('aria-selected', idx===i ? 'true':'false'));
+    }
+
+    // --- Prev/Next giữa 5 màu ---
+    function goPrev(){ currentColorIndex = (currentColorIndex + 5 - 1) % 5; selectColor(currentColorIndex); }
+    function goNext(){ currentColorIndex = (currentColorIndex + 1) % 5; selectColor(currentColorIndex); }
+
+    document.getElementById('prevBtn').addEventListener('click', goPrev);
+    document.getElementById('nextBtn').addEventListener('click', goNext);
+
+    // --- Swipe main image ---
+    let startX = 0; let touching = false;
+    preview.addEventListener('touchstart', (e)=>{ touching=true; startX = e.touches[0].clientX; }, {passive:true});
+    preview.addEventListener('touchend', (e)=>{
+      if(!touching) return; touching=false;
+      const dx = (e.changedTouches[0].clientX - startX);
+      const TH = 40; if (dx > TH) goPrev(); else if (dx < -TH) goNext();
+    }, {passive:true});
+
+    // --- Lightbox logic (xem bộ ảnh detail) ---
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbCaption = document.getElementById('lbCaption');
+    const lbThumbs = document.getElementById('lbThumbs');
+    const lbClose = document.getElementById('lbClose');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    let lbIndex = 5; // bắt đầu từ ảnh detail đầu tiên
+
+    function openLightbox(startIndex=5){
+      lbIndex = startIndex;
+      renderLbThumbs();
+      setLbImage(lbIndex);
+      lightbox.style.display = 'flex';
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      lightbox.style.display = 'none';
+      lightbox.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+    function setLbImage(i){
+      const it = GALLERY[i];
+      lbImg.src = it.src;
+      lbCaption.textContent = it.type==='detail' ? (it.caption || '') : (it.name || '');
+      [...lbThumbs.children].forEach((el, idx)=> el.setAttribute('aria-selected', (5+idx)===i ? 'true':'false'));
+    }
+    function renderLbThumbs(){
+      lbThumbs.innerHTML = '';
+      GALLERY.slice(5).forEach((it, i)=>{
+        const t = document.createElement('button');
+        t.className = 'lb-thumb';
+        t.setAttribute('aria-selected', (5+i)===lbIndex ? 'true':'false');
+        t.innerHTML = `<img src="${it.src}" alt="${it.caption || 'Ảnh chi tiết'}">`;
+        t.addEventListener('click', ()=>{ lbIndex = 5+i; setLbImage(lbIndex); });
+        lbThumbs.appendChild(t);
+      });
+    }
+    function lbPrevFn(){
+      lbIndex = lbIndex<=5 ? GALLERY.length-1 : lbIndex-1;
+      if(lbIndex < 5) lbIndex = GALLERY.length-1;
+      setLbImage(lbIndex);
+    }
+    function lbNextFn(){
+      lbIndex = lbIndex>=GALLERY.length-1 ? 5 : lbIndex+1;
+      setLbImage(lbIndex);
+    }
+
+    lbClose.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', lbPrevFn);
+    lbNext.addEventListener('click', lbNextFn);
+    lightbox.addEventListener('click', (e)=>{ if(e.target===lightbox) closeLightbox(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); });
+
+    // Init
+    renderThumbsBox();
+    selectColor(0);
+
+    // ===== Contact Modal =====
+    const backdrop = document.getElementById('backdrop');
+    const messenger = document.getElementById('messenger');
+    const zalo = document.getElementById('zalo');
+    const picked = document.getElementById('picked');
+    const closeBtn = document.getElementById('close');
+
+    function openModal(){
+      picked.textContent = GALLERY[currentColorIndex].name;
+      messenger.href = MESSENGER_LINK;
+      zalo.href = ZALO_LINK;
+      backdrop.style.display = 'flex';
+      backdrop.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(){
+      backdrop.style.display = 'none';
+      backdrop.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('buy').addEventListener('click', openModal);
+    document.getElementById('more').addEventListener('click', ()=> alert('Thông số kỹ thuật sẽ được cập nhật.'));
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', (e)=>{ if(e.target===backdrop) closeModal(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+  </script>
+</body>
+</html>
