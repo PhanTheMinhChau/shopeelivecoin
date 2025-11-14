@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
   <title>iPhone Air – Mua ngay</title>
-  <meta name="description" content="Trang bán iPhone Air, tối ưu mobile. 5 ảnh đầu đổi màu, các ảnh sau hiển thị +n giống album Facebook, popup thông số & liên hệ Messenger/Zalo." />
+  <meta name="description" content="Trang bán iPhone Air, tối ưu mobile. 4 ảnh đầu đổi màu, các ảnh sau hiển thị +n giống album Facebook, popup thông số & liên hệ Messenger/Zalo." />
   <style>
     /* ===== Monochrome mobile-first ===== */
     :root{
@@ -266,7 +266,7 @@
           <h1>iPhone Air</h1>
           <div class="price" id="price">27.990.000 ₫</div>
         </div>
-        <div class="muted" id="colorLabel">Màu: Đen Graphite</div>
+        <div class="muted" id="colorLabel">Màu: Trắng mây</div>
 
         <div class="block-title">Ảnh sản phẩm</div>
         <div class="thumbs-box" id="thumbsBox" aria-label="Chọn ảnh và đổi màu"></div>
@@ -275,7 +275,7 @@
           <button id="buy" class="btn" aria-label="Mua ngay">Mua ngay</button>
           <button id="more" class="btn ghost" aria-label="Xem thông số">Thông số</button>
         </div>
-        <div class="block-title">Miễn Phí ship trên địa bàn TP Huế.</div>
+        <div class="block-title">Miễn phí ship nội thành TP Huế.</div>
       </div>
     </section>
 
@@ -301,10 +301,10 @@
       <h2>Thông số iPhone Air</h2>
       <ul style="margin:0 0 8px 18px;padding:0;font-size:14px;line-height:1.7">
         <li>Bộ nhớ: 256 GB</li>
-        <li>Màn hình: Super Retina XDR - 6.5 inches </li>
+        <li>Màn hình: Super Retina XDR - 6.5 inches</li>
         <li>Chip: A19 Pro</li>
         <li>CPU: 6 lõi (2 hiệu năng + 4 tiết kiệm điện)</li>
-        <li>Pin: Xem video 27 giờ, xem video trực tuyến: 22 giờ, sạc nhanh USB-C 20W</li>
+        <li>Pin: Xem video 27 giờ, xem video trực tuyến 22 giờ, sạc nhanh USB-C 20W</li>
         <li>SIM: SIM kép (nano SIM và eSIM)</li>
       </ul>
       <button class="close" id="specClose">Đóng</button>
@@ -326,22 +326,22 @@
   </div>
 
   <script>
-    // ===== Liên hệ (thay bằng link thật) =====
+    // ===== Liên hệ (đã dùng link thật của bạn) =====
     const MESSENGER_LINK = "https://m.me/fchffyftv556";
     const ZALO_LINK = "https://zalo.me/0896433309";
 
     // ===== Dữ liệu ảnh =====
-    // 5 ảnh đầu là ảnh màu (type: 'color'), các ảnh sau là ảnh chi tiết (type: 'detail')
+    // 4 ảnh đầu là ảnh màu (type: 'color'), các ảnh sau là ảnh chi tiết (type: 'detail')
     const GALLERY = [
-      { type:'color', name:'Trắng mây',   color:'#2b2f36', src:'https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_17_256gb-4.jpg' },
-      { type:'color', name:'Đen không gian',     color:'#f3f5f7', src:'https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_air-2.jpg' },
-      { type:'color', name:'Vàng nhạt',     color:'#1f6aa5', src:'https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_17_256gb-5.jpg' },
-      { type:'color', name:'Xanh da trời',      color:'#e58db3', src:'https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_air.jpg' },
+      { type:'color', name:'Trắng mây',        src:'https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_17_256gb-4.jpg' },
+      { type:'color', name:'Đen không gian',   src:'https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_air-2.jpg' },
+      { type:'color', name:'Vàng nhạt',        src:'https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_17_256gb-5.jpg' },
+      { type:'color', name:'Xanh da trời',     src:'https://cdn2.cellphones.com.vn/358x/media/catalog/product/i/p/iphone_air.jpg' },
       // Detail images
-      { type:'detail', caption:'Cụm camera', src:'https://placehold.co/1200x1600/png?text=Camera' },
-      { type:'detail', caption:'Màn hình 120Hz', src:'https://placehold.co/1200x1600/png?text=120Hz' },
-      { type:'detail', caption:'Khung viền', src:'https://placehold.co/1200x1600/png?text=Frame' },
-      { type:'detail', caption:'Hộp & phụ kiện', src:'https://placehold.co/1200x1600/png?text=Box+%26+Accessories' },
+      { type:'detail', caption:'Cụm camera',         src:'https://placehold.co/1200x1600/png?text=Camera' },
+      { type:'detail', caption:'Màn hình 120Hz',     src:'https://placehold.co/1200x1600/png?text=120Hz' },
+      { type:'detail', caption:'Khung viền',         src:'https://placehold.co/1200x1600/png?text=Frame' },
+      { type:'detail', caption:'Hộp & phụ kiện',     src:'https://placehold.co/1200x1600/png?text=Box+%26+Accessories' },
     ];
 
     const mainImg   = document.getElementById('mainImg');
@@ -357,11 +357,12 @@
     document.getElementById('price').textContent = formatVND(27990000);
     year.textContent = new Date().getFullYear();
 
-    let currentColorIndex = 0; // 0..4
+    let currentColorIndex = 0; // 0..3
 
+    // Render grid ảnh (4 màu + 1 ô +n)
     function renderThumbsBox(){
       thumbsBox.innerHTML = '';
-      // 5 màu đầu
+      // 4 màu đầu
       GALLERY.slice(0,4).forEach((it, i)=>{
         const btn = document.createElement('button');
         btn.className = 'thumb';
@@ -371,7 +372,7 @@
         btn.addEventListener('click', ()=> selectColor(i));
         thumbsBox.appendChild(btn);
       });
-      // ô +n
+      // ô +n cho ảnh còn lại
       const remaining = Math.max(GALLERY.length - 4, 0);
       if(remaining > 0){
         const thumbMore = document.createElement('button');
@@ -395,11 +396,11 @@
       currentColorIndex = i;
       const item = GALLERY[i];
       mainImg.src = item.src;
-      colorLabel.textContent = 'Màu hiện tại: ' + item.name;
+      colorLabel.textContent = 'Màu: ' + item.name;
       [...thumbsBox.children].forEach((el, idx)=> el.setAttribute('aria-selected', idx===i ? 'true':'false'));
     }
 
-    // Prev/Next giữa 5 màu
+    // Prev/Next giữa 4 màu
     function goPrev(){ currentColorIndex = (currentColorIndex + 4 - 1) % 4; selectColor(currentColorIndex); }
     function goNext(){ currentColorIndex = (currentColorIndex + 1) % 4; selectColor(currentColorIndex); }
 
@@ -417,7 +418,7 @@
       else if(dx < -TH) goNext();
     }, {passive:true});
 
-    // Lightbox
+    // ===== Lightbox =====
     const lightbox  = document.getElementById('lightbox');
     const lbImg     = document.getElementById('lbImg');
     const lbCaption = document.getElementById('lbCaption');
@@ -425,7 +426,7 @@
     const lbClose   = document.getElementById('lbClose');
     const lbPrev    = document.getElementById('lbPrev');
     const lbNext    = document.getElementById('lbNext');
-    let lbIndex = 4;
+    let lbIndex = 4; // bắt đầu ở ảnh detail đầu tiên
 
     function openLightbox(startIndex=4){
       lbIndex = startIndex;
@@ -452,22 +453,22 @@
     }
     function renderLbThumbs(){
       lbThumbs.innerHTML = '';
-      GALLERY.slice(5).forEach((it, i)=>{
+      GALLERY.slice(4).forEach((it, i)=>{
         const t = document.createElement('button');
         t.className = 'lb-thumb';
-        t.setAttribute('aria-selected', (5+i)===lbIndex ? 'true':'false');
+        t.setAttribute('aria-selected', (4+i)===lbIndex ? 'true':'false');
         t.innerHTML = `<img src="${it.src}" alt="${it.caption || 'Ảnh chi tiết'}">`;
-        t.addEventListener('click', ()=>{ lbIndex = 5+i; setLbImage(lbIndex); });
+        t.addEventListener('click', ()=>{ lbIndex = 4+i; setLbImage(lbIndex); });
         lbThumbs.appendChild(t);
       });
     }
     function lbPrevFn(){
-      lbIndex = lbIndex<=5 ? GALLERY.length-1 : lbIndex-1;
-      if(lbIndex < 5) lbIndex = GALLERY.length-1;
+      lbIndex = lbIndex<=4 ? GALLERY.length-1 : lbIndex-1;
+      if(lbIndex < 4) lbIndex = GALLERY.length-1;
       setLbImage(lbIndex);
     }
     function lbNextFn(){
-      lbIndex = lbIndex>=GALLERY.length-1 ? 5 : lbIndex+1;
+      lbIndex = lbIndex>=GALLERY.length-1 ? 4 : lbIndex+1;
       setLbImage(lbIndex);
     }
 
@@ -475,17 +476,11 @@
     lbPrev.addEventListener('click', lbPrevFn);
     lbNext.addEventListener('click', lbNextFn);
     lightbox.addEventListener('click', e=>{ if(e.target===lightbox) closeLightbox(); });
-    window.addEventListener('keydown', e=>{ if(e.key==='Escape') { closeLightbox(); closeModal(); closeSpecs(); } });
 
-    // Init gallery
-    renderThumbsBox();
-    selectColor(0);
-
-    // Contact modal
+    // ===== Contact Modal =====
     const backdrop  = document.getElementById('backdrop');
     const messenger = document.getElementById('messenger');
     const zalo      = document.getElementById('zalo');
-    const picked    = document.getElementById('picked');
     const closeBtn  = document.getElementById('close');
 
     function openModal(){
@@ -505,7 +500,7 @@
     closeBtn.addEventListener('click', closeModal);
     backdrop.addEventListener('click', e=>{ if(e.target===backdrop) closeModal(); });
 
-    // Spec modal
+    // ===== Spec modal =====
     const specBackdrop = document.getElementById('specBackdrop');
     const specClose    = document.getElementById('specClose');
 
@@ -523,6 +518,18 @@
     document.getElementById('more').addEventListener('click', openSpecs);
     specClose.addEventListener('click', closeSpecs);
     specBackdrop.addEventListener('click', e=>{ if(e.target===specBackdrop) closeSpecs(); });
+
+    // ===== Khởi tạo & ESC =====
+    renderThumbsBox();
+    selectColor(0);
+
+    window.addEventListener('keydown', e=>{
+      if(e.key === 'Escape'){
+        closeLightbox();
+        closeModal();
+        closeSpecs();
+      }
+    });
   </script>
 </body>
 </html>
