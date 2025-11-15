@@ -267,6 +267,7 @@
           <div class="price" id="price">27.990.000 ₫</div>
         </div>
         <div class="muted" id="colorLabel">Màu: Trắng mây</div>
+        <div class="muted" id="stockPd">Kho: 1</div>
 
         <div class="block-title">Ảnh sản phẩm</div>
         <div class="thumbs-box" id="thumbsBox" aria-label="Chọn ảnh và đổi màu"></div>
@@ -333,15 +334,15 @@
     // ===== Dữ liệu ảnh =====
     // 4 ảnh đầu là ảnh màu (type: 'color'), các ảnh sau là ảnh chi tiết (type: 'detail')
     const GALLERY = [
-      { type:'color', name:'Trắng mây',        src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-1_1.jpg' },
-      { type:'color', name:'Đen không gian',   src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air_1_1.jpg' },
-      { type:'color', name:'Vàng nhạt',        src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-2_2.jpg' },
-      { type:'color', name:'Xanh da trời',     src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-3_2.jpg' },
+      { type:'color', stock: 1,name:'Trắng mây', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-1_1.jpg' },
+      { type:'color', stock: 1, name:'Đen không gian', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air_1_1.jpg' },
+      { type:'color', stock: 1, name:'Vàng nhạt', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-2_2.jpg' },
+      { type:'color', stock: 1, name:'Xanh da trời', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-3_2.jpg' },
       // Detail images
-      { type:'detail', caption:'Siêu mỏng nhẹ',         src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone-air-256gb-3.jpg' },
-      { type:'detail', caption:'Bền, mạnh mẽ',     src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone-air-256gb-4.jpg' },
-      { type:'detail', caption:'Hộp & phụ kiện',         src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone-air-256gb-6.jpg' },
-      { type:'detail', caption:'Bảo hành',     src:'https://cdn2.cellphones.com.vn/x/media/catalog/product/i/p/iphone-air-256gb-9.jpg' },
+      { type:'detail', caption:'Siêu mỏng nhẹ', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone-air-256gb-3.jpg' },
+      { type:'detail', caption:'Bền, mạnh mẽ', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone-air-256gb-4.jpg' },
+      { type:'detail', caption:'Hộp & phụ kiện', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone-air-256gb-6.jpg' },
+      { type:'detail', caption:'Bảo hành', src:'https://cdn2.cellphones.com.vn/x/media/catalog/product/i/p/iphone-air-256gb-9.jpg' },
     ];
 
     const mainImg   = document.getElementById('mainImg');
@@ -349,6 +350,7 @@
     const thumbsBox = document.getElementById('thumbsBox');
     const imgCount  = document.getElementById('imgCount');
     const colorLabel= document.getElementById('colorLabel');
+    const stockPd   = document.getElementById('stockPd');
     const year      = document.getElementById('year');
 
     function formatVND(x){
@@ -397,6 +399,7 @@
       const item = GALLERY[i];
       mainImg.src = item.src;
       colorLabel.textContent = 'Màu: ' + item.name;
+      stockPd.textContent = 'Kho: ' + item.stock;
       [...thumbsBox.children].forEach((el, idx)=> el.setAttribute('aria-selected', idx===i ? 'true':'false'));
     }
 
