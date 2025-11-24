@@ -113,6 +113,21 @@
       display:grid;place-items:center;
       font-weight:800;font-size:18px;
     }
+    /* stock badge */
+    .thumb-stock{
+      position:absolute;
+      top:6px;
+      right:6px;
+      background:rgba(0,0,0,.9);
+      color:#fff;
+      padding:4px 7px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:12px;
+      line-height:1;
+      box-shadow:0 4px 10px rgba(0,0,0,.12);
+      pointer-events:none;
+    }
     @media(min-width:600px){
       .thumbs-box{grid-template-columns:repeat(6,1fr);}
     }
@@ -331,12 +346,12 @@
     const MESSENGER_LINK = "https://m.me/fchffyftv556";
     const ZALO_LINK = "https://zalo.me/0896433309";
 
-    // ===== Dữ liệu ảnh =====
+    // ===== Dữ liệu ảnh (KHÔNG SỬA) =====
     // 4 ảnh đầu là ảnh màu (type: 'color'), các ảnh sau là ảnh chi tiết (type: 'detail')
     const GALLERY = [
       { type:'color', stock: 1,name:'Trắng mây', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-1_1.jpg' },
-      { type:'color', stock: 2, name:'Đen không gian', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air_1_1.jpg' },
-      { type:'color', stock: 3, name:'Vàng nhạt', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-2_2.jpg' },
+    //   { type:'color', stock: 2, name:'Đen không gian', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air_1_1.jpg' },
+    //   { type:'color', stock: 3, name:'Vàng nhạt', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-2_2.jpg' },
       { type:'color', stock: 4, name:'Xanh da trời', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone_air-3_2.jpg' },
       // Detail images
       { type:'detail', caption:'Siêu mỏng nhẹ', src:'https://cellphones.com.vn/media/catalog/product/i/p/iphone-air-256gb-3.jpg' },
@@ -346,6 +361,8 @@
       { type:'detail', caption:'Hoá đơn', src:'https://shopeelivecoin.com/img/hoadon.png' },
     ];
 
+
+    // ===== Tham chiếu DOM =====
     const mainImg   = document.getElementById('mainImg');
     const preview   = document.getElementById('preview');
     const thumbsBox = document.getElementById('thumbsBox');
@@ -360,36 +377,58 @@
     document.getElementById('price').textContent = formatVND(27990000);
     year.textContent = new Date().getFullYear();
 
-    let currentColorIndex = 0; // 0..3
+    // ===== TỰ ĐỘNG PHÂN LOẠI TỪ GALLERY =====
+    // Lấy các loại có trong GALLERY (ví dụ 'color', 'detail', ...)
+    const DEVICE_TYPES = [...new Set(GALLERY.map(item => item.type))];
 
-    // Render grid ảnh (4 màu + 1 ô +n)
+    // Tách riêng các màu (type: 'color') và ảnh chi tiết (type: 'detail')
+    const COLORS = GALLERY.filter(i => i.type === 'color');
+    const DETAILS = GALLERY.filter(i => i.type === 'detail');
+
+    // nếu không có color, fallback sang phần tử đầu của GALLERY
+    const hasColors = COLORS.length > 0;
+    const hasDetails = DETAILS.length > 0;
+
+    // trạng thái hiện tại
+    let currentColorIndex = 0; // index trong mảng COLORS
+    // ánh xạ: nếu không có COLORS, dùng GALLERY đầu làm mainImg
+    function safeGetColorItem(idx){
+      if(hasColors) return COLORS[idx];
+      return GALLERY[idx] || GALLERY[0];
+    }
+
+    // Render grid ảnh (dựa trên COLORS và DETAILS)
     function renderThumbsBox(){
       thumbsBox.innerHTML = '';
-      // 4 màu đầu
-      GALLERY.slice(0,4).forEach((it, i)=>{
+      // Render thumbnails cho tất cả items type 'color'
+      (hasColors ? COLORS : GALLERY.slice(0,4)).forEach((it, i)=>{
         const btn = document.createElement('button');
         btn.className = 'thumb';
         btn.setAttribute('aria-selected', i===currentColorIndex ? 'true':'false');
-        btn.title = it.name;
-        btn.innerHTML = `<img src="${it.src}" alt="${it.name}">`;
+        btn.title = it.name || it.caption || '';
+        // stock badge nếu có
+        btn.innerHTML = `<img src="${it.src}" alt="${it.name || it.caption || 'Ảnh'}">`;
         btn.addEventListener('click', ()=> selectColor(i));
         thumbsBox.appendChild(btn);
       });
-      // ô +n cho ảnh còn lại
-      const remaining = Math.max(GALLERY.length - 4, 0);
+
+      // Ô +n để mở lightbox: hiển thị tổng ảnh detail (DETAILS)
+      const remaining = hasDetails ? DETAILS.length : Math.max(GALLERY.length - (hasColors ? COLORS.length : 4), 0);
       if(remaining > 0){
+        // dùng ảnh preview đầu tiên trong DETAILS nếu có, hoặc phần tử thứ 4 của GALLERY
+        const previewSrc = (hasDetails ? DETAILS[0].src : (GALLERY[4] && GALLERY[4].src) || GALLERY[0].src);
         const thumbMore = document.createElement('button');
         thumbMore.className = 'thumb';
         thumbMore.setAttribute('aria-label', `Xem thêm ${remaining} ảnh`);
-        thumbMore.innerHTML = `<img src="${GALLERY[4].src}" alt="Ảnh chi tiết"><div class="overlay-count">+${remaining}</div>`;
-        thumbMore.addEventListener('click', ()=> openLightbox(4));
+        thumbMore.innerHTML = `<img src="${previewSrc}" alt="Ảnh chi tiết"><div class="overlay-count">+${remaining}</div>`;
+        thumbMore.addEventListener('click', ()=> openLightbox(0)); // mở lightbox at first detail
         thumbsBox.appendChild(thumbMore);
       }
       // badge +n trên ảnh chính
       if(remaining > 0){
         imgCount.textContent = `+${remaining}`;
         imgCount.setAttribute('aria-hidden','false');
-        imgCount.onclick = ()=> openLightbox(4);
+        imgCount.onclick = ()=> openLightbox(0);
       }else{
         imgCount.setAttribute('aria-hidden','true');
       }
@@ -397,16 +436,25 @@
 
     function selectColor(i){
       currentColorIndex = i;
-      const item = GALLERY[i];
+      const item = safeGetColorItem(i);
       mainImg.src = item.src;
-      colorLabel.textContent = 'Màu: ' + item.name;
-      stockPd.textContent = 'Kho: ' + item.stock;
+      colorLabel.textContent = 'Màu: ' + (item.name || item.caption || '—');
+      // nếu có stock show, nếu không giữ nguyên
+      if(typeof item.stock === 'number') stockPd.textContent = 'Kho: ' + item.stock;
       [...thumbsBox.children].forEach((el, idx)=> el.setAttribute('aria-selected', idx===i ? 'true':'false'));
     }
 
-    // Prev/Next giữa 4 màu
-    function goPrev(){ currentColorIndex = (currentColorIndex + 4 - 1) % 4; selectColor(currentColorIndex); }
-    function goNext(){ currentColorIndex = (currentColorIndex + 1) % 4; selectColor(currentColorIndex); }
+    // Prev/Next giữa các màu (dùng length động)
+    function goPrev(){
+      const len = hasColors ? COLORS.length : Math.max(1, Math.min(4, GALLERY.length));
+      currentColorIndex = (currentColorIndex + len - 1) % len;
+      selectColor(currentColorIndex);
+    }
+    function goNext(){
+      const len = hasColors ? COLORS.length : Math.max(1, Math.min(4, GALLERY.length));
+      currentColorIndex = (currentColorIndex + 1) % len;
+      selectColor(currentColorIndex);
+    }
 
     document.getElementById('prevBtn').addEventListener('click', goPrev);
     document.getElementById('nextBtn').addEventListener('click', goNext);
@@ -422,7 +470,7 @@
       else if(dx < -TH) goNext();
     }, {passive:true});
 
-    // ===== Lightbox =====
+    // ===== Lightbox (dành cho DETAILS) =====
     const lightbox  = document.getElementById('lightbox');
     const lbImg     = document.getElementById('lbImg');
     const lbCaption = document.getElementById('lbCaption');
@@ -430,55 +478,104 @@
     const lbClose   = document.getElementById('lbClose');
     const lbPrev    = document.getElementById('lbPrev');
     const lbNext    = document.getElementById('lbNext');
-    let lbIndex = 4; // bắt đầu ở ảnh detail đầu tiên
 
-    function openLightbox(startIndex=4){
-      lbIndex = startIndex;
+    // lbIndex là index trong DETAILS (0..DETAILS.length-1)
+    let lbIndex = 0;
+
+    function openLightbox(startIndex=0){
+      if(!hasDetails){
+        // nếu không có DETAILS tách riêng, cố gắng lấy phần tử sau màu (bắt đầu từ index = COLORS.length)
+        const fallbackIndex = (COLORS.length < GALLERY.length) ? COLORS.length : 0;
+        // xây một "virtual" DETAILS từ GALLERY.slice(fallbackIndex)
+        lbIndex = startIndex;
+        renderLbThumbsFallback(fallbackIndex);
+        setLbImageFallback(lbIndex, fallbackIndex);
+        lightbox.style.display = 'flex';
+        lightbox.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+        return;
+      }
+      lbIndex = Math.max(0, Math.min(startIndex, DETAILS.length - 1));
       renderLbThumbs();
       setLbImage(lbIndex);
       lightbox.style.display = 'flex';
       lightbox.setAttribute('aria-hidden','false');
       document.body.style.overflow = 'hidden';
     }
+
     function closeLightbox(){
       lightbox.style.display = 'none';
       lightbox.setAttribute('aria-hidden','true');
       document.body.style.overflow = '';
     }
+
     function setLbImage(i){
-      const it = GALLERY[i];
+      const it = DETAILS[i];
       lbImg.src = it.src;
-      lbCaption.textContent = it.type === 'detail'
-        ? (it.caption || '')
-        : (it.name || '');
+      lbCaption.textContent = it.caption || it.name || '';
       [...lbThumbs.children].forEach((el, idx)=>
-        el.setAttribute('aria-selected', (4+idx)===i ? 'true':'false')
+        el.setAttribute('aria-selected', idx===i ? 'true':'false')
       );
     }
     function renderLbThumbs(){
       lbThumbs.innerHTML = '';
-      GALLERY.slice(4).forEach((it, i)=>{
+      DETAILS.forEach((it, i)=>{
         const t = document.createElement('button');
         t.className = 'lb-thumb';
-        t.setAttribute('aria-selected', (4+i)===lbIndex ? 'true':'false');
-        t.innerHTML = `<img src="${it.src}" alt="${it.caption || 'Ảnh chi tiết'}">`;
-        t.addEventListener('click', ()=>{ lbIndex = 4+i; setLbImage(lbIndex); });
+        t.setAttribute('aria-selected', i===lbIndex ? 'true':'false');
+        t.innerHTML = `<img src="${it.src}" alt="${it.caption || it.name || 'Ảnh chi tiết'}">`;
+        t.addEventListener('click', ()=>{ lbIndex = i; setLbImage(lbIndex); });
         lbThumbs.appendChild(t);
       });
     }
     function lbPrevFn(){
-      lbIndex = lbIndex<=4 ? GALLERY.length-1 : lbIndex-1;
-      if(lbIndex < 4) lbIndex = GALLERY.length-1;
+      lbIndex = (lbIndex <= 0) ? (DETAILS.length - 1) : (lbIndex - 1);
       setLbImage(lbIndex);
     }
     function lbNextFn(){
-      lbIndex = lbIndex>=GALLERY.length-1 ? 4 : lbIndex+1;
+      lbIndex = (lbIndex >= DETAILS.length - 1) ? 0 : (lbIndex + 1);
       setLbImage(lbIndex);
     }
 
+    // Fallback: nếu không có DETAILS tách riêng, lấy từ GALLERY.slice(start)
+    function renderLbThumbsFallback(startFrom){
+      lbThumbs.innerHTML = '';
+      const arr = GALLERY.slice(startFrom);
+      arr.forEach((it, i)=>{
+        const t = document.createElement('button');
+        t.className = 'lb-thumb';
+        t.setAttribute('aria-selected', i===lbIndex ? 'true':'false');
+        t.innerHTML = `<img src="${it.src}" alt="${it.caption || it.name || 'Ảnh chi tiết'}">`;
+        t.addEventListener('click', ()=>{ lbIndex = i; setLbImageFallback(lbIndex, startFrom); });
+        lbThumbs.appendChild(t);
+      });
+    }
+    function setLbImageFallback(i, startFrom){
+      const it = (GALLERY[startFrom + i] || GALLERY[0]);
+      lbImg.src = it.src;
+      lbCaption.textContent = it.caption || it.name || '';
+      [...lbThumbs.children].forEach((el, idx)=>
+        el.setAttribute('aria-selected', idx===i ? 'true':'false')
+      );
+    }
+    function lbPrevFnFallback(startFrom){
+      const len = Math.max(1, GALLERY.length - startFrom);
+      lbIndex = (lbIndex <= 0) ? (len - 1) : (lbIndex - 1);
+      setLbImageFallback(lbIndex, startFrom);
+    }
+    function lbNextFnFallback(startFrom){
+      const len = Math.max(1, GALLERY.length - startFrom);
+      lbIndex = (lbIndex >= len - 1) ? 0 : (lbIndex + 1);
+      setLbImageFallback(lbIndex, startFrom);
+    }
+
     lbClose.addEventListener('click', closeLightbox);
-    lbPrev.addEventListener('click', lbPrevFn);
-    lbNext.addEventListener('click', lbNextFn);
+    lbPrev.addEventListener('click', ()=>{
+      if(hasDetails) lbPrevFn(); else lbPrevFnFallback(COLORS.length);
+    });
+    lbNext.addEventListener('click', ()=>{
+      if(hasDetails) lbNextFn(); else lbNextFnFallback(COLORS.length);
+    });
     lightbox.addEventListener('click', e=>{ if(e.target===lightbox) closeLightbox(); });
 
     // ===== Contact Modal =====
@@ -525,6 +622,7 @@
 
     // ===== Khởi tạo & ESC =====
     renderThumbsBox();
+    // chọn màu đầu tiên an toàn
     selectColor(0);
 
     window.addEventListener('keydown', e=>{
