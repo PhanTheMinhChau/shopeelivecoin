@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gallery từ JSON — Chọn & Xuất (hỗ trợ dấu ')</title>
+<style>
+  :root{
+    --gap: 12px;
+    --thumb-size: 160px;
+    --accent: #0b78d1;
+    --muted: #666;
+    --bg: #f7f8fa;
+  }
+  body{
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    margin: 16px;
+    background: var(--bg);
+    color: #111;
+  }
+  h1{font-size:18px;margin:0 0 12px}
+  .container{max-width:1100px;margin:0 auto}
+  .row{display:flex;gap:12px;align-items:flex-start}
+  .col{flex:1}
+  textarea{width:100%;min-height:140px;font-family:monospace;font-size:13px;padding:10px;border-radius:6px;border:1px solid #ddd;resize:vertical}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  button{background:var(--accent);color:#fff;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+  button.ghost{background:transparent;color:var(--accent);border:1px solid rgba(11,120,209,0.2)}
+  .meta{font-size:13px;color:var(--muted);margin-top:6px}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--thumb-size),1fr));gap:var(--gap);margin-top:14px}
+  .card{
+    position:relative;border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    cursor:pointer;user-select:none;display:flex;flex-direction:column;align-items:stretch;
+  }
+  .thumb{
+    width:100%;height:var(--thumb-size);object-fit:cover;background:#eee;display:block;
+  }
+  .info{padding:8px;font-size:12px;color:#222;display:flex;justify-content:space-between;align-items:center}
+  .checkbox{
+    position:absolute;right:8px;top:8px;background:rgba(255,255,255,0.9);border-radius:6px;padding:4px;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 1px 2px rgba(0,0,0,0.08);
+  }
+  .card.selected{outline:3px solid rgba(11,120,209,0.12)}
+  .placeholder{padding:18px;border-radius:8px;background:#fff;border:1px dashed #e0e0e0;color:var(--muted)}
+  .actions{display:flex;gap:8px;align-items:center}
+  .count{font-weight:600;color:var(--accent)}
+  .output-area{min-height:120px}
+  .small{font-size:13px;color:var(--muted)}
+  .footer{margin-top:18px;font-size:13px;color:var(--muted)}
+  a.download-link{display:inline-block;margin-left:8px;color:var(--accent)}
+  @media (max-width:600px){
+    :root{--thumb-size:120px}
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hiển thị ảnh từ JSON — Chọn và xuất JSON (hỗ trợ dấu ')</h1>
+
+    <div class="row">
+      <div class="col" style="max-width:540px">
+        <label><strong>1) Dán JSON đầu vào (một danh sách object)</strong></label>
+        <textarea id="inputJson" placeholder='Ví dụ: [{"cover":"https://...","title":"A"}, {"cover":"https://..."}]'></textarea>
+
+        <div class="controls">
+          <button id="btnLoad">Load</button>
+          <button id="btnSelectAll" class="ghost">Chọn tất cả</button>
+          <button id="btnClearAll" class="ghost">Bỏ chọn tất cả</button>
+          <button id="btnExport" style="margin-left:auto">Xuất JSON đã chọn</button>
+        </div>
+
+        <div class="meta">
+          <span id="status" class="small">Chưa load dữ liệu.</span>
+        </div>
+      </div>
+
+      <div class="col">
+        <label><strong>2) Kết quả (JSON đã chọn)</strong></label>
+        <textarea id="outputJson" class="output-area" readonly placeholder='JSON các item đã chọn sẽ hiện ở đây'></textarea>
+        <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+          <button id="btnDownload" class="ghost">Tải về file .json</button>
+          <span class="small">Items đã chọn: <span id="selectedCount">0</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <label><strong>3) Thư viện ảnh</strong></label>
+      <div id="gallery" class="gallery">
+        <div class="placeholder">Chưa có item — hãy dán JSON và bấm "Load".</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      Lưu ý: JSON đầu vào phải là một mảng. Mỗi phần tử nên có trường <code>cover</code> là URL ảnh. Mình hỗ trợ cả trường hợp dùng dấu <code>'</code> thay cho <code>"</code>.
+    </div>
+  </div>
+
+<script>
+(function(){
+  // Elements
+  const inputJson = document.getElementById('inputJson');
+  const outputJson = document.getElementById('outputJson');
+  const gallery = document.getElementById('gallery');
+  const status = document.getElementById('status');
+  const btnLoad = document.getElementById('btnLoad');
+  const btnSelectAll = document.getElementById('btnSelectAll');
+  const btnClearAll = document.getElementById('btnClearAll');
+  const btnExport = document.getElementById('btnExport');
+  const btnDownload = document.getElementById('btnDownload');
+  const selectedCount = document.getElementById('selectedCount');
+
+  let items = []; // original array
+  let selected = new Set(); // indexes
+
+  // Convert single-quoted strings to double-quoted strings (handles escaped chars inside)
+  function convertSingleQuotesToDouble(str) {
+    // Replace single-quoted strings with double-quoted equivalents
+    // This regex attempts to match single-quoted string literals: '...'
+    // It won't perfectly handle every malformed JavaScript, but works for typical JSON-like inputs.
+    return str.replace(/'([^'\\]*(\\.[^'\\]*)*)'/g, function(_, inner) {
+      // escape existing double quotes inside the captured content
+      const escaped = inner.replace(/"/g, '\\"');
+      return '"' + escaped + '"';
+    });
+  }
+
+  // Remove trailing commas before ] or }
+  function removeTrailingCommas(str) {
+    return str.replace(/,\s*(?=[}\]])/g, '');
+  }
+
+  function tryFixAndParse(text) {
+    let t = text.trim();
+    // quick sanity: if it already looks like valid JSON starting with [ or { and contains double quotes, try parse
+    try {
+      return {ok: true, value: JSON.parse(t)};
+    } catch (e) {
+      // attempt fixes:
+      try {
+        t = convertSingleQuotesToDouble(t);
+        t = removeTrailingCommas(t);
+        return {ok: true, value: JSON.parse(t)};
+      } catch (e2) {
+        // last resort: try to extract any array inside an object like: { data: [ ... ] } where keys might be unquoted
+        try {
+          // convert unquoted object keys to quoted keys (simple heuristic)
+          let s = t.replace(/([{,]\s*)([A-Za-z0-9_@\$-]+)\s*:/g, '$1"$2":');
+          s = convertSingleQuotesToDouble(s);
+          s = removeTrailingCommas(s);
+          return {ok: true, value: JSON.parse(s)};
+        } catch (e3) {
+          return {ok: false, error: e3.message || e2.message || e.message};
+        }
+      }
+    }
+  }
+
+  function safeParseJson(text){
+    const res = tryFixAndParse(text);
+    if(res.ok) return res;
+    return {ok:false, error: res.error || 'Không parse được JSON.'};
+  }
+
+  function renderGallery(){
+    gallery.innerHTML = '';
+    if(!Array.isArray(items) || items.length === 0){
+      gallery.innerHTML = '<div class="placeholder">Không có item để hiển thị.</div>';
+      status.textContent = 'Không có item.';
+      selected.clear(); updateSelectedUI(); return;
+    }
+    const frag = document.createDocumentFragment();
+    items.forEach((it, idx) => {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.setAttribute('data-idx', idx);
+
+      const img = document.createElement('img');
+      img.className = 'thumb';
+      img.loading = 'lazy';
+      const cover = (it && it.cover) ? it.cover : '';
+      img.src = cover || '';
+      img.alt = it && (it.title || it.name || ('Item ' + (idx+1))) || ('Item ' + (idx+1));
+
+      img.onerror = function(){ this.style.opacity = '0.6'; this.style.background = '#f0f0f0'; this.src = ''; };
+
+      const cbWrap = document.createElement('div');
+      cbWrap.className = 'checkbox';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.setAttribute('aria-label', 'Chọn item ' + (idx+1));
+      checkbox.dataset.idx = idx;
+      cbWrap.appendChild(checkbox);
+
+      const info = document.createElement('div');
+      info.className = 'info';
+      const left = document.createElement('div');
+      left.textContent = it && (it.title || it.name) ? (it.title || it.name) : ('Item ' + (idx+1));
+      left.title = left.textContent;
+      const right = document.createElement('div');
+      right.style.fontSize = '12px';
+      right.style.color = '#777';
+      right.textContent = '#' + (idx+1);
+      info.appendChild(left); info.appendChild(right);
+
+      card.appendChild(img);
+      card.appendChild(cbWrap);
+      card.appendChild(info);
+
+      card.addEventListener('click', function(e){
+        if(e.target.tagName.toLowerCase() === 'input') return;
+        toggleSelect(idx);
+        const cb = card.querySelector('input[type="checkbox"]');
+        if(cb) cb.checked = selected.has(idx);
+      });
+
+      checkbox.addEventListener('change', function(e){
+        const i = Number(this.dataset.idx);
+        if(this.checked) selected.add(i); else selected.delete(i);
+        updateSelectedUI();
+        card.classList.toggle('selected', selected.has(i));
+      });
+
+      frag.appendChild(card);
+    });
+    gallery.appendChild(frag);
+    status.textContent = `Loaded ${items.length} item(s).`;
+    updateSelectedUI();
+  }
+
+  function toggleSelect(idx){
+    if(selected.has(idx)) selected.delete(idx); else selected.add(idx);
+    const card = gallery.querySelector('.card[data-idx="'+idx+'"]');
+    if(card){
+      const cb = card.querySelector('input[type="checkbox"]');
+      if(cb) cb.checked = selected.has(idx);
+      card.classList.toggle('selected', selected.has(idx));
+    }
+    updateSelectedUI();
+  }
+
+  function updateSelectedUI(){
+    selectedCount.textContent = selected.size;
+    const selectedList = Array.from(selected).sort((a,b)=>a-b).map(i => items[i]);
+    try{
+      outputJson.value = JSON.stringify(selectedList, null, 2);
+    }catch(e){
+      outputJson.value = 'Error serializing selection';
+    }
+  }
+
+  // Button actions
+  btnLoad.addEventListener('click', function(){
+    const text = inputJson.value.trim();
+    if(!text){
+      alert('Hãy dán JSON vào ô input trước khi Load.');
+      return;
+    }
+    const res = safeParseJson(text);
+    if(!res.ok){
+      alert('JSON không parse được: ' + res.error);
+      return;
+    }
+    let parsed = res.value;
+    if(!Array.isArray(parsed)){
+      // try to find first array inside object
+      if(parsed && typeof parsed === 'object'){
+        let found = null;
+        for(const k in parsed){
+          if(Array.isArray(parsed[k])){ found = parsed[k]; break; }
+        }
+        if(found){
+          parsed = found;
+        } else {
+          alert('JSON đã parse nhưng không phải là mảng. Vui lòng cung cấp một mảng các object.');
+          return;
+        }
+      } else {
+        alert('JSON đã parse nhưng không phải là mảng. Vui lòng cung cấp một mảng các object.');
+        return;
+      }
+    }
+    items = parsed;
+    selected.clear();
+    renderGallery();
+  });
+
+  btnSelectAll.addEventListener('click', function(){
+    selected.clear();
+    items.forEach((_,i)=>selected.add(i));
+    gallery.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked = true);
+    gallery.querySelectorAll('.card').forEach(c=>c.classList.add('selected'));
+    updateSelectedUI();
+  });
+
+  btnClearAll.addEventListener('click', function(){
+    selected.clear();
+    gallery.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked = false);
+    gallery.querySelectorAll('.card').forEach(c=>c.classList.remove('selected'));
+    updateSelectedUI();
+  });
+
+  btnExport.addEventListener('click', function(){
+    updateSelectedUI();
+    outputJson.scrollIntoView({behavior:'smooth'});
+  });
+
+  btnDownload.addEventListener('click', function(){
+    const dataStr = outputJson.value;
+    if(!dataStr || dataStr.trim().length===0){
+      alert('Không có dữ liệu để tải. Hãy chọn ít nhất 1 item và bấm "Xuất JSON đã chọn".');
+      return;
+    }
+    const blob = new Blob([dataStr], {type: 'application/json;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'selected_items.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  inputJson.addEventListener('keydown', function(e){
+    if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+      btnLoad.click();
+    }
+  });
+
+  // Prefill sample for convenience
+  window.prefillSample = function(){
+    const sample = [
+      {"cover":"https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?w=800&auto=format&fit=crop&q=60","title":"Sunset"},
+      {"cover":"https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&auto=format&fit=crop&q=60","title":"Mountains"},
+      {"cover":"https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&auto=format&fit=crop&q=60","title":"Forest"}
+    ];
+    inputJson.value = JSON.stringify(sample, null, 2);
+  };
+
+  inputJson.placeholder = 'Dán JSON vào đây. Hỗ trợ cả dạng với dấu nháy đơn: [{\'cover\':\'https://...\',\'title\':\'A\'}]';
+})();
+</script>
+</body>
+</html>
