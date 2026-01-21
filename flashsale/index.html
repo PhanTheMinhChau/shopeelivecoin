@@ -205,7 +205,7 @@
     function itemCard(item){
       const {image,shopid,itemid,name,price,price_before_discount,raw_discount,stock,flash_sale_stock}=item;
       const a=document.createElement('a'); a.className='card';
-      a.href=`https://shopee.vn/product/${shopid}/${itemid}?uls_trackid=53nvku3b00p8&utm_campaign=id_13DH2fLLToO&utm_content=flashsale----&utm_medium=affiliates&utm_source=an_17396220028&utm_term=don9zxk76jwm`; 
+      a.href=`https://shopee.vn/universal-link?redir=https://shopee.vn/product/${shopid}/${itemid}?uls_trackid=53nvku3b00p8&utm_campaign=id_13DH2fLLToO&utm_content=flashsale----&utm_medium=affiliates&utm_source=an_17396220028&utm_term=don9zxk76jwm&deep_and_deferred=1`; 
       a.target='_blank';
       const imgURL=`https://cf.shopee.vn/file/${image}`;
       a.innerHTML=`<div class="thumb">
