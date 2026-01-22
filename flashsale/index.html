@@ -203,7 +203,7 @@
     function skeletonCard(){const d=document.createElement('div');d.className='card';d.innerHTML=`<div class="thumb skeleton"></div><div class="content"><div class="skeleton" style="height:18px;width:90%"></div><div class="skeleton" style="height:14px;width:60%"></div><div class="skeleton" style="height:12px;width:40%"></div></div>`;return d}
 
     function itemCard(item){
-      const {image,shopid,itemid,name,price,price_before_discount,raw_discount,stock,flash_sale_stock}=item;
+      const {image,shopid,itemid,name,price,price_before_discount,raw_discount,stock,flash_sale_stock,describe}=item;
       const a=document.createElement('a'); a.className='card';
       a.href=`https://shopee.vn/universal-link?redir=https://shopee.vn/product/${shopid}/${itemid}?uls_trackid=53nvku3b00p8&utm_campaign=id_13DH2fLLToO&utm_content=flashsale----&utm_medium=affiliates&utm_source=an_17396220028&utm_term=don9zxk76jwm&deep_and_deferred=1`; 
       a.target='_blank';
@@ -221,6 +221,7 @@
             ${price_before_discount?`<div class='before'>${toVND(price_before_discount)}</div>`:''}
           </div>
           <div class='stock'>Còn: ${Number.isFinite(stock)?stock:'—'}/${Number.isFinite(flash_sale_stock)?flash_sale_stock:'—'}</div>
+          <div class='stock'>${describe)</div>
         </div>`;
       return a;
     }
