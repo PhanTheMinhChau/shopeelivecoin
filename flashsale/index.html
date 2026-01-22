@@ -337,7 +337,7 @@
       if(now>=sel.start_time && now<sel.end_time){ countdownEl.style.display='none'; return; }
       let target=null,label='';
       if(now<sel.start_time){ target=sel.start_time; label='Bắt đầu sau'; }
-      else{ const next=getNextPromoAfter(now); if(!next){ countdownEl.style.display='none'; return; } target=next.start_time; label='Khung kế tiếp sau'; }
+      else{ const next=getNextPromoAfter(now); if(!next){ countdownEl.style.display='none'; return; } target=next.start_time; label='Khung kế tiếp sau'; window.location.href = '/flashsale'}
       const remain=target-now;
       countdownEl.textContent = `${label}: ${formatDHMS(remain)}`;
       countdownEl.style.display='block';
