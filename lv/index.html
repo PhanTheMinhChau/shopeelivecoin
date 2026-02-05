@@ -88,7 +88,6 @@
       border-radius: 10px;
       padding: 12px;
       font-size: 14px;
-      display: block;
     }
 
     .hidden {
@@ -111,26 +110,30 @@
       font-weight: 500;
     }
 
+    /* ===== FIX COPY CHE LINK ===== */
     .link-box {
-      display: flex;
-      gap: 8px;
       margin-top: 8px;
     }
 
     .link-box input {
-      flex: 1;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 14px;
       background: #fff;
     }
 
     .copy-btn {
-      padding: 0 14px;
-      border-radius: 10px;
+      margin-top: 8px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
       border: none;
       background: #00b894;
       color: #fff;
       cursor: pointer;
       font-size: 14px;
-      white-space: nowrap;
     }
 
     .copy-btn.copied {
