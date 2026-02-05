@@ -2,10 +2,9 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Chuyển link Shopee</title>
+  <title>Chuyển link Shopee Live</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
@@ -26,17 +25,11 @@
 
     .card {
       width: 100%;
-      max-width: 420px;
+      max-width: 460px;
       background: #fff;
       border-radius: 16px;
       padding: 24px;
       box-shadow: 0 20px 40px rgba(0,0,0,.15);
-      animation: fadeIn .4s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
     }
 
     h1 {
@@ -52,22 +45,23 @@
       margin: 0 0 20px;
     }
 
-    input {
+    input, textarea {
       width: 100%;
       padding: 14px;
       border-radius: 10px;
       border: 1px solid #ddd;
       font-size: 14px;
       outline: none;
+      margin-bottom: 10px;
     }
 
-    input:focus {
-      border-color: #6c5ce7;
+    textarea {
+      resize: vertical;
+      min-height: 80px;
     }
 
     button {
       width: 100%;
-      margin-top: 12px;
       padding: 14px;
       border-radius: 10px;
       border: none;
@@ -76,6 +70,7 @@
       font-size: 15px;
       font-weight: 500;
       cursor: pointer;
+      margin-top: 6px;
     }
 
     button:disabled {
@@ -88,52 +83,25 @@
       border-radius: 10px;
       padding: 12px;
       font-size: 14px;
+      white-space: pre-line;
     }
 
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
 
-    .result.success {
-      border: 1px solid #dfe6ff;
+    .success {
       background: #f8f9ff;
+      border: 1px solid #dfe6ff;
     }
 
-    .result.error {
-      border: 1px solid #ffd6d6;
+    .error {
       background: #fff5f5;
+      border: 1px solid #ffd6d6;
       color: #c0392b;
     }
 
-    .loading {
-      text-align: center;
-      font-weight: 500;
-    }
-
-    /* ===== FIX COPY CHE LINK ===== */
-    .link-box {
-      margin-top: 8px;
-    }
-
-    .link-box input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      font-size: 14px;
-      background: #fff;
-    }
-
     .copy-btn {
-      margin-top: 8px;
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
+      margin-top: 10px;
       background: #00b894;
-      color: #fff;
-      cursor: pointer;
-      font-size: 14px;
     }
 
     .copy-btn.copied {
@@ -151,83 +119,86 @@
 <body>
 
 <div class="card">
-  <h1>Chuyển link Shopee</h1>
-  <p>Dán link rút gọn, nhận link đầy đủ ngay</p>
+  <h1>Shopee Live Formatter</h1>
+  <p>Dán link + nhập tin nhắn → copy đoạn text</p>
 
-  <input id="inputLink" placeholder="https://vn.shp.ee/..." />
+  <input id="inputLink" placeholder="Dán link Shopee Live..." />
+  <textarea id="inputMsg" placeholder="Nhập tin nhắn của bạn..."></textarea>
 
-  <button id="submitBtn" onclick="getLiveLink()">Lấy link mới</button>
+  <button id="submitBtn" onclick="processLink()">Tạo nội dung</button>
 
   <div id="result" class="result hidden"></div>
+  <button id="copyBtn" class="copy-btn hidden" onclick="copyText()">Copy nội dung</button>
 
   <div class="footer">Powered by sharelink</div>
 </div>
 
 <script>
-  async function getLiveLink() {
-    const input = document.getElementById("inputLink");
+  function nowTime() {
+    return new Date().toLocaleTimeString("vi-VN", { hour12: false });
+  }
+
+  async function processLink() {
+    const link = document.getElementById("inputLink").value.trim();
+    const msg = document.getElementById("inputMsg").value.trim();
     const result = document.getElementById("result");
     const btn = document.getElementById("submitBtn");
-    const link = input.value.trim();
+    const copyBtn = document.getElementById("copyBtn");
 
     if (!link) {
       result.className = "result error";
-      result.innerHTML = "⚠️ Vui lòng nhập link";
+      result.textContent = "⚠️ Vui lòng nhập link";
       result.classList.remove("hidden");
       return;
     }
 
-    // Loading
     btn.disabled = true;
+    copyBtn.classList.add("hidden");
     result.className = "result";
     result.classList.remove("hidden");
-    result.innerHTML = `<div class="loading">⏳ Đang xử lý...</div>`;
+    result.textContent = "⏳ Đang xử lý...";
 
     try {
-      const res = await fetch(
-        "https://sharelink-kappa.vercel.app/get_link_live",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ link })
-        }
-      );
+      const res = await fetch("https://sharelink-kappa.vercel.app/get_link_live", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ link })
+      });
 
       const json = await res.json();
 
-      if (json.err_code !== 0) {
-        throw new Error(json.err_msg);
+      if (!json.link || !json.nickname) {
+        throw new Error("Invalid response");
       }
 
-      const newLink = json.data.link;
+      const text =
+`🚨 ${json.nickname} live 🚨
+${msg || ""}
+${json.link}
+${nowTime()} - ${json.viewer_count} mắt xem`;
 
       result.className = "result success";
-      result.innerHTML = `
-        <div>Link mới:</div>
-        <div class="link-box">
-          <input id="outputLink" value="${newLink}" readonly />
-          <button class="copy-btn" onclick="copyLink(this)">Copy</button>
-        </div>
-      `;
+      result.textContent = text;
+      copyBtn.classList.remove("hidden");
+
     } catch (e) {
       result.className = "result error";
-      result.innerHTML = "❌ Không lấy được link";
+      result.textContent = "❌ Không lấy được dữ liệu";
     } finally {
       btn.disabled = false;
     }
   }
 
-  function copyLink(btn) {
-    const input = document.getElementById("outputLink");
-    input.select();
-    input.setSelectionRange(0, 99999);
-    document.execCommand("copy");
+  function copyText() {
+    const text = document.getElementById("result").textContent;
+    navigator.clipboard.writeText(text);
 
-    btn.textContent = "Đã copy";
+    const btn = document.getElementById("copyBtn");
+    btn.textContent = "Đã copy ✔";
     btn.classList.add("copied");
 
     setTimeout(() => {
-      btn.textContent = "Copy";
+      btn.textContent = "Copy nội dung";
       btn.classList.remove("copied");
     }, 1500);
   }
