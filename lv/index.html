@@ -51,7 +51,6 @@
       border-radius: 10px;
       border: 1px solid #ddd;
       font-size: 14px;
-      outline: none;
       margin-bottom: 10px;
     }
 
@@ -79,12 +78,6 @@
       font-size: 15px;
       font-weight: 500;
       cursor: pointer;
-      margin-top: 6px;
-    }
-
-    button:disabled {
-      background: #b2b2b2;
-      cursor: not-allowed;
     }
 
     .result {
@@ -113,10 +106,6 @@
       background: #00b894;
     }
 
-    .copy-btn.copied {
-      background: #2ecc71;
-    }
-
     .footer {
       text-align: center;
       font-size: 12px;
@@ -129,23 +118,17 @@
 
 <div class="card">
   <h1>Shopee Live Formatter</h1>
-  <p>Dán link → nhập 1 dòng → copy nội dung</p>
+  <p>Dán link → tick Like / Share → copy</p>
 
-  <input id="inputLink" type="text" placeholder="Dán link Shopee Live..." />
-  <input id="inputMsg" type="text" placeholder="Nhập tin nhắn (1 dòng)..." />
+  <input id="inputLink" placeholder="Dán link Shopee Live..." />
+  <input id="inputMsg" placeholder="Nhập tin nhắn (1 dòng)..." />
 
   <div class="checkbox-group">
-    <label>
-      <input type="checkbox" id="chkLike" />
-      ❤️ Like
-    </label>
-    <label>
-      <input type="checkbox" id="chkShare" />
-      🔁 Share
-    </label>
+    <label><input type="checkbox" id="chkLike"> ❤️ Like</label>
+    <label><input type="checkbox" id="chkShare"> 🔁 Share</label>
   </div>
 
-  <button id="submitBtn" onclick="processLink()">Tạo nội dung</button>
+  <button onclick="fetchLive()">Tạo nội dung</button>
 
   <div id="result" class="result hidden"></div>
   <button id="copyBtn" class="copy-btn hidden" onclick="copyText()">Copy nội dung</button>
@@ -154,19 +137,42 @@
 </div>
 
 <script>
+  let liveData = null; // 👉 LƯU RESPONSE API
+
   function nowTime() {
     return new Date().toLocaleTimeString("vi-VN", { hour12: false });
   }
 
-  async function processLink() {
-    const link = document.getElementById("inputLink").value.trim();
+  function renderText() {
+    if (!liveData) return;
+
     const msg = document.getElementById("inputMsg").value.trim();
-    const likeChecked = document.getElementById("chkLike").checked;
-    const shareChecked = document.getElementById("chkShare").checked;
+    const like = document.getElementById("chkLike").checked;
+    const share = document.getElementById("chkShare").checked;
+
+    let likeShareLine = "";
+    if (like || share) {
+      const parts = [];
+      if (like) parts.push(`${liveData.like_cnt} tim`);
+      if (share) parts.push(`${liveData.share_cnt} share`);
+      likeShareLine = `Đang ${parts.join(", ")}`;
+    }
+
+    const text =
+`🚨 ${liveData.nickname} live 🚨
+${msg}
+${liveData.link}
+${likeShareLine}
+${nowTime()} - ${liveData.viewer_count} mắt xem`.trim();
 
     const result = document.getElementById("result");
-    const btn = document.getElementById("submitBtn");
-    const copyBtn = document.getElementById("copyBtn");
+    result.className = "result success";
+    result.textContent = text;
+  }
+
+  async function fetchLive() {
+    const link = document.getElementById("inputLink").value.trim();
+    const result = document.getElementById("result");
 
     if (!link) {
       result.className = "result error";
@@ -175,8 +181,6 @@
       return;
     }
 
-    btn.disabled = true;
-    copyBtn.classList.add("hidden");
     result.className = "result";
     result.classList.remove("hidden");
     result.textContent = "⏳ Đang xử lý...";
@@ -188,52 +192,31 @@
         body: JSON.stringify({ link })
       });
 
-      const json = await res.json();
+      liveData = await res.json();
 
-      if (!json.link || !json.nickname) {
+      if (!liveData.link || !liveData.nickname) {
         throw new Error("Invalid response");
       }
 
-      let likeShareLine = "";
-      if (likeChecked || shareChecked) {
-        const parts = [];
-        if (likeChecked) parts.push(`${json.like_cnt} tim`);
-        if (shareChecked) parts.push(`${json.share_cnt} share`);
-        likeShareLine = `Đang ${parts.join(", ")}`;
-      }
-
-      const text =
-`🚨 ${json.nickname} live 🚨
-${msg}
-${json.link}
-${likeShareLine}
-${nowTime()} - ${json.viewer_count} mắt xem`.trim();
-
-      result.className = "result success";
-      result.textContent = text;
-      copyBtn.classList.remove("hidden");
+      renderText();
+      document.getElementById("copyBtn").classList.remove("hidden");
 
     } catch (e) {
       result.className = "result error";
       result.textContent = "❌ Không lấy được dữ liệu";
-    } finally {
-      btn.disabled = false;
     }
   }
 
   function copyText() {
-    const text = document.getElementById("result").textContent;
-    navigator.clipboard.writeText(text);
-
-    const btn = document.getElementById("copyBtn");
-    btn.textContent = "Đã copy ✔";
-    btn.classList.add("copied");
-
-    setTimeout(() => {
-      btn.textContent = "Copy nội dung";
-      btn.classList.remove("copied");
-    }, 1500);
+    navigator.clipboard.writeText(
+      document.getElementById("result").textContent
+    );
   }
+
+  // 👉 AUTO UPDATE KHI TICK / BỎ TICK
+  document.getElementById("chkLike").addEventListener("change", renderText);
+  document.getElementById("chkShare").addEventListener("change", renderText);
+  document.getElementById("inputMsg").addEventListener("input", renderText);
 </script>
 
 </body>
