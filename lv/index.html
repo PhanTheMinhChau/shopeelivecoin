@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lấy link Shopee live</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    }
+    h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 15px;
+      word-break: break-all;
+    }
+    .error {
+      color: red;
+    }
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Chuyển link Shopee</h2>
+
+  <input
+    id="inputLink"
+    type="text"
+    placeholder="Dán link vào đây..."
+  />
+
+  <button onclick="getLiveLink()">Lấy link mới</button>
+
+  <div id="result" class="result"></div>
+</div>
+
+<script>
+  async function getLiveLink() {
+    const input = document.getElementById("inputLink");
+    const result = document.getElementById("result");
+    const link = input.value.trim();
+
+    if (!link) {
+      result.innerHTML = '<span class="error">Vui lòng nhập link</span>';
+      return;
+    }
+
+    result.innerHTML = "Đang xử lý...";
+
+    try {
+      const res = await fetch(
+        "https://sharelink-kappa.vercel.app/get_link_live",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ link })
+        }
+      );
+
+      const json = await res.json();
+
+      if (json.err_code === 0) {
+        const newLink = json.data.link;
+        result.innerHTML = `
+          <div class="success">Link mới:</div>
+          <a href="${newLink}" target="_blank">${newLink}</a>
+        `;
+      } else {
+        result.innerHTML =
+          '<span class="error">' + json.err_msg + '</span>';
+      }
+    } catch (e) {
+      result.innerHTML =
+        '<span class="error">Lỗi kết nối</span>';
+    }
+  }
+</script>
+
+</body>
+</html>
