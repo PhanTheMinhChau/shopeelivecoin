@@ -120,8 +120,8 @@
   <input id="inputMsg" placeholder="Tin nhắn (1 dòng)..." />
 
   <div class="checkbox-group">
-    <label><input type="checkbox" id="chkLike"> ❤️ Like</label>
-    <label><input type="checkbox" id="chkShare"> 🔁 Share</label>
+    <label><input type="checkbox" id="chkLike">❤️</label>
+    <label><input type="checkbox" id="chkShare">share</label>
   </div>
 
   <button onclick="fetchLive()">Tạo nội dung</button>
@@ -145,7 +145,7 @@ function renderText() {
   const share = document.getElementById("chkShare").checked;
 
   const lines = [
-    `🚨 ${liveData.nickname} live 🚨`,
+    `🚨 ${liveData.nickname} 🚨`,
     msg,
     liveData.link
   ];
