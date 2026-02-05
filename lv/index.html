@@ -16,8 +16,8 @@
 
     body {
       margin: 0;
-      background: linear-gradient(135deg, #6c5ce7, #00b894);
       min-height: 100vh;
+      background: linear-gradient(135deg, #6c5ce7, #00b894);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -59,7 +59,6 @@
       border: 1px solid #ddd;
       font-size: 14px;
       outline: none;
-      transition: border .2s;
     }
 
     input:focus {
@@ -77,32 +76,39 @@
       font-size: 15px;
       font-weight: 500;
       cursor: pointer;
-      transition: background .2s;
     }
 
-    button:hover {
-      background: #5a4fdc;
+    button:disabled {
+      background: #b2b2b2;
+      cursor: not-allowed;
     }
 
     .result {
       margin-top: 16px;
-      background: #f8f9ff;
       border-radius: 10px;
       padding: 12px;
       font-size: 14px;
+      display: block;
+    }
+
+    .hidden {
       display: none;
     }
 
     .result.success {
-      display: block;
       border: 1px solid #dfe6ff;
+      background: #f8f9ff;
     }
 
     .result.error {
-      display: block;
       border: 1px solid #ffd6d6;
       background: #fff5f5;
       color: #c0392b;
+    }
+
+    .loading {
+      text-align: center;
+      font-weight: 500;
     }
 
     .link-box {
@@ -124,6 +130,7 @@
       color: #fff;
       cursor: pointer;
       font-size: 14px;
+      white-space: nowrap;
     }
 
     .copy-btn.copied {
@@ -146,9 +153,9 @@
 
   <input id="inputLink" placeholder="https://vn.shp.ee/..." />
 
-  <button onclick="getLiveLink()">Lấy link mới</button>
+  <button id="submitBtn" onclick="getLiveLink()">Lấy link mới</button>
 
-  <div id="result" class="result"></div>
+  <div id="result" class="result hidden"></div>
 
   <div class="footer">Powered by sharelink</div>
 </div>
@@ -157,16 +164,21 @@
   async function getLiveLink() {
     const input = document.getElementById("inputLink");
     const result = document.getElementById("result");
+    const btn = document.getElementById("submitBtn");
     const link = input.value.trim();
 
     if (!link) {
       result.className = "result error";
       result.innerHTML = "⚠️ Vui lòng nhập link";
+      result.classList.remove("hidden");
       return;
     }
 
+    // Loading
+    btn.disabled = true;
     result.className = "result";
-    result.innerHTML = "⏳ Đang xử lý...";
+    result.classList.remove("hidden");
+    result.innerHTML = `<div class="loading">⏳ Đang xử lý...</div>`;
 
     try {
       const res = await fetch(
@@ -197,12 +209,15 @@
     } catch (e) {
       result.className = "result error";
       result.innerHTML = "❌ Không lấy được link";
+    } finally {
+      btn.disabled = false;
     }
   }
 
   function copyLink(btn) {
     const input = document.getElementById("outputLink");
     input.select();
+    input.setSelectionRange(0, 99999);
     document.execCommand("copy");
 
     btn.textContent = "Đã copy";
