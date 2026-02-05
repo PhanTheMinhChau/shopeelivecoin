@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Chuyển link Shopee Live</title>
+  <title>Shopee Live Formatter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -45,7 +45,7 @@
       margin: 0 0 20px;
     }
 
-    input, textarea {
+    input[type="text"] {
       width: 100%;
       padding: 14px;
       border-radius: 10px;
@@ -55,9 +55,18 @@
       margin-bottom: 10px;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 80px;
+    .checkbox-group {
+      display: flex;
+      gap: 16px;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
     }
 
     button {
@@ -120,10 +129,21 @@
 
 <div class="card">
   <h1>Shopee Live Formatter</h1>
-  <p>Dán link + nhập tin nhắn → copy đoạn text</p>
+  <p>Dán link → nhập 1 dòng → copy nội dung</p>
 
-  <input id="inputLink" placeholder="Dán link Shopee Live..." />
-  <textarea id="inputMsg" placeholder="Nhập tin nhắn của bạn..."></textarea>
+  <input id="inputLink" type="text" placeholder="Dán link Shopee Live..." />
+  <input id="inputMsg" type="text" placeholder="Nhập tin nhắn (1 dòng)..." />
+
+  <div class="checkbox-group">
+    <label>
+      <input type="checkbox" id="chkLike" />
+      ❤️ Like
+    </label>
+    <label>
+      <input type="checkbox" id="chkShare" />
+      🔁 Share
+    </label>
+  </div>
 
   <button id="submitBtn" onclick="processLink()">Tạo nội dung</button>
 
@@ -141,6 +161,9 @@
   async function processLink() {
     const link = document.getElementById("inputLink").value.trim();
     const msg = document.getElementById("inputMsg").value.trim();
+    const likeChecked = document.getElementById("chkLike").checked;
+    const shareChecked = document.getElementById("chkShare").checked;
+
     const result = document.getElementById("result");
     const btn = document.getElementById("submitBtn");
     const copyBtn = document.getElementById("copyBtn");
@@ -171,11 +194,20 @@
         throw new Error("Invalid response");
       }
 
+      let likeShareLine = "";
+      if (likeChecked || shareChecked) {
+        const parts = [];
+        if (likeChecked) parts.push(`${json.like_cnt} tim`);
+        if (shareChecked) parts.push(`${json.share_cnt} share`);
+        likeShareLine = `Đang ${parts.join(", ")}`;
+      }
+
       const text =
 `🚨 ${json.nickname} live 🚨
-${msg || ""}
+${msg}
 ${json.link}
-${nowTime()} - ${json.viewer_count} mắt xem`;
+${likeShareLine}
+${nowTime()} - ${json.viewer_count} mắt xem`.trim();
 
       result.className = "result success";
       result.textContent = text;
