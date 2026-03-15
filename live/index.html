@@ -2,136 +2,184 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Live các nhà quen thuộc</title>
 
 <style>
 
+*{box-sizing:border-box}
+
 body{
-    margin:0;
-    font-family:system-ui,Arial;
-    background:#f5f5f5;
+margin:0;
+font-family:system-ui,Arial;
+background:#f5f5f5;
 }
 
 /* header */
 
 .live-header{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:14px 16px;
-    font-size:16px;
-    font-weight:700;
-    background:white;
-    border-bottom:1px solid #eee;
-    position:sticky;
-    top:0;
-    z-index:10;
+display:flex;
+align-items:center;
+gap:8px;
+padding:14px 16px;
+font-size:16px;
+font-weight:700;
+background:white;
+border-bottom:1px solid #eee;
+position:sticky;
+top:0;
+z-index:10;
 }
 
 .live-dot{
-    width:10px;
-    height:10px;
-    background:red;
-    border-radius:50%;
-    animation:pulse 1.5s infinite;
+width:10px;
+height:10px;
+background:red;
+border-radius:50%;
+animation:pulse 1.5s infinite;
 }
 
 @keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(255,0,0,0.7);}
-    70%{box-shadow:0 0 0 8px rgba(255,0,0,0);}
-    100%{box-shadow:0 0 0 0 rgba(255,0,0,0);}
+0%{box-shadow:0 0 0 0 rgba(255,0,0,0.7)}
+70%{box-shadow:0 0 0 8px rgba(255,0,0,0)}
+100%{box-shadow:0 0 0 0 rgba(255,0,0,0)}
 }
 
 /* search */
 
 .search-box{
-    padding:10px 12px;
-    background:white;
-    border-bottom:1px solid #eee;
+padding:10px 12px;
+background:white;
+border-bottom:1px solid #eee;
 }
 
-.search-box input{
-    width:100%;
-    padding:10px 12px;
-    font-size:14px;
-    border-radius:8px;
-    border:1px solid #ddd;
-    outline:none;
+.search-input{
+position:relative;
 }
 
-.search-box input:focus{
-    border-color:#ff2d55;
+.search-icon{
+position:absolute;
+left:12px;
+top:50%;
+transform:translateY(-50%);
+font-size:14px;
+opacity:.6;
+}
+
+.clear-btn{
+position:absolute;
+right:10px;
+top:50%;
+transform:translateY(-50%);
+font-size:16px;
+cursor:pointer;
+display:none;
+opacity:.6;
+}
+
+.clear-btn:hover{
+opacity:1;
+}
+
+.search-input input{
+width:100%;
+padding:10px 34px 10px 34px;
+font-size:14px;
+border-radius:20px;
+border:1px solid #ddd;
+outline:none;
+background:#fafafa;
+}
+
+.search-input input:focus{
+border-color:#ff2d55;
+background:white;
+}
+
+/* suggestions */
+
+.quick-suggestions{
+display:flex;
+gap:8px;
+padding:10px 12px;
+background:white;
+border-bottom:1px solid #eee;
+}
+
+.suggest-btn{
+padding:6px 12px;
+background:#f2f2f2;
+border-radius:20px;
+font-size:13px;
+cursor:pointer;
 }
 
 /* loading */
 
 .loading{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:150px;
+display:flex;
+justify-content:center;
+align-items:center;
+height:150px;
 }
 
 .spinner{
-    width:32px;
-    height:32px;
-    border:4px solid #eee;
-    border-top:4px solid red;
-    border-radius:50%;
-    animation:spin 1s linear infinite;
+width:32px;
+height:32px;
+border:4px solid #eee;
+border-top:4px solid red;
+border-radius:50%;
+animation:spin 1s linear infinite;
 }
 
 @keyframes spin{
-    to{transform:rotate(360deg);}
+to{transform:rotate(360deg)}
 }
 
 /* grid */
 
 .grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    padding:12px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+padding:12px;
 }
 
-.item{
-    text-align:center;
-}
+.item{text-align:center}
 
 .avatar-box{
-    position:relative;
-    width:72px;
-    height:72px;
-    margin:auto;
+position:relative;
+width:72px;
+height:72px;
+margin:auto;
 }
 
 .avatar{
-    width:100%;
-    height:100%;
-    border-radius:50%;
-    object-fit:cover;
-    border:3px solid #ff2d55;
+width:100%;
+height:100%;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #ff2d55;
 }
 
 .live{
-    position:absolute;
-    bottom:-6px;
-    left:50%;
-    transform:translateX(-50%);
-    background:red;
-    color:white;
-    font-size:10px;
-    padding:2px 7px;
-    border-radius:10px;
-    font-weight:bold;
+position:absolute;
+bottom:-6px;
+left:50%;
+transform:translateX(-50%);
+background:red;
+color:white;
+font-size:10px;
+padding:2px 7px;
+border-radius:10px;
+font-weight:bold;
 }
 
 .username{
-    margin-top:8px;
-    font-size:12px;
-    line-height:1.2;
-    word-break:break-word;
+margin-top:8px;
+font-size:12px;
+line-height:1.2;
+word-break:break-word;
 }
 
 </style>
@@ -145,7 +193,18 @@ body{
 </header>
 
 <div class="search-box">
+<div class="search-input">
+<span class="search-icon">🔍</span>
 <input type="text" id="search" placeholder="Tìm nhà live...">
+<span class="clear-btn" id="clear">✖</span>
+</div>
+</div>
+
+<div class="quick-suggestions">
+<span class="suggest-btn" data-key="adpia">Adpia</span>
+<span class="suggest-btn" data-key="Accesstradevn">Xe</span>
+<span class="suggest-btn" data-key="siêu sao">bịp</span>
+<span class="suggest-btn" data-key="beyond">Beyonk</span>
 </div>
 
 <div class="loading" id="loading">
@@ -156,9 +215,10 @@ body{
 
 <script>
 
-const grid = document.getElementById("grid")
-const loading = document.getElementById("loading")
-const search = document.getElementById("search")
+const grid=document.getElementById("grid")
+const loading=document.getElementById("loading")
+const search=document.getElementById("search")
+const clearBtn=document.getElementById("clear")
 
 let liveData=[]
 
@@ -166,62 +226,92 @@ fetch("https://sharelink-kappa.vercel.app/get_live_session")
 .then(res=>res.json())
 .then(data=>{
 
-    loading.style.display="none"
+loading.style.display="none"
 
-    data.sort((a,b)=>a.username.localeCompare(b.username,'vi'))
+data.sort((a,b)=>a.username.localeCompare(b.username,'vi'))
 
-    liveData=data
-
-    render(data)
+liveData=data
+render(data)
 
 })
+
 .catch(()=>{
-    loading.innerHTML="Không tải được dữ liệu"
+loading.innerHTML="Không tải được dữ liệu"
 })
 
 function render(list){
 
-    grid.innerHTML=""
+grid.innerHTML=""
 
-    const frag=document.createDocumentFragment()
+const frag=document.createDocumentFragment()
 
-    list.forEach(i=>{
+list.forEach(i=>{
 
-        const card=document.createElement("div")
-        card.className="item"
+const card=document.createElement("div")
+card.className="item"
 
-        card.innerHTML=`
-        <a href="https://s.shopee.vn/an_redir?affiliate_id=17396220028&sub_id=---livex-&origin_link=https%3A%2F%2Flive.shopee.vn%2Fshare%3Ffrom%3Dlive%26session%3D${i.session_id}" target="_blank">
-            <div class="avatar-box">
-                <img 
-                class="avatar"
-                loading="lazy"
-                src="https://cf.shopee.vn/file/${i.avatar}"
-                onerror="this.src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/live-placeholder.png'"
-                >
-                <div class="live">LIVE</div>
-            </div>
-        </a>
-        <div class="username">${i.username}</div>
-        `
+card.innerHTML=`
+<a href="https://s.shopee.vn/an_redir?affiliate_id=17396220028&sub_id=---livex-&origin_link=https%3A%2F%2Flive.shopee.vn%2Fshare%3Ffrom%3Dlive%26session%3D${i.session_id}" target="_blank">
+<div class="avatar-box">
+<img class="avatar" loading="lazy" src="https://cf.shopee.vn/file/${i.avatar}">
+<div class="live">LIVE</div>
+</div>
+</a>
+<div class="username">${i.username}</div>
+`
 
-        frag.appendChild(card)
+frag.appendChild(card)
 
-    })
+})
 
-    grid.appendChild(frag)
+grid.appendChild(frag)
 
 }
 
+/* search */
+
 search.addEventListener("input",e=>{
 
-    const q=e.target.value.toLowerCase()
+const q=e.target.value.toLowerCase()
 
-    const filtered=liveData.filter(i=>
-        i.username.toLowerCase().includes(q)
-    )
+clearBtn.style.display=q?"block":"none"
 
-    render(filtered)
+const filtered=liveData.filter(i=>
+i.username.toLowerCase().includes(q)
+)
+
+render(filtered)
+
+})
+
+/* clear button */
+
+clearBtn.onclick=()=>{
+
+search.value=""
+clearBtn.style.display="none"
+render(liveData)
+
+}
+
+/* suggestions */
+
+document.querySelectorAll(".suggest-btn").forEach(btn=>{
+
+btn.onclick=()=>{
+
+const keyword=btn.dataset.key
+
+search.value=btn.textContent
+clearBtn.style.display="block"
+
+const filtered=liveData.filter(i=>
+i.username.toLowerCase().includes(keyword.toLowerCase())
+)
+
+render(filtered)
+
+}
 
 })
 
