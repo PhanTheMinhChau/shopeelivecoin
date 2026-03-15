@@ -104,6 +104,7 @@ gap:8px;
 padding:10px 12px;
 background:white;
 border-bottom:1px solid #eee;
+overflow-x:auto;
 }
 
 .suggest-btn{
@@ -112,6 +113,7 @@ background:#f2f2f2;
 border-radius:20px;
 font-size:13px;
 cursor:pointer;
+white-space:nowrap;
 }
 
 /* loading */
@@ -202,7 +204,7 @@ word-break:break-word;
 
 <div class="quick-suggestions">
 <span class="suggest-btn" data-key="adpia">Adpia</span>
-<span class="suggest-btn" data-key="Accesstradevn">Xe</span>
+<span class="suggest-btn" data-key="accesstradevn">Xe</span>
 <span class="suggest-btn" data-key="siêu sao">bịp</span>
 <span class="suggest-btn" data-key="beyond">Beyonk</span>
 </div>
@@ -222,6 +224,15 @@ const clearBtn=document.getElementById("clear")
 
 let liveData=[]
 
+/* alias tìm kiếm */
+
+const alias={
+"bịp":"siêu sao",
+"xe":"accesstradevn"
+}
+
+/* fetch data */
+
 fetch("https://sharelink-kappa.vercel.app/get_live_session")
 .then(res=>res.json())
 .then(data=>{
@@ -234,10 +245,11 @@ liveData=data
 render(data)
 
 })
-
 .catch(()=>{
 loading.innerHTML="Không tải được dữ liệu"
 })
+
+/* render grid */
 
 function render(list){
 
@@ -268,13 +280,17 @@ grid.appendChild(frag)
 
 }
 
-/* search */
+/* search realtime */
 
 search.addEventListener("input",e=>{
 
-const q=e.target.value.toLowerCase()
+let q=e.target.value.toLowerCase()
 
 clearBtn.style.display=q?"block":"none"
+
+/* alias */
+
+if(alias[q]) q=alias[q]
 
 const filtered=liveData.filter(i=>
 i.username.toLowerCase().includes(q)
@@ -302,7 +318,7 @@ btn.onclick=()=>{
 
 const keyword=btn.dataset.key
 
-search.value=btn.textContent
+search.value=keyword
 clearBtn.style.display="block"
 
 const filtered=liveData.filter(i=>
