@@ -77,13 +77,9 @@ display:none;
 opacity:.6;
 }
 
-.clear-btn:hover{
-opacity:1;
-}
-
 .search-input input{
 width:100%;
-padding:10px 34px 10px 34px;
+padding:10px 34px;
 font-size:14px;
 border-radius:20px;
 border:1px solid #ddd;
@@ -224,7 +220,7 @@ const clearBtn=document.getElementById("clear")
 
 let liveData=[]
 
-/* alias tìm kiếm */
+/* alias tìm */
 
 const alias={
 "bịp":"siêu sao",
@@ -232,6 +228,8 @@ const alias={
 }
 
 /* fetch data */
+
+function loadData(){
 
 fetch("https://sharelink-kappa.vercel.app/get_live_session")
 .then(res=>res.json())
@@ -242,14 +240,25 @@ loading.style.display="none"
 data.sort((a,b)=>a.username.localeCompare(b.username,'vi'))
 
 liveData=data
-render(data)
+
+let q=search.value.toLowerCase()
+
+if(alias[q]) q=alias[q]
+
+const filtered=liveData.filter(i=>
+i.username.toLowerCase().includes(q)
+)
+
+render(filtered)
 
 })
 .catch(()=>{
-loading.innerHTML="Không tải được dữ liệu"
+console.log("fetch lỗi")
 })
 
-/* render grid */
+}
+
+/* render */
 
 function render(list){
 
@@ -280,15 +289,13 @@ grid.appendChild(frag)
 
 }
 
-/* search realtime */
+/* search */
 
 search.addEventListener("input",e=>{
 
 let q=e.target.value.toLowerCase()
 
 clearBtn.style.display=q?"block":"none"
-
-/* alias */
 
 if(alias[q]) q=alias[q]
 
@@ -330,6 +337,14 @@ render(filtered)
 }
 
 })
+
+/* load lần đầu */
+
+loadData()
+
+/* auto refresh mỗi 5 phút */
+
+setInterval(loadData,300000)
 
 </script>
 
