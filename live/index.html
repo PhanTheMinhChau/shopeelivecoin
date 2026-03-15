@@ -26,6 +26,7 @@ body{
     border-bottom:1px solid #eee;
     position:sticky;
     top:0;
+    z-index:10;
 }
 
 .live-dot{
@@ -40,6 +41,27 @@ body{
     0%{box-shadow:0 0 0 0 rgba(255,0,0,0.7);}
     70%{box-shadow:0 0 0 8px rgba(255,0,0,0);}
     100%{box-shadow:0 0 0 0 rgba(255,0,0,0);}
+}
+
+/* search */
+
+.search-box{
+    padding:10px 12px;
+    background:white;
+    border-bottom:1px solid #eee;
+}
+
+.search-box input{
+    width:100%;
+    padding:10px 12px;
+    font-size:14px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    outline:none;
+}
+
+.search-box input:focus{
+    border-color:#ff2d55;
 }
 
 /* loading */
@@ -118,12 +140,16 @@ body{
 <body>
 
 <header class="live-header">
-    <div class="live-dot"></div>
-    <span>Live các nhà quen thuộc</span>
+<div class="live-dot"></div>
+<span>Live các nhà quen thuộc</span>
 </header>
 
+<div class="search-box">
+<input type="text" id="search" placeholder="Tìm nhà live...">
+</div>
+
 <div class="loading" id="loading">
-    <div class="spinner"></div>
+<div class="spinner"></div>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -132,37 +158,71 @@ body{
 
 const grid = document.getElementById("grid")
 const loading = document.getElementById("loading")
+const search = document.getElementById("search")
+
+let liveData=[]
 
 fetch("https://sharelink-kappa.vercel.app/get_live_session")
-.then(res => res.json())
-.then(data => {
+.then(res=>res.json())
+.then(data=>{
 
     loading.style.display="none"
 
     data.sort((a,b)=>a.username.localeCompare(b.username,'vi'))
 
-    data.forEach(i => {
+    liveData=data
+
+    render(data)
+
+})
+.catch(()=>{
+    loading.innerHTML="Không tải được dữ liệu"
+})
+
+function render(list){
+
+    grid.innerHTML=""
+
+    const frag=document.createDocumentFragment()
+
+    list.forEach(i=>{
 
         const card=document.createElement("div")
         card.className="item"
 
         card.innerHTML=`
-            <a href="https://s.shopee.vn/an_redir?affiliate_id=17396220028&sub_id=---livex-&origin_link=https%3A%2F%2Flive.shopee.vn%2Fshare%3Ffrom%3Dlive%26session%3D${i.session_id}" target="_blank">
-                <div class="avatar-box">
-                    <img class="avatar" src="https://cf.shopee.vn/file/${i.avatar}">
-                    <div class="live">LIVE</div>
-                </div>
-            </a>
-            <div class="username">${i.username}</div>
+        <a href="https://s.shopee.vn/an_redir?affiliate_id=17396220028&sub_id=---livex-&origin_link=https%3A%2F%2Flive.shopee.vn%2Fshare%3Ffrom%3Dlive%26session%3D${i.session_id}" target="_blank">
+            <div class="avatar-box">
+                <img 
+                class="avatar"
+                loading="lazy"
+                src="https://cf.shopee.vn/file/${i.avatar}"
+                onerror="this.src='https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/live-placeholder.png'"
+                >
+                <div class="live">LIVE</div>
+            </div>
+        </a>
+        <div class="username">${i.username}</div>
         `
 
-        grid.appendChild(card)
+        frag.appendChild(card)
 
     })
 
-})
-.catch(()=>{
-    loading.innerHTML="Không tải được dữ liệu"
+    grid.appendChild(frag)
+
+}
+
+search.addEventListener("input",e=>{
+
+    const q=e.target.value.toLowerCase()
+
+    const filtered=liveData.filter(i=>
+        i.username.toLowerCase().includes(q)
+    )
+
+    render(filtered)
+
 })
 
 </script>
