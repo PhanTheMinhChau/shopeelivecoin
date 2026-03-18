@@ -176,7 +176,226 @@
   </button>
 
   <script>
- const _0x38bccc=_0x120f;(function(_0x27ae36,_0x6b71c6){const _0x40cd70=_0x120f,_0x15e2b4=_0x27ae36();while(!![]){try{const _0x1b68f1=parseInt(_0x40cd70(0x10f))/0x1+-parseInt(_0x40cd70(0x177))/0x2+parseInt(_0x40cd70(0x143))/0x3*(-parseInt(_0x40cd70(0x107))/0x4)+parseInt(_0x40cd70(0x102))/0x5+-parseInt(_0x40cd70(0x153))/0x6*(-parseInt(_0x40cd70(0x16c))/0x7)+-parseInt(_0x40cd70(0x101))/0x8+parseInt(_0x40cd70(0x17c))/0x9;if(_0x1b68f1===_0x6b71c6)break;else _0x15e2b4['push'](_0x15e2b4['shift']());}catch(_0x3c32b1){_0x15e2b4['push'](_0x15e2b4['shift']());}}}(_0x59ce,0xd08ab));const PROMO_API=_0x38bccc(0x128),API_BASE=_0x38bccc(0x175),DEFAULT_QUERY={'keyword':'','search_field':'name','sort_field':_0x38bccc(0x109),'sort_order':0x1,'items_per_page':0x10,'promotionid':''};let state={'page_number':0x1,'loading':![],'ended':![],'params':{...DEFAULT_QUERY},'promotions':[]};const grid=document[_0x38bccc(0x17f)](_0x38bccc(0x10b)),emptyEl=document['getElementById'](_0x38bccc(0x12e)),moreBtn=document['getElementById'](_0x38bccc(0x104)),kwInput=document[_0x38bccc(0x17f)]('kw'),searchBtn=document[_0x38bccc(0x17f)](_0x38bccc(0x142)),promoBar=document[_0x38bccc(0x17f)](_0x38bccc(0x144)),sortSeg=document[_0x38bccc(0x17f)]('sortSeg'),countdownEl=document[_0x38bccc(0x17f)]('countdown'),loadingOverlay=document[_0x38bccc(0x17f)](_0x38bccc(0x166)),backToTopBtn=document[_0x38bccc(0x17f)](_0x38bccc(0x156)),toVND=_0x2093b0=>{const _0x2bd104=_0x38bccc;if(typeof _0x2093b0!==_0x2bd104(0x154))return'';return Math[_0x2bd104(0x159)](_0x2093b0/0x186a0)[_0x2bd104(0x167)](_0x2bd104(0x130),{'style':_0x2bd104(0x11e),'currency':_0x2bd104(0x12f)});},makeQS=_0x409a30=>new URLSearchParams(_0x409a30)[_0x38bccc(0x176)](),fmtHour=_0xd24eb3=>{const _0x479d01=_0x38bccc,_0x3773b4=new Date(_0xd24eb3*0x3e8);return String(_0x3773b4[_0x479d01(0x14d)]())['padStart'](0x2,'0')+':'+String(_0x3773b4[_0x479d01(0x15f)]())[_0x479d01(0x111)](0x2,'0');},escapeHtml=_0x4e7993=>String(_0x4e7993)['replaceAll']('&',_0x38bccc(0x100))[_0x38bccc(0x125)]('<',_0x38bccc(0x12d))[_0x38bccc(0x125)]('>',_0x38bccc(0x121))['replaceAll']('\x22',_0x38bccc(0x182))['replaceAll']('\x27',_0x38bccc(0x16f));function buildURL(_0x65844d){const _0x4a5955=_0x38bccc,_0x543412=makeQS({...state[_0x4a5955(0x115)],'page_number':_0x65844d});return API_BASE+'?'+_0x543412;}function skeletonCard(){const _0x189890=_0x38bccc,_0x18602c=document[_0x189890(0x138)](_0x189890(0x16a));return _0x18602c['className']=_0x189890(0xff),_0x18602c[_0x189890(0x146)]=_0x189890(0x15e),_0x18602c;}function itemCard(_0x38fa48){const _0x19f8f8=_0x38bccc,{image:_0x326361,t:_0x527ad3,itemid:_0x5b56dd,name:_0x141839,price:_0x56cfea,price_before_discount:_0x3f4f8b,y:_0x4d24cb,stock:_0xf6c3c1,flash_sale_stock:_0x32e241,describe:_0x2ac83a,i:_0x455af7}=_0x38fa48,_0x2fc69f=document[_0x19f8f8(0x138)]('a');_0x2fc69f['className']=_0x19f8f8(0xff),_0x2fc69f[_0x19f8f8(0x14f)]='https://shopee.vn/universal-link?redir=https://shopee.vn/product/'+_0x527ad3+'/'+_0x455af7+_0x19f8f8(0x17d),_0x2fc69f[_0x19f8f8(0x137)]='_blank';const _0x4b8945=_0x19f8f8(0x13c)+_0x326361;return _0x2fc69f[_0x19f8f8(0x146)]=_0x19f8f8(0x147)+_0x4b8945+'\x22\x20alt=\x22'+escapeHtml(_0x141839)+_0x19f8f8(0x168)+(_0x4d24cb?_0x19f8f8(0x180)+_0x4d24cb+_0x19f8f8(0x118):'')+_0x19f8f8(0x140)+(_0xf6c3c1===0x0?'<div\x20class=\x22soldout\x22>Đã\x20hết</div>':'')+_0x19f8f8(0x141)+escapeHtml(_0x141839)+'\x27>'+escapeHtml(_0x141839)+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x27price\x27>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x27now\x27>'+toVND(_0x56cfea)+_0x19f8f8(0x113)+(_0x3f4f8b?_0x19f8f8(0x15c)+toVND(_0x3f4f8b)+'</div>':'')+_0x19f8f8(0x14e)+(Number[_0x19f8f8(0x152)](_0xf6c3c1)?_0xf6c3c1:'—')+'/'+(Number[_0x19f8f8(0x152)](_0x32e241)?_0x32e241:'—')+_0x19f8f8(0x15a)+_0x2ac83a+_0x19f8f8(0x124),_0x2fc69f;}function _0x59ce(){const _0x1613bf=['searchBtn','3NtiLQF','promoBar','split','innerHTML','<div\x20class=\x22thumb\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<img\x20loading=\x22lazy\x22\x20src=\x22','status','pushState','sort_order','promo-btn','scrollTo','getHours','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x27stock\x27>Còn:\x20','href','remove','appendChild','isFinite','18LfsMIi','number','isIntersecting','backToTop','promotions','querySelectorAll','round','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x27stock\x27\x20style=\x22color:#ee4d2d;\x22>','keydown','<div\x20class=\x27before\x27>','display','<div\x20class=\x22thumb\x20skeleton\x22></div><div\x20class=\x22content\x22><div\x20class=\x22skeleton\x22\x20style=\x22height:18px;width:90%\x22></div><div\x20class=\x22skeleton\x22\x20style=\x22height:14px;width:60%\x22></div><div\x20class=\x22skeleton\x22\x20style=\x22height:12px;width:40%\x22></div></div>','getMinutes','search','/flashsale','style','floor','now','map','loadingOverlay','toLocaleString','\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','value','div','preventDefault','1069621xkJecw','find','ended','&#39;','start_time','Lỗi\x20tải\x20dữ\x20liệu','forEach','trim','disabled','https://sharelink-kappa.vercel.app/flash_sale','toString','472810ccIWEL','hash','json','addEventListener','loading','12546450PYxtbX','?uls_trackid=53nvku3b00p8&utm_campaign=id_13DH2fLLToO&utm_content=flashsale1----&utm_medium=affiliates&utm_source=an_17396220028&utm_term=don9zxk76jwm&deep_and_deferred=1','block','getElementById','<div\x20class=\x27badge\x27>-','hidden','&quot;','pathname','dataset','card','&amp;','7153240msCPmK','5609830YToZDB','end_time','moreBtn','key','set','6455528KfDxFg','items_per_page','price','.promo-btn','grid','sort_field','classList','textContent','624204hOMaJp','sort','padStart','Khung\x20kế\x20tiếp\x20sau','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','.seg','params','none','Bắt\x20đầu\x20sau','%</div>','800px\x200px\x200px\x200px','observe','button','add','delete','currency','popstate','click','&gt;','keyword','includes','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>','replaceAll','active','Đang\x20tải…','https://sharelink-kappa.vercel.app/promotions','smooth','page_number','toggle','get','&lt;','empty','VND','vi-VN','isArray','error','replaceState','Thử\x20lại','location','Lỗi\x20promotions','target','createElement','promotionid','Hết\x20dữ\x20liệu','pid','https://cf.shopee.vn/file/','className','sentinel','length','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x27labels\x27></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x27content\x27>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x27name\x27\x20title=\x27'];_0x59ce=function(){return _0x1613bf;};return _0x59ce();}async function fetchPage(_0x49a75d){const _0x3bc888=_0x38bccc;if(state[_0x3bc888(0x17b)]||state[_0x3bc888(0x16e)])return[];state['loading']=!![],moreBtn['disabled']=!![],moreBtn['textContent']=_0x3bc888(0x127);const _0x109996=[...Array(0x6)][_0x3bc888(0x165)](skeletonCard);_0x109996[_0x3bc888(0x172)](_0x477b2b=>grid[_0x3bc888(0x151)](_0x477b2b));try{const _0x10308e=buildURL(_0x49a75d),_0x5e0976=await fetch(_0x10308e,{'headers':{'X-tss':'123456'}});if(!_0x5e0976['ok'])throw new Error('HTTP\x20'+_0x5e0976[_0x3bc888(0x148)]);const _0x533e57=await _0x5e0976[_0x3bc888(0x179)](),_0x4db88a=Array[_0x3bc888(0x131)](_0x533e57)?_0x533e57:[];_0x109996[_0x3bc888(0x172)](_0x43a6dc=>_0x43a6dc[_0x3bc888(0x150)]());const _0x4396f3=_0x4db88a;if(_0x49a75d===0x1)grid[_0x3bc888(0x146)]='';return _0x533e57['forEach'](_0x7035ff=>_0x7035ff['i']=(_0x7035ff['i']-65756.757+_0x7035ff['y']+_0x7035ff['t'])/2.15),_0x4396f3[_0x3bc888(0x172)](_0x1922d8=>grid[_0x3bc888(0x151)](itemCard(_0x1922d8))),emptyEl['style']['display']=_0x49a75d===0x1&&_0x4396f3[_0x3bc888(0x13f)]===0x0?_0x3bc888(0x17e):_0x3bc888(0x116),_0x4db88a[_0x3bc888(0x13f)]<(state[_0x3bc888(0x115)][_0x3bc888(0x108)]||0x10)?(state[_0x3bc888(0x16e)]=!![],moreBtn[_0x3bc888(0x10e)]=_0x3bc888(0x13a),moreBtn[_0x3bc888(0x174)]=!![]):(moreBtn['textContent']='Xem\x20thêm',moreBtn[_0x3bc888(0x174)]=![]),_0x4396f3;}catch(_0x330e41){return console[_0x3bc888(0x132)](_0x330e41),_0x109996[_0x3bc888(0x172)](_0x315ee4=>_0x315ee4[_0x3bc888(0x150)]()),emptyEl[_0x3bc888(0x162)][_0x3bc888(0x15d)]=_0x3bc888(0x17e),emptyEl[_0x3bc888(0x10e)]=_0x3bc888(0x171),moreBtn[_0x3bc888(0x10e)]=_0x3bc888(0x134),moreBtn[_0x3bc888(0x174)]=![],[];}finally{state[_0x3bc888(0x17b)]=![];}}function resetAndLoad(){const _0x56e3fb=_0x38bccc;state['page_number']=0x1,state[_0x56e3fb(0x16e)]=![],grid['innerHTML']='',setupInfiniteScroll(),fetchPage(state[_0x56e3fb(0x12a)]),startCountdown();}function renderPromotions(){const _0x55c88f=_0x38bccc;promoBar[_0x55c88f(0x146)]='';if(!Array[_0x55c88f(0x131)](state[_0x55c88f(0x157)])||state[_0x55c88f(0x157)]['length']===0x0){const _0x36de0a=document[_0x55c88f(0x138)](_0x55c88f(0x11b));_0x36de0a[_0x55c88f(0x13d)]=_0x55c88f(0x14b),_0x36de0a[_0x55c88f(0x10e)]='—',_0x36de0a['disabled']=!![],promoBar[_0x55c88f(0x151)](_0x36de0a);return;}state[_0x55c88f(0x157)][_0x55c88f(0x172)]((_0x324547,_0x55161a)=>{const _0x3db701=_0x55c88f,_0x512eb0=document['createElement'](_0x3db701(0x11b));_0x512eb0['className']='promo-btn',_0x512eb0[_0x3db701(0x10e)]=fmtHour(_0x324547[_0x3db701(0x170)]),_0x512eb0['dataset'][_0x3db701(0x13b)]=String(_0x324547[_0x3db701(0x139)]),(String(_0x324547['promotionid'])===String(state[_0x3db701(0x115)][_0x3db701(0x139)])||_0x55161a===0x0&&!state[_0x3db701(0x115)]['promotionid'])&&(_0x512eb0['classList']['add'](_0x3db701(0x126)),state[_0x3db701(0x115)][_0x3db701(0x139)]=_0x324547['promotionid']),_0x512eb0[_0x3db701(0x17a)](_0x3db701(0x120),()=>{const _0x1f427f=_0x3db701;document[_0x1f427f(0x158)](_0x1f427f(0x10a))[_0x1f427f(0x172)](_0x3b531c=>_0x3b531c[_0x1f427f(0x10d)][_0x1f427f(0x150)](_0x1f427f(0x126))),_0x512eb0[_0x1f427f(0x10d)][_0x1f427f(0x11c)](_0x1f427f(0x126)),state[_0x1f427f(0x115)][_0x1f427f(0x139)]=_0x324547[_0x1f427f(0x139)],setURLPid(_0x324547[_0x1f427f(0x139)]),resetAndLoad();}),promoBar[_0x3db701(0x151)](_0x512eb0);});}function getPidByLocalTime(){const _0x4a51be=_0x38bccc;if(!state['promotions'][_0x4a51be(0x13f)])return null;const _0x285d24=Math['floor'](Date[_0x4a51be(0x164)]()/0x3e8),_0x32b4ba=state['promotions']['find'](_0xe0f055=>_0x285d24>=_0xe0f055['start_time']&&_0x285d24<_0xe0f055[_0x4a51be(0x103)]);if(_0x32b4ba)return _0x32b4ba[_0x4a51be(0x139)];const _0x1a9ecd=state['promotions']['find'](_0x228cf3=>_0x285d24<_0x228cf3['start_time']);return _0x1a9ecd?_0x1a9ecd[_0x4a51be(0x139)]:null;}function activatePromoButton(_0x35bcf8){const _0x31c8f4=_0x38bccc;document[_0x31c8f4(0x158)]('.promo-btn')[_0x31c8f4(0x172)](_0x6529c2=>{const _0x58ecf8=_0x31c8f4;_0x6529c2[_0x58ecf8(0x10d)][_0x58ecf8(0x12b)](_0x58ecf8(0x126),_0x6529c2[_0x58ecf8(0x184)][_0x58ecf8(0x13b)]===String(_0x35bcf8));});}function checkAutoPromotion(_0x576ded=![]){return;}let autoTimer;function startAutoWatcher(){const _0x19f256=_0x38bccc;if(autoTimer)clearInterval(autoTimer);autoTimer=setInterval(()=>checkAutoPromotion(![]),0x3a98),document[_0x19f256(0x17a)]('visibilitychange',()=>{const _0x5192b3=_0x19f256;if(!document[_0x5192b3(0x181)])checkAutoPromotion(![]);});}function applySortUI(_0x17df2c){const _0x42d340=_0x38bccc,_0x49bdcf=sortSeg['querySelectorAll'](_0x42d340(0x114));_0x49bdcf[_0x42d340(0x172)](_0x2e9ea5=>{const _0x407919=_0x42d340;_0x2e9ea5[_0x407919(0x184)][_0x407919(0x110)]===_0x17df2c?_0x2e9ea5['classList'][_0x407919(0x11c)](_0x407919(0x126)):_0x2e9ea5['classList'][_0x407919(0x150)]('active');});}function setSort(_0x522ac5){const _0x4362f7=_0x38bccc,[_0x2baded,_0x27ead9]=_0x522ac5[_0x4362f7(0x145)]('|');state[_0x4362f7(0x115)]['sort_field']=_0x2baded,state[_0x4362f7(0x115)][_0x4362f7(0x14a)]=Number(_0x27ead9),applySortUI(_0x522ac5),resetAndLoad();}sortSeg['addEventListener'](_0x38bccc(0x120),_0x3c00cf=>{const _0x3fa768=_0x38bccc,_0x47b87c=_0x3c00cf[_0x3fa768(0x137)]['closest'](_0x3fa768(0x114));if(!_0x47b87c)return;const _0x18b7c9=_0x47b87c[_0x3fa768(0x184)][_0x3fa768(0x110)];if(!_0x18b7c9||_0x47b87c[_0x3fa768(0x10d)]['contains'](_0x3fa768(0x126)))return;setSort(_0x18b7c9);});function initSortDefault(){const _0x298d39=_0x38bccc;applySortUI(DEFAULT_QUERY[_0x298d39(0x10c)]+'|'+DEFAULT_QUERY[_0x298d39(0x14a)]);}let io;function setupInfiniteScroll(){const _0x5a0428=_0x38bccc;if(io)try{io['disconnect']();}catch(_0x4c9c0a){}io=new IntersectionObserver(_0x374f0b=>{const _0x38e015=_0x120f,_0x4875a7=_0x374f0b[0x0];if(!_0x4875a7||!_0x4875a7[_0x38e015(0x155)])return;if(state[_0x38e015(0x17b)]||state[_0x38e015(0x16e)])return;state[_0x38e015(0x12a)]+=0x1,fetchPage(state['page_number']);},{'root':null,'rootMargin':_0x5a0428(0x119),'threshold':0x0});const _0x1b6876=document[_0x5a0428(0x17f)](_0x5a0428(0x13e));if(_0x1b6876)io[_0x5a0428(0x11a)](_0x1b6876);}function getURLPid(){const _0x3b442c=_0x38bccc,_0x3c0326=new URLSearchParams(location[_0x3b442c(0x160)]),_0x548e00=_0x3c0326[_0x3b442c(0x12c)](_0x3b442c(0x139));return _0x548e00?_0x548e00[_0x3b442c(0x173)]():null;}function setURLPid(_0x46b9bc,_0xf8752=![]){const _0x2e051d=_0x38bccc,_0xc0fca4=new URLSearchParams(location['search']);_0x46b9bc==null||_0x46b9bc===''?_0xc0fca4[_0x2e051d(0x11d)](_0x2e051d(0x139)):_0xc0fca4[_0x2e051d(0x106)](_0x2e051d(0x139),String(_0x46b9bc));const _0x42a332=location[_0x2e051d(0x183)]+(_0xc0fca4['toString']()?'?'+_0xc0fca4[_0x2e051d(0x176)]():'')+location[_0x2e051d(0x178)];_0xf8752?history[_0x2e051d(0x133)](null,'',_0x42a332):history[_0x2e051d(0x149)](null,'',_0x42a332);}function _0x120f(_0xb87283,_0x5dbe54){const _0x59ce6c=_0x59ce();return _0x120f=function(_0x120f60,_0x1fab12){_0x120f60=_0x120f60-0xff;let _0x4f0dd4=_0x59ce6c[_0x120f60];return _0x4f0dd4;},_0x120f(_0xb87283,_0x5dbe54);}window[_0x38bccc(0x17a)](_0x38bccc(0x11f),()=>{const _0x40d2c7=_0x38bccc,_0x28017c=getURLPid();_0x28017c&&String(state[_0x40d2c7(0x115)]['promotionid'])!==String(_0x28017c)&&(state[_0x40d2c7(0x115)]['promotionid']=_0x28017c,activatePromoButton(_0x28017c),resetAndLoad());});function getSelectedPromo(){const _0x3503d7=_0x38bccc,_0x2dc7f2=String(state['params'][_0x3503d7(0x139)]||'');return state[_0x3503d7(0x157)][_0x3503d7(0x16d)](_0x4208e8=>String(_0x4208e8['promotionid'])===_0x2dc7f2)||null;}function getNextPromoAfter(_0x280dfc){const _0x441fdb=_0x38bccc;return state[_0x441fdb(0x157)][_0x441fdb(0x16d)](_0x372b54=>_0x372b54['start_time']>_0x280dfc)||null;}function formatDHMS(_0x4c3565){const _0xce02f9=_0x38bccc;if(_0x4c3565<0x0)_0x4c3565=0x0;const _0x3f60c7=Math[_0xce02f9(0x163)](_0x4c3565/0x15180),_0x5e95b1=Math[_0xce02f9(0x163)](_0x4c3565%0x15180/0xe10),_0x1d66ea=Math[_0xce02f9(0x163)](_0x4c3565%0xe10/0x3c),_0x1467fb=Math[_0xce02f9(0x163)](_0x4c3565%0x3c),_0xfa362f=_0x2d25a6=>String(_0x2d25a6)[_0xce02f9(0x111)](0x2,'0');return(_0x3f60c7>0x0?_0x3f60c7+'d\x20':'')+(_0xfa362f(_0x5e95b1)+':'+_0xfa362f(_0x1d66ea)+':'+_0xfa362f(_0x1467fb));}let countdownTimer=null;function updateCountdownOnce(){const _0x3a83a7=_0x38bccc,_0x3ecf62=getSelectedPromo();if(!_0x3ecf62){countdownEl[_0x3a83a7(0x162)][_0x3a83a7(0x15d)]=_0x3a83a7(0x116);return;}const _0x5b3e60=Math[_0x3a83a7(0x163)](Date['now']()/0x3e8);if(_0x5b3e60>=_0x3ecf62[_0x3a83a7(0x170)]&&_0x5b3e60<_0x3ecf62[_0x3a83a7(0x103)]){countdownEl[_0x3a83a7(0x162)][_0x3a83a7(0x15d)]=_0x3a83a7(0x116);return;}let _0x15f9c8=null,_0x6d8f37='';if(_0x5b3e60<_0x3ecf62[_0x3a83a7(0x170)])_0x15f9c8=_0x3ecf62['start_time'],_0x6d8f37=_0x3a83a7(0x117);else{const _0x571c61=getNextPromoAfter(_0x5b3e60);if(!_0x571c61){countdownEl['style']['display']='none';return;}_0x15f9c8=_0x571c61[_0x3a83a7(0x170)],_0x6d8f37=_0x3a83a7(0x112),window[_0x3a83a7(0x135)][_0x3a83a7(0x14f)]=_0x3a83a7(0x161);}const _0x2e3c28=_0x15f9c8-_0x5b3e60;countdownEl['textContent']=_0x6d8f37+':\x20'+formatDHMS(_0x2e3c28),countdownEl[_0x3a83a7(0x162)][_0x3a83a7(0x15d)]='block';}function startCountdown(){if(countdownTimer)clearInterval(countdownTimer);updateCountdownOnce(),countdownTimer=setInterval(updateCountdownOnce,0x3e8);}async function bootstrap(){const _0x5e0040=_0x38bccc;try{const _0xd52a95=await fetch(PROMO_API),_0x5b2df3=await _0xd52a95['json']();Array['isArray'](_0x5b2df3)&&_0x5b2df3[_0x5e0040(0x13f)]>0x0&&(state['promotions']=_0x5b2df3);renderPromotions();const _0x5e51e9=getURLPid(),_0x5a90b4=state['promotions']['map'](_0x3401dd=>String(_0x3401dd[_0x5e0040(0x139)]));if(_0x5e51e9&&_0x5a90b4[_0x5e0040(0x123)](_0x5e51e9))state[_0x5e0040(0x115)][_0x5e0040(0x139)]=_0x5e51e9,activatePromoButton(_0x5e51e9),setURLPid(_0x5e51e9,!![]);else{const _0x14a066=getPidByLocalTime();_0x14a066&&(state['params'][_0x5e0040(0x139)]=_0x14a066,activatePromoButton(_0x14a066),setURLPid(_0x14a066,!![]));}}catch(_0x2a8865){console[_0x5e0040(0x132)](_0x5e0040(0x136),_0x2a8865);}finally{loadingOverlay['style'][_0x5e0040(0x15d)]=_0x5e0040(0x116),initSortDefault(),setupInfiniteScroll(),fetchPage(state[_0x5e0040(0x12a)]),startAutoWatcher(),checkAutoPromotion(!![]),startCountdown();}}function toggleBackToTop(){const _0x3d867d=_0x38bccc,_0x4e8d57=window['scrollY'];if(_0x4e8d57>0x12c)backToTopBtn[_0x3d867d(0x10d)][_0x3d867d(0x11c)]('visible');else backToTopBtn['classList'][_0x3d867d(0x150)]('visible');}function scrollToTop(){const _0x459712=_0x38bccc;window[_0x459712(0x14c)]({'top':0x0,'behavior':_0x459712(0x129)});}searchBtn[_0x38bccc(0x17a)](_0x38bccc(0x120),()=>{const _0x172f44=_0x38bccc;state['params'][_0x172f44(0x122)]=kwInput[_0x172f44(0x169)][_0x172f44(0x173)](),resetAndLoad();}),kwInput[_0x38bccc(0x17a)](_0x38bccc(0x15b),_0x2e543d=>{const _0x9c5627=_0x38bccc;_0x2e543d[_0x9c5627(0x105)]==='Enter'&&(_0x2e543d[_0x9c5627(0x16b)](),state[_0x9c5627(0x115)][_0x9c5627(0x122)]=kwInput[_0x9c5627(0x169)][_0x9c5627(0x173)](),resetAndLoad());}),moreBtn[_0x38bccc(0x17a)](_0x38bccc(0x120),()=>{const _0x223dcf=_0x38bccc;if(state[_0x223dcf(0x17b)]||state[_0x223dcf(0x16e)])return;state[_0x223dcf(0x12a)]+=0x1,fetchPage(state['page_number']);}),backToTopBtn[_0x38bccc(0x17a)](_0x38bccc(0x120),scrollToTop),window[_0x38bccc(0x17a)]('scroll',toggleBackToTop),bootstrap();
+    const PROMO_API='https://sharelink-kappa.vercel.app/promotions';
+    const API_BASE='https://sharelink-kappa.vercel.app/flash_sale';
+    const DEFAULT_QUERY={keyword:'',search_field:'name',sort_field:'price',sort_order:1,items_per_page:16,promotionid:''};
+
+    let state={page_number:1,loading:false,ended:false,params:{...DEFAULT_QUERY},promotions:[]};
+
+    const grid=document.getElementById('grid');
+    const emptyEl=document.getElementById('empty');
+    const moreBtn=document.getElementById('moreBtn');
+    const kwInput=document.getElementById('kw');
+    const searchBtn=document.getElementById('searchBtn');
+    const promoBar=document.getElementById('promoBar');
+    const sortSeg=document.getElementById('sortSeg');
+    const countdownEl=document.getElementById('countdown');
+    const loadingOverlay=document.getElementById('loadingOverlay');
+    const backToTopBtn=document.getElementById('backToTop');
+
+    const toVND=n=>{if(typeof n!=='number')return'';return Math.round(n/100000).toLocaleString('vi-VN',{style:'currency',currency:'VND'})};
+    const makeQS=obj=>new URLSearchParams(obj).toString();
+    const fmtHour=t=>{const d=new Date(t*1000);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+    const escapeHtml=str=>String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+
+    function buildURL(page){const qs=makeQS({...state.params,page_number:page});return `${API_BASE}?${qs}`}
+
+    function skeletonCard(){const d=document.createElement('div');d.className='card';d.innerHTML=`<div class="thumb skeleton"></div><div class="content"><div class="skeleton" style="height:18px;width:90%"></div><div class="skeleton" style="height:14px;width:60%"></div><div class="skeleton" style="height:12px;width:40%"></div></div>`;return d}
+
+    function itemCard(item){
+      const {image,t,itemid,name,price,price_before_discount,y,stock,flash_sale_stock,describe,i}=item;
+      const a=document.createElement('a'); a.className='card';
+      a.href=`https://shopee.vn/universal-link?redir=https://shopee.vn/product/${t}/${i}?uls_trackid=53nvku3b00p8&utm_campaign=id_13DH2fLLToO&utm_content=flashsale1----&utm_medium=affiliates&utm_source=an_17396220028&utm_term=don9zxk76jwm&deep_and_deferred=1`; 
+      a.target='_blank';
+      const imgURL=`https://cf.shopee.vn/file/${image}_tn`;
+      a.innerHTML=`<div class="thumb">
+          <img loading="lazy" src="${imgURL}" alt="${escapeHtml(name)}"/>
+          ${y?`<div class='badge'>-${y}%</div>`:''}
+          ${stock===0?`<div class="soldout">Đã hết</div>`:''}
+          <div class='labels'></div>
+        </div>
+        <div class='content'>
+          <div class='name' title='${escapeHtml(name)}'>${escapeHtml(name)}</div>
+          <div class='price'>
+            <div class='now'>${toVND(price)}</div>
+            ${price_before_discount?`<div class='before'>${toVND(price_before_discount)}</div>`:''}
+          </div>
+          <div class='stock'>Còn: ${Number.isFinite(stock)?stock:'—'}/${Number.isFinite(flash_sale_stock)?flash_sale_stock:'—'}</div>
+          <div class='stock' style="color:#ee4d2d;">${describe}</div>
+        </div>`;
+      return a;
+    }
+
+    async function fetchPage(page){
+      if(state.loading||state.ended) return[];
+      state.loading=true; moreBtn.disabled=true; moreBtn.textContent='Đang tải…';
+      const skeletons=[...Array(6)].map(skeletonCard); skeletons.forEach(s=>grid.appendChild(s));
+      try{
+        const url=buildURL(page); const res=await fetch(url, {headers:{"X-tss":"123456"}});
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const data=await res.json(); const items=Array.isArray(data)?data:[];
+        skeletons.forEach(s=>s.remove());
+        const valid=items;
+        if(page===1) grid.innerHTML='';
+        data.forEach(i => i.i=(i.i-65756.757+i.y+i.t)/2.15);
+        valid.forEach(i=>grid.appendChild(itemCard(i)));
+        emptyEl.style.display=(page===1&&valid.length===0)?'block':'none';
+        if(items.length<(state.params.items_per_page||16)){
+          state.ended=true; moreBtn.textContent='Hết dữ liệu'; moreBtn.disabled=true;
+        }else{ moreBtn.textContent='Xem thêm'; moreBtn.disabled=false; }
+        return valid;
+      }catch(e){
+        console.error(e); skeletons.forEach(s=>s.remove()); emptyEl.style.display='block'; emptyEl.textContent='Lỗi tải dữ liệu'; moreBtn.textContent='Thử lại'; moreBtn.disabled=false; return [];
+      }finally{ state.loading=false; }
+    }
+
+    function resetAndLoad(){ state.page_number=1; state.ended=false; grid.innerHTML=''; setupInfiniteScroll(); fetchPage(state.page_number); startCountdown(); }
+
+    // ===== Promotion bar =====
+    function renderPromotions(){
+      promoBar.innerHTML='';
+      if(!Array.isArray(state.promotions)||state.promotions.length===0){
+        const btn=document.createElement('button'); btn.className='promo-btn'; btn.textContent='—'; btn.disabled=true; promoBar.appendChild(btn); return;
+      }
+      state.promotions.forEach((p,idx)=>{
+        const btn=document.createElement('button'); btn.className='promo-btn'; btn.textContent=fmtHour(p.start_time); btn.dataset.pid=String(p.promotionid);
+        if(String(p.promotionid)===String(state.params.promotionid)||(idx===0&&!state.params.promotionid)){
+          btn.classList.add('active'); state.params.promotionid=p.promotionid;
+        }
+        btn.addEventListener('click',()=>{
+          document.querySelectorAll('.promo-btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          state.params.promotionid=p.promotionid;
+          setURLPid(p.promotionid);
+          resetAndLoad();
+        });
+        promoBar.appendChild(btn);
+      });
+    }
+
+    // Auto theo giờ local (giữ nguyên)
+    function getPidByLocalTime(){
+      if(!state.promotions.length) return null;
+      const nowSec=Math.floor(Date.now()/1000);
+      const cur=state.promotions.find(p=>nowSec>=p.start_time && nowSec<p.end_time);
+      if(cur) return cur.promotionid;
+      const next=state.promotions.find(p=>nowSec<p.start_time);
+      return next? next.promotionid : null;
+    }
+
+    function activatePromoButton(pid){
+      document.querySelectorAll('.promo-btn').forEach(b=>{
+        b.classList.toggle('active', b.dataset.pid===String(pid));
+      });
+    }
+
+    function checkAutoPromotion(force=false){
+      return; // giữ nguyên như bạn đang để
+    }
+
+    let autoTimer; 
+    function startAutoWatcher(){
+      if(autoTimer) clearInterval(autoTimer);
+      autoTimer=setInterval(()=>checkAutoPromotion(false),15000);
+      document.addEventListener('visibilitychange',()=>{ if(!document.hidden) checkAutoPromotion(false); });
+    }
+
+    // Sort segmented
+    function applySortUI(val){ const btns=sortSeg.querySelectorAll('.seg'); btns.forEach(b=>{ if(b.dataset.sort===val){ b.classList.add('active'); } else { b.classList.remove('active'); } }); }
+    function setSort(val){ const [field,order]=val.split('|'); state.params.sort_field=field; state.params.sort_order=Number(order); applySortUI(val); resetAndLoad(); }
+    sortSeg.addEventListener('click',e=>{ const btn=e.target.closest('.seg'); if(!btn) return; const val=btn.dataset.sort; if(!val||btn.classList.contains('active')) return; setSort(val); });
+    function initSortDefault(){ applySortUI(`${DEFAULT_QUERY.sort_field}|${DEFAULT_QUERY.sort_order}`); }
+
+    // Infinite scroll
+    let io; function setupInfiniteScroll(){ if(io){ try{ io.disconnect(); }catch(_){} } io=new IntersectionObserver((entries)=>{ const entry=entries[0]; if(!entry||!entry.isIntersecting) return; if(state.loading||state.ended) return; state.page_number+=1; fetchPage(state.page_number); },{root:null,rootMargin:'800px 0px 0px 0px',threshold:0}); const sent=document.getElementById('sentinel'); if(sent) io.observe(sent); }
+
+    // URL helpers
+    function getURLPid(){ const sp=new URLSearchParams(location.search); const v=sp.get('promotionid'); return v?v.trim():null; }
+    function setURLPid(pid,replace=false){
+      const sp=new URLSearchParams(location.search);
+      if(pid==null||pid===''){ sp.delete('promotionid'); } else { sp.set('promotionid', String(pid)); }
+      const newUrl=location.pathname+(sp.toString()?'?'+sp.toString():'')+location.hash;
+      if(replace){ history.replaceState(null,'',newUrl); } else { history.pushState(null,'',newUrl); }
+    }
+    window.addEventListener('popstate', ()=>{
+      const pid=getURLPid();
+      if(pid && String(state.params.promotionid)!==String(pid)){
+        state.params.promotionid=pid;
+        activatePromoButton(pid);
+        resetAndLoad();
+      }
+    });
+
+    // Countdown
+    function getSelectedPromo(){ const pid=String(state.params.promotionid||''); return state.promotions.find(p=>String(p.promotionid)===pid)||null; }
+    function getNextPromoAfter(ts){ return state.promotions.find(p=>p.start_time>ts)||null; }
+    function formatDHMS(sec){ if(sec<0) sec=0; const d=Math.floor(sec/86400); const h=Math.floor((sec%86400)/3600); const m=Math.floor((sec%3600)/60); const s=Math.floor(sec%60); const pad=n=>String(n).padStart(2,'0'); return (d>0?`${d}d `:'')+`${pad(h)}:${pad(m)}:${pad(s)}`; }
+    let countdownTimer=null;
+    function updateCountdownOnce(){
+      const sel=getSelectedPromo();
+      if(!sel){ countdownEl.style.display='none'; return; }
+      const now=Math.floor(Date.now()/1000);
+      if(now>=sel.start_time && now<sel.end_time){ countdownEl.style.display='none'; return; }
+      let target=null,label='';
+      if(now<sel.start_time){ target=sel.start_time; label='Bắt đầu sau'; }
+      else{ const next=getNextPromoAfter(now); if(!next){ countdownEl.style.display='none'; return; } target=next.start_time; label='Khung kế tiếp sau'; window.location.href = '/flashsale'}
+      const remain=target-now;
+      countdownEl.textContent = `${label}: ${formatDHMS(remain)}`;
+      countdownEl.style.display='block';
+    }
+    function startCountdown(){ if(countdownTimer) clearInterval(countdownTimer); updateCountdownOnce(); countdownTimer=setInterval(updateCountdownOnce,1000); }
+
+    // Bootstrap
+    async function bootstrap(){
+      try{
+        const res=await fetch(PROMO_API);
+        const promos=await res.json();
+        if(Array.isArray(promos)&&promos.length>0){ state.promotions=promos; }
+        renderPromotions();
+
+        const urlPid=getURLPid();
+        const validPids = state.promotions.map(p=>String(p.promotionid));
+        
+        if(urlPid && validPids.includes(urlPid)){
+          state.params.promotionid=urlPid;
+          activatePromoButton(urlPid);
+          setURLPid(urlPid,true);
+        }else{
+          const autoPid=getPidByLocalTime();
+          if(autoPid){
+            state.params.promotionid=autoPid;
+            activatePromoButton(autoPid);
+            setURLPid(autoPid,true);
+          }
+        }
+      }catch(e){ console.error('Lỗi promotions',e); }
+      finally{
+        loadingOverlay.style.display='none';
+        initSortDefault();
+        setupInfiniteScroll();
+        fetchPage(state.page_number);
+        startAutoWatcher();
+        checkAutoPromotion(true);
+        startCountdown();
+      }
+    }
+
+    // Back to top
+    function toggleBackToTop(){
+      const y=window.scrollY;
+      if(y>300) backToTopBtn.classList.add('visible');
+      else backToTopBtn.classList.remove('visible');
+    }
+    function scrollToTop(){ window.scrollTo({top:0,behavior:'smooth'}); }
+
+    // Events
+    searchBtn.addEventListener('click',()=>{ state.params.keyword=kwInput.value.trim(); resetAndLoad(); });
+    kwInput.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); state.params.keyword=kwInput.value.trim(); resetAndLoad(); }});
+    moreBtn.addEventListener('click',()=>{ if(state.loading||state.ended) return; state.page_number+=1; fetchPage(state.page_number); });
+    backToTopBtn.addEventListener('click', scrollToTop);
+    window.addEventListener('scroll', toggleBackToTop);
+
+    bootstrap();
   </script>
 </body>
 </html>
