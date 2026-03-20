@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lịch sử hoàn xu</title>
+
+<title>Shopee Rewards</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -11,43 +12,89 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-  background: #f2f3f5;
+  background: linear-gradient(180deg, #ff5a00, #ff2d00);
 }
 
+/* HEADER */
 .header {
-  position: sticky;
-  top: 0;
-  background: white;
-  padding: 12px 16px;
+  padding: 20px 16px 100px;
+  color: white;
+  text-align: center;
+  position: relative;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 13px;
+  margin-top: 6px;
+  opacity: 0.9;
+}
+
+/* CARD */
+.card {
+  background: #f5f5f5;
+  margin: -80px 12px 0;
+  border-radius: 24px;
+  padding: 16px;
+}
+
+/* BANNER */
+.banner {
+  width: 100%;
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+/* DESC */
+.desc {
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+/* BUTTON */
+.btn {
+  display: block;
+  width: 100%;
+  background: linear-gradient(90deg, #ff5a00, #ff2d00);
+  color: white;
+  text-align: center;
+  padding: 14px;
+  border-radius: 14px;
   font-weight: 600;
-  font-size: 16px;
-  border-bottom: 1px solid #eee;
+  text-decoration: none;
 }
 
-.container {
-  padding: 10px;
+/* LIST */
+.list {
+  margin-top: 20px;
 }
 
+/* ITEM */
 .item {
   display: flex;
   align-items: center;
   background: white;
-  padding: 10px 12px;
+  padding: 10px;
   margin-bottom: 10px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-  animation: fadeIn 0.3s ease;
+  border-radius: 14px;
 }
 
 .avatar {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   margin-right: 10px;
-  object-fit: cover;
 }
 
-.info { flex: 1; }
+.info {
+  flex: 1;
+}
 
 .package {
   font-size: 14px;
@@ -58,6 +105,7 @@ body {
   padding: 2px 8px;
   border-radius: 999px;
   font-size: 12px;
+  margin-left: 6px;
 }
 
 .green { background: #e6f7ef; color: #00a14b; }
@@ -68,23 +116,40 @@ body {
   font-size: 12px;
   color: #888;
 }
-
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(-5px);}
-  to {opacity: 1; transform: translateY(0);}
-}
 </style>
 </head>
 
 <body>
 
-<div class="header">🔴 Live nhận thưởng</div>
-<div class="container" id="list"></div>
+<!-- HEADER -->
+<div class="header">
+  <div class="title">SHOPEE REWARDS HOÀN XU</div>
+  <div class="subtitle">
+    Hoàn đến 800.000 Xu cho 4 đơn hàng<br>
+    Chỉ áp dụng ngày 20.3
+  </div>
+</div>
+
+<!-- CARD -->
+<div class="card">
+
+  <img class="banner"
+    src="https://cf.shopee.vn/file/vn-11134001-81ztc-mm08aor855ok53"
+    onerror="this.src='https://via.placeholder.com/300x120'">
+
+  <div class="desc">
+    Cơ hội hoàn đến 200.000 Xu cho đơn hàng của bạn
+  </div>
+
+  <a href="#" class="btn">🛒 Mua sắm ngay</a>
+
+  <!-- LIST -->
+  <div class="list" id="list"></div>
+
+</div>
 
 <script>
 const API = "https://sharelink-kappa.vercel.app/cashback";
-
-let currentData = [];
 
 // format giờ
 function formatClock(epoch) {
@@ -103,7 +168,6 @@ function timeAgo(epoch) {
   return `${Math.floor(diff / 86400)} ngày trước`;
 }
 
-// màu badge
 function getColor(pkg) {
   if (pkg.includes("5%")) return "green";
   if (pkg.includes("4%")) return "orange";
@@ -112,7 +176,6 @@ function getColor(pkg) {
 
 const list = document.getElementById("list");
 
-// render list
 function render(data) {
   list.innerHTML = "";
 
@@ -122,16 +185,17 @@ function render(data) {
 
     div.innerHTML = `
       <img class="avatar" src="${item.avt}" 
-           onerror="this.src='https://via.placeholder.com/42'">
+           onerror="this.src='https://via.placeholder.com/40'">
 
       <div class="info">
         <div class="package">
+          Nhận thưởng 
           <span class="badge ${getColor(item.package_name)}">
             ${item.package_name}
           </span>
         </div>
 
-        <div class="time" data-time="${item.lucky_time}">
+        <div class="time">
           ${formatClock(item.lucky_time)} • ${timeAgo(item.lucky_time)}
         </div>
       </div>
@@ -141,36 +205,21 @@ function render(data) {
   });
 }
 
-// fetch API
-async function fetchData() {
+// fetch
+async function load() {
   try {
     const res = await fetch(API);
     const data = await res.json();
-
-    // sort
     data.sort((a, b) => b.lucky_time - a.lucky_time);
-
-    currentData = data;
-    render(currentData);
-
+    render(data);
   } catch (e) {
-    console.error("Lỗi fetch:", e);
+    console.log(e);
   }
 }
 
-// update time mượt
-setInterval(() => {
-  document.querySelectorAll(".time").forEach(el => {
-    const t = parseInt(el.dataset.time);
-    el.textContent = `${formatClock(t)} • ${timeAgo(t)}`;
-  });
-}, 5000);
-
-// auto fetch mỗi 5s
-setInterval(fetchData, 20000);
-
-// lần đầu
-fetchData();
+// auto load
+setInterval(load, 20000);
+load();
 </script>
 
 </body>
