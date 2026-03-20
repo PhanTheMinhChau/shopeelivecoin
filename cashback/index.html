@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lịch sử hoàn xu</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+  background: #f2f3f5;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.container {
+  padding: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  animation: fadeIn 0.3s ease;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.info { flex: 1; }
+
+.package {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.badge {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.green { background: #e6f7ef; color: #00a14b; }
+.orange { background: #fff4e5; color: #ff9800; }
+.red { background: #fdecea; color: #e53935; }
+
+.time {
+  font-size: 12px;
+  color: #888;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(-5px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">🔴 Live nhận thưởng</div>
+<div class="container" id="list"></div>
+
+<script>
+const API = "https://sharelink-kappa.vercel.app/cashback";
+
+let currentData = [];
+
+// format giờ
+function formatClock(epoch) {
+  return new Date(epoch * 1000).toLocaleTimeString("vi-VN");
+}
+
+// time ago
+function timeAgo(epoch) {
+  const now = Math.floor(Date.now() / 1000);
+  const diff = now - epoch;
+
+  if (diff < 5) return "vừa xong";
+  if (diff < 60) return `${diff} giây trước`;
+  if (diff < 3600) return `${Math.floor(diff / 60)} phút trước`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} giờ trước`;
+  return `${Math.floor(diff / 86400)} ngày trước`;
+}
+
+// màu badge
+function getColor(pkg) {
+  if (pkg.includes("5%")) return "green";
+  if (pkg.includes("4%")) return "orange";
+  return "red";
+}
+
+const list = document.getElementById("list");
+
+// render list
+function render(data) {
+  list.innerHTML = "";
+
+  data.slice(0, 20).forEach(item => {
+    const div = document.createElement("div");
+    div.className = "item";
+
+    div.innerHTML = `
+      <img class="avatar" src="${item.avt}" 
+           onerror="this.src='https://via.placeholder.com/42'">
+
+      <div class="info">
+        <div class="package">
+          <span class="badge ${getColor(item.package_name)}">
+            ${item.package_name}
+          </span>
+        </div>
+
+        <div class="time" data-time="${item.lucky_time}">
+          ${formatClock(item.lucky_time)} • ${timeAgo(item.lucky_time)}
+        </div>
+      </div>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+// fetch API
+async function fetchData() {
+  try {
+    const res = await fetch(API);
+    const data = await res.json();
+
+    // sort
+    data.sort((a, b) => b.lucky_time - a.lucky_time);
+
+    currentData = data;
+    render(currentData);
+
+  } catch (e) {
+    console.error("Lỗi fetch:", e);
+  }
+}
+
+// update time mượt
+setInterval(() => {
+  document.querySelectorAll(".time").forEach(el => {
+    const t = parseInt(el.dataset.time);
+    el.textContent = `${formatClock(t)} • ${timeAgo(t)}`;
+  });
+}, 5000);
+
+// auto fetch mỗi 5s
+setInterval(fetchData, 20000);
+
+// lần đầu
+fetchData();
+</script>
+
+</body>
+</html>
