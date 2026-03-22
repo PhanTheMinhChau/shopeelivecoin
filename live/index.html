@@ -200,25 +200,21 @@ word-break:break-word;
 justify-content:space-between;
 }
 
-.reload-btn {
-  display: block;
-  width: 100%;
-  text-align: center;
-  padding: 12px;
-  margin-bottom: 12px;
-
-  background: rgba(255, 45, 0, 0.08); /* nền rất nhẹ */
-  color: #ff2d00;
-
-  border-radius: 12px;
-  font-weight: 600;
-
-  cursor: pointer;
-  transition: all 0.2s;
+#reloadBtn{
+border:none;
+background:none;
+font-size:22px;
+cursor:pointer;
+padding:6px;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:0.3s;
 }
 
-.reload-btn:active {
-  transform: scale(0.97);
+#reloadBtn.disabled{
+opacity:0.4;
+pointer-events:none;
 }
 
 </style>
