@@ -173,6 +173,22 @@ border-radius:10px;
 font-weight:bold;
 }
 
+/* coin */
+
+.coin-badge{
+position:absolute;
+top:-6px;
+right:-6px;
+background:linear-gradient(45deg,#ff9800,#ff2d55);
+color:white;
+font-size:10px;
+padding:2px 6px;
+border-radius:12px;
+font-weight:bold;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+white-space:nowrap;
+}
+
 .username{
 margin-top:8px;
 font-size:12px;
@@ -223,14 +239,18 @@ const clearBtn=document.getElementById("clear")
 
 let liveData=[]
 
-/* alias tìm */
-
 const alias={
 "bịp":"siêu sao",
 "xe":"accesstradevn"
 }
 
-/* fetch data */
+function formatCoin(n){
+if(!n) return 0
+if(n>=1000) return (n/1000).toFixed(1)+'k'
+return n
+}
+
+/* fetch */
 
 function loadData(){
 
@@ -240,19 +260,25 @@ fetch("https://sharelink-kappa.vercel.app/get_live_session")
 
 loading.style.display="none"
 
-data.sort((a,b)=>a.username.localeCompare(b.username,'vi'))
+/* SORT: coin trước, null xuống dưới */
+
+data.sort((a,b)=>{
+const coinA = a.coin ?? -1
+const coinB = b.coin ?? -1
+
+if(coinA !== coinB) return coinB - coinA
+
+return a.username.localeCompare(b.username,'vi')
+})
 
 liveData=data
 
 let q=search.value.toLowerCase()
-
 if(alias[q]) q=alias[q]
 
-const filtered=liveData.filter(i=>
+render(liveData.filter(i=>
 i.username.toLowerCase().includes(q)
-)
-
-render(filtered)
+))
 
 })
 .catch(()=>{
@@ -279,6 +305,7 @@ card.innerHTML=`
 <div class="avatar-box">
 <img class="avatar" loading="lazy" src="https://cf.shopee.vn/file/${i.avatar}">
 <div class="live">LIVE</div>
+${i.coin != null ? `<div class="coin-badge">💰 ${formatCoin(i.coin)}</div>` : ``}
 </div>
 </a>
 <div class="username">${i.username}</div>
@@ -302,28 +329,23 @@ clearBtn.style.display=q?"block":"none"
 
 if(alias[q]) q=alias[q]
 
-const filtered=liveData.filter(i=>
+render(liveData.filter(i=>
 i.username.toLowerCase().includes(q)
-)
-
-render(filtered)
+))
 
 })
 
-/* clear button */
+/* clear */
 
 clearBtn.onclick=()=>{
-
 search.value=""
 clearBtn.style.display="none"
 render(liveData)
-
 }
 
 /* suggestions */
 
 document.querySelectorAll(".suggest-btn").forEach(btn=>{
-
 btn.onclick=()=>{
 
 const keyword=btn.dataset.key
@@ -331,22 +353,16 @@ const keyword=btn.dataset.key
 search.value=keyword
 clearBtn.style.display="block"
 
-const filtered=liveData.filter(i=>
+render(liveData.filter(i=>
 i.username.toLowerCase().includes(keyword.toLowerCase())
-)
-
-render(filtered)
+))
 
 }
-
 })
 
-/* load lần đầu */
+/* init */
 
 loadData()
-
-/* auto refresh mỗi 5 phút */
-
 setInterval(loadData,300000)
 
 </script>
