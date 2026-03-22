@@ -196,6 +196,26 @@ line-height:1.2;
 word-break:break-word;
 }
 
+.live-header{
+justify-content:space-between;
+}
+
+#reloadBtn{
+border:none;
+background:#f2f2f2;
+border-radius:50%;
+width:34px;
+height:34px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+#reloadBtn.disabled{
+opacity:0.5;
+pointer-events:none;
+}
+
 </style>
 </head>
 
@@ -204,6 +224,7 @@ word-break:break-word;
 <header class="live-header">
 <div class="live-dot"></div>
 <span>Live các nhà quen thuộc</span>
+<button id="reloadBtn">⟳</button>
 </header>
 
 <div class="search-box">
@@ -364,6 +385,36 @@ i.username.toLowerCase().includes(keyword.toLowerCase())
 
 loadData()
 setInterval(loadData,300000)
+
+const reloadBtn = document.getElementById("reloadBtn")
+
+let lastReload = 0
+const RELOAD_COOLDOWN = 5000 // 5 giây
+
+reloadBtn.onclick = () => {
+
+    const now = Date.now()
+
+    if(now - lastReload < RELOAD_COOLDOWN){
+        return
+    }
+
+    lastReload = now
+
+    // hiệu ứng quay
+    reloadBtn.style.transform = "rotate(360deg)"
+
+    // disable nút
+    reloadBtn.classList.add("disabled")
+
+    loadData()
+
+    // mở lại sau cooldown
+    setTimeout(()=>{
+        reloadBtn.classList.remove("disabled")
+        reloadBtn.style.transform = "rotate(0deg)"
+    }, RELOAD_COOLDOWN)
+}
 
 </script>
 
