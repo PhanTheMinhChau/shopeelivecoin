@@ -1,4 +1,4 @@
-const apiUrl = "https://script.google.com/macros/s/AKfycbyobr7LWkEQjy0Kvu-_eRoTgTG-aWEPC8Lk81l6pIYar85KIz1BoZfYijcp3zjghvYhPA/exec";
+const apiUrl = "https://sharelink-kappa.vercel.app/live-coin-wheel/list";
 const dataList = document.getElementById("data-list");
 
 function formatCountdown(timeDifference) {
