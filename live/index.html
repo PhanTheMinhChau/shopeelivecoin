@@ -274,10 +274,14 @@ const alias={
 "xe":"accesstradevn"
 }
 
-function formatCoin(n){
-if(!n) return 0
-if(n>=1000) return (n/1000).toFixed(1)+'k'
-return n
+function formatCoin(n) {
+  if (!n) return 0
+  if (n >= 1000) {
+    const k = Math.floor(n / 1000)
+    const remain = Math.floor((n % 1000) / 100)
+    return remain ? `${k}k${remain}` : `${k}k`
+  }
+  return n
 }
 
 /* fetch */
