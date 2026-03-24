@@ -203,7 +203,7 @@ justify-content:space-between;
 #reloadBtn{
 border:none;
 background:none;
-font-size:22px;
+font-size:40px;
 cursor:pointer;
 padding:6px;
 display:flex;
@@ -222,9 +222,17 @@ pointer-events:none;
 
 <body>
 
-<header class="live-header">
-<div class="live-dot"></div>
-<span>Live các nhà quen thuộc</span>
+<header class="live-header" style="height: 56px;">
+<div style="
+    display: flex;
+    align-items: center;
+" bis_skin_checked="1">
+<div class="live-dot" bis_skin_checked="1"></div>
+<span style="
+    margin-left: 10px;
+">Live các nhà quen thuộc</span>
+</div>
+
 <button id="reloadBtn">⟳</button>
 </header>
 
