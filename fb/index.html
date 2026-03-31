@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 <title>Convert Link Shopee</title>
 
 <style>
@@ -11,11 +11,10 @@
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
-  background: #f5f6fa;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: linear-gradient(135deg, #ff6a00, #ee4d2d);
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
 }
 
 .container {
@@ -24,75 +23,139 @@ body {
   padding: 20px;
 }
 
+/* CARD */
 .card {
   background: white;
   border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  margin-bottom: 15px;
 }
 
 h2 {
-  margin: 0 0 15px;
+  margin: 0 0 10px;
   font-size: 20px;
 }
 
+/* INPUT */
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
 .input {
-  width: 100%;
+  flex: 1;
   padding: 12px;
   border-radius: 12px;
   border: 1px solid #ddd;
   font-size: 15px;
-  margin-bottom: 12px;
-  outline: none;
 }
 
-.input:focus {
-  border-color: #ee4d2d;
-}
-
-.btn {
-  width: 100%;
-  padding: 12px;
+.convert-btn {
+  width: 50px;
   border: none;
   border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btn-primary {
   background: #ee4d2d;
   color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.btn-primary:active {
-  opacity: 0.9;
+.convert-btn:active {
+  transform: scale(0.95);
 }
 
-.result-box {
-  margin-top: 15px;
-  display: none;
+/* DISABLED STATE */
+.convert-btn.loading {
+  opacity: 0.6;
+  pointer-events: none;
 }
 
-.result {
-  background: #f1f2f6;
+/* RESULT */
+.result-card {
+  margin-top: 12px;
+  background: #f9f9f9;
+  border-radius: 14px;
   padding: 12px;
-  border-radius: 10px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.result-text {
   font-size: 14px;
   word-break: break-all;
-  margin-bottom: 10px;
 }
 
 .copy-btn {
+  border: none;
   background: #2ecc71;
   color: white;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
 }
 
-.loading {
-  text-align: center;
-  margin-top: 10px;
+.copy-btn:active {
+  transform: scale(0.95);
+}
+
+/* STEPS */
+.steps {
   font-size: 14px;
-  color: #888;
+  line-height: 1.5;
+}
+
+.step {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.step-number {
+  min-width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ee4d2d;
+  color: white;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-text a {
+  color: #ee4d2d;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* LOADING */
+.loading-text {
+  text-align: center;
+  font-size: 14px;
+  color: white;
+  display: none;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
 </head>
@@ -100,26 +163,63 @@ h2 {
 <body>
 
 <div class="container">
+
+  <!-- HƯỚNG DẪN -->
   <div class="card">
-    <h2>🔗 Convert Link Shopee</h2>
+    <h2>📌 Cách sử dụng</h2>
 
-    <input id="urlInput" class="input" placeholder="Dán link vào đây..." />
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-text">
+          Vào app Shopee → sao chép link sản phẩm
+        </div>
+      </div>
 
-    <button class="btn btn-primary" onclick="convertLink()">
-      Chuyển đổi
-    </button>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-text">
+          Dán link vào ô bên dưới → chuyển đổi → sao chép link mới
+        </div>
+      </div>
 
-    <div id="loading" class="loading" style="display:none;">
-      Đang xử lý...
-    </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-text">
+          Vào bài viết:
+          <a href="https://fb.com/dhgdhd" target="_blank">fb.com/dhgdhd</a>
+          → bình luận link vừa sao chép
+        </div>
+      </div>
 
-    <div id="resultBox" class="result-box">
-      <div id="result" class="result"></div>
-      <button class="btn copy-btn" onclick="copyLink()">
-        Sao chép link
-      </button>
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-text">
+          Click vào link trong bình luận để mở app Shopee và mua hàng
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- TOOL -->
+  <div class="card">
+    <h2>🔗 Convert Link</h2>
+
+    <div class="input-group">
+      <input id="urlInput" class="input" placeholder="Dán link Shopee..." />
+      <button class="convert-btn" onclick="convertLink()">→</button>
+    </div>
+
+    <div id="resultCard" class="result-card">
+      <div class="result-row">
+        <div id="resultText" class="result-text"></div>
+        <button class="copy-btn" onclick="copyLink()">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loading" class="loading-text">Đang xử lý...</div>
+
 </div>
 
 <script>
@@ -128,14 +228,20 @@ let currentLink = "";
 async function convertLink() {
   const url = document.getElementById("urlInput").value.trim();
   const loading = document.getElementById("loading");
-  const resultBox = document.getElementById("resultBox");
+  const resultCard = document.getElementById("resultCard");
+  const btn = document.querySelector(".convert-btn");
 
   if (!url) {
-    alert("Nhập link trước đã 😅");
+    alert("Nhập link trước 😅");
     return;
   }
 
-  resultBox.style.display = "none";
+  // disable nút
+  btn.classList.add("loading");
+  btn.disabled = true;
+  btn.innerText = "...";
+
+  resultCard.style.display = "none";
   loading.style.display = "block";
 
   try {
@@ -149,30 +255,31 @@ async function convertLink() {
 
     const data = await res.json();
 
-    loading.style.display = "none";
-
     if (data.link) {
       currentLink = data.link;
-      document.getElementById("result").innerText = data.link;
-      resultBox.style.display = "block";
+      document.getElementById("resultText").innerText = data.link;
+      resultCard.style.display = "block";
     } else {
-      alert("Không nhận được link 😢");
+      alert("Không có dữ liệu 😢");
     }
 
   } catch (err) {
-    loading.style.display = "none";
     alert("Lỗi: " + err.message);
   }
+
+  // enable lại nút
+  loading.style.display = "none";
+  btn.classList.remove("loading");
+  btn.disabled = false;
+  btn.innerText = "→";
 }
 
 function copyLink() {
+  if (!currentLink) return;
+
   navigator.clipboard.writeText(currentLink)
-    .then(() => {
-      alert("Đã copy 🎉");
-    })
-    .catch(() => {
-      alert("Copy thất bại");
-    });
+    .then(() => alert("Đã copy 🎉"))
+    .catch(() => alert("Copy lỗi"));
 }
 </script>
 
