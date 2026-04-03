@@ -181,7 +181,7 @@ async function fetchLive() {
   result.classList.remove("hidden");
 
   try {
-    const res = await fetch("https://sharelink-kappa.vercel.app/get_link_live", {
+    const res = await fetch("https://shopeelivecoinbackend.vercel.app/get_link_live", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ link })
