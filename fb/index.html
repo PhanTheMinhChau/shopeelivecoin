@@ -160,7 +160,7 @@ h2 {
         <div class="step-number">3</div>
         <div class="step-text">
           Vào bài viết:
-          <a href="https://www.facebook.com/share/p/173XKZG32o/?mibextid=wwXIfr" target="_blank">fb.com/534634356</a>
+          <a id="linkfb" href="https://www.facebook.com/share/p/173XKZG32o/?mibextid=wwXIfr" target="_blank">fb.com/534634356</a>
           → bình luận link vừa sao chép
         </div>
       </div>
@@ -198,7 +198,7 @@ h2 {
 
 <script>
 let currentLink = "";
-const POST_URL = "https://www.facebook.com/share/p/18XqTP6TEc/?mibextid=wwXIfr";
+let POST_URL = "https://www.facebook.com/share/p/18XqTP6TEc/?mibextid=wwXIfr";
 
 async function convertLink() {
   const url = document.getElementById("urlInput").value.trim();
@@ -230,6 +230,7 @@ async function convertLink() {
     if (data.link) {
       currentLink = data.link;
       document.getElementById("resultText").innerText = data.link;
+      POST_URL = data.post;
       resultCard.style.display = "block";
     } else {
       alert("Không có dữ liệu 😢");
