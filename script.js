@@ -38,7 +38,7 @@ async function fetchData() {
           <div class="shop-name"> ${item.userName}</div>
           <div class="coin-section">${item.maxcoin} xu</div>
           <div class="button-section">
-            <button onclick="window.location.href='${item.shopId}'">Vào ngay</button>
+            <button onclick="window.open('${item.shopId}', '_blank', 'noopener,noreferrer')">Vào ngay</button>
           </div>
         </div>
         <div style=" display: flex; justify-content: space-between; width: 61%; ">
