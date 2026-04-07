@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Minigame</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#f5f5f5}
+
+/* HEADER */
+.header{
+  position:sticky;top:0;background:#fff;padding:12px;
+  text-align:center;font-weight:bold;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);z-index:10
+}
+.back{
+  position:absolute;left:12px;top:12px;
+  cursor:pointer;display:none;font-size:18px
+}
+
+/* LIST */
+.container{padding:12px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px
+}
+@media(min-width:768px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+}
+
+.card{
+  background:#fff;border-radius:12px;overflow:hidden;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  cursor:pointer
+}
+.card:active{transform:scale(.97)}
+
+.card img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover
+}
+
+.card-content{padding:10px}
+.title{
+  font-size:14px;font-weight:600;
+  height:36px;overflow:hidden
+}
+.deadline{
+  margin-top:6px;font-size:12px;color:#e74c3c
+}
+
+/* DETAIL */
+.detail{display:none;animation:fadeIn .25s}
+.detail-content{
+  background:#fff;padding:16px;border-radius:12px
+}
+.detail img{
+  width:100%;aspect-ratio:1/1;
+  object-fit:cover;margin-top:16px;border-radius:12px
+}
+
+/* TEXT */
+h2{font-size:18px;margin-bottom:10px}
+h3{margin-top:16px;font-size:15px}
+ul{padding-left:18px;margin-top:8px}
+li{margin-bottom:6px}
+
+/* BUTTON */
+.btn{
+  display:block;text-align:center;
+  margin-top:16px;padding:12px;
+  background:#ee4d2d;color:#fff;
+  border-radius:8px;text-decoration:none;
+  font-weight:bold
+}
+
+/* HASHTAG */
+.hashtag{
+  font-weight:bold;color:#ee4d2d;
+  position:relative;cursor:pointer
+}
+.copy-popup{
+  position:absolute;top:-28px;left:0;
+  background:#000;color:#fff;
+  padding:4px 8px;font-size:12px;
+  border-radius:6px;display:none
+}
+.hashtag.active .copy-popup{display:block}
+
+/* SKELETON */
+.skeleton{
+  aspect-ratio:1/1;border-radius:12px;
+  background:linear-gradient(90deg,#eee,#ddd,#eee);
+  animation:loading 1.2s infinite
+}
+@keyframes loading{
+  0%{background-position:-200px 0}
+  100%{background-position:200px 0}
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <span class="back" onclick="goBack()">←</span>
+  <span id="title">Minigame</span>
+</div>
+
+<div class="container">
+  <div class="grid" id="list"></div>
+  <div class="detail" id="detail">
+    <div id="detailContent"></div>
+  </div>
+</div>
+
+<script>
+let listData=[];
+
+/* ===== COUNTDOWN ===== */
+function formatCountdown(deadline){
+  const end=new Date(deadline).getTime();
+  const now=new Date().getTime();
+  const diff=end-now;
+
+  if(diff<=0) return "⛔ Đã kết thúc";
+
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor((diff%86400000)/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+
+  return `⏳ ${d}d ${h}h ${m}m ${s}s`;
+}
+
+/* ===== PARSE CONTENT ===== */
+function parseContent(text=""){
+  let result=text.replace(/\[(.*?)\]\((.*?)\)/g,'<a href="$2" target="_blank">$1</a>');
+  result=result.replace(/(#\w+)/g,`
+    <span class="hashtag" onclick="showCopy(this,'$1')">
+      $1 <span class="copy-popup">Copy</span>
+    </span>
+  `);
+  return result;
+}
+
+/* ===== COPY ===== */
+function showCopy(el,text){
+  document.querySelectorAll(".hashtag").forEach(e=>e.classList.remove("active"));
+  el.classList.add("active");
+
+  const popup=el.querySelector(".copy-popup");
+  popup.onclick=(e)=>{
+    e.stopPropagation();
+    navigator.clipboard.writeText(text);
+    popup.innerText="Đã copy!";
+    setTimeout(()=>{
+      popup.innerText="Copy";
+      el.classList.remove("active");
+    },1000);
+  };
+
+  setTimeout(()=>el.classList.remove("active"),2000);
+}
+
+/* ===== SKELETON ===== */
+function showSkeleton(){
+  document.getElementById("list").innerHTML=
+    Array(6).fill('<div class="skeleton"></div>').join("");
+}
+
+/* ===== LOAD LIST ===== */
+async function loadList(){
+  showSkeleton();
+  try{
+    const res=await fetch("https://fbautoaff.vercel.app/minigame");
+    listData=await res.json();
+    renderList();
+    startCountdownList();
+  }catch{
+    document.getElementById("list").innerHTML="❌ Lỗi tải dữ liệu";
+  }
+}
+
+/* ===== RENDER LIST ===== */
+function renderList(){
+  document.getElementById("list").innerHTML=listData.map(item=>`
+    <div class="card" onclick="openDetail('${item._id}')">
+      <img src="${item.image}">
+      <div class="card-content">
+        <div class="title">${item.title}</div>
+        <div class="deadline" id="cd-${item._id}"></div>
+      </div>
+    </div>
+  `).join("");
+}
+
+/* ===== COUNTDOWN LIST ===== */
+function startCountdownList(){
+  setInterval(()=>{
+    listData.forEach(item=>{
+      const el=document.getElementById(`cd-${item._id}`);
+      if(el) el.innerText=formatCountdown(item.deadline);
+    });
+  },1000);
+}
+
+/* ===== DETAIL ===== */
+async function openDetail(id){
+  document.querySelector(".back").style.display="block";
+  document.getElementById("list").style.display="none";
+  document.getElementById("detail").style.display="block";
+
+  document.getElementById("detailContent").innerHTML="Đang tải...";
+
+  try{
+    const res=await fetch(`https://fbautoaff.vercel.app/minigame/${id}`);
+    const d=await res.json();
+
+    document.getElementById("title").innerText=d.title;
+
+    document.getElementById("detailContent").innerHTML=`
+      <div class="detail-content">
+        <h2>${d.title}</h2>
+        <p>${d.description||""}</p>
+
+        <h3>📌 Cách tham gia</h3>
+        <ul>${(d.steps||[]).map(s=>`<li>${parseContent(s)}</li>`).join("")}</ul>
+
+        <h3>🎁 Phần thưởng</h3>
+        <ul>${(d.rewards||[]).map(r=>`<li>${r}</li>`).join("")}</ul>
+
+        <h3>⏰ Hạn</h3>
+        <p id="cd-detail"></p>
+
+        <h3>📜 Thể lệ</h3>
+        <p>${parseContent(d.rules||"")}</p>
+
+        ${(d.post_url||d.fanpage)?`
+          <a class="btn" href="${d.post_url||d.fanpage}" target="_blank">
+            Vào bài viết
+          </a>`:""}
+
+        <img src="${d.image}">
+      </div>
+    `;
+
+    startCountdownDetail(d.deadline);
+
+  }catch{
+    document.getElementById("detailContent").innerHTML="❌ Lỗi tải chi tiết";
+  }
+}
+
+/* ===== COUNTDOWN DETAIL ===== */
+function startCountdownDetail(deadline){
+  const el=document.getElementById("cd-detail");
+  const interval=setInterval(()=>{
+    if(!el) return clearInterval(interval);
+    el.innerText=formatCountdown(deadline);
+  },1000);
+}
+
+/* ===== BACK ===== */
+function goBack(){
+  document.querySelector(".back").style.display="none";
+  document.getElementById("title").innerText="Minigame";
+  document.getElementById("list").style.display="grid";
+  document.getElementById("detail").style.display="none";
+}
+
+/* INIT */
+loadList();
+</script>
+
+</body>
+</html>
