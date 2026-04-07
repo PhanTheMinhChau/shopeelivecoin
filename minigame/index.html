@@ -240,7 +240,12 @@ async function openDetail(id){
 
         <h3>📌 Cách tham gia</h3>
         <ul>${(d.steps||[]).map(s=>`<li>${parseContent(s)}</li>`).join("")}</ul>
-
+        
+        ${(d.post_url||d.fanpage)?`
+          <a class="btn" href="${d.post_url||d.fanpage}" target="_blank">
+            Vào bài viết
+          </a>`:""}
+          
         <h3>🎁 Phần thưởng</h3>
         <ul>${(d.rewards||[]).map(r=>`<li>${r}</li>`).join("")}</ul>
 
@@ -249,12 +254,6 @@ async function openDetail(id){
 
         <h3>📜 Thể lệ</h3>
         <p>${parseContent(d.rules||"")}</p>
-
-        ${(d.post_url||d.fanpage)?`
-          <a class="btn" href="${d.post_url||d.fanpage}" target="_blank">
-            Vào bài viết
-          </a>`:""}
-
         <img src="${d.image}">
       </div>
     `;
