@@ -112,7 +112,7 @@ li{margin-bottom:6px}
 
 <div class="header">
   <span class="back" onclick="goBack()">←</span>
-  <span id="title">Minigame</span>
+  <span id="title" style=" padding: 10px; ">Minigame</span>
 </div>
 
 <div class="container">
@@ -127,18 +127,24 @@ let listData=[];
 
 /* ===== COUNTDOWN ===== */
 function formatCountdown(deadline){
-  const end=new Date(deadline).getTime();
-  const now=new Date().getTime();
-  const diff=end-now;
+  const end = new Date(deadline).getTime();
+  const now = new Date().getTime();
+  const diff = end - now;
 
-  if(diff<=0) return "⛔ Đã kết thúc";
+  if(diff <= 0) return "⛔ Đã kết thúc";
 
-  const d=Math.floor(diff/86400000);
-  const h=Math.floor((diff%86400000)/3600000);
-  const m=Math.floor((diff%3600000)/60000);
-  const s=Math.floor((diff%60000)/1000);
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
 
-  return `⏳ ${d}d ${h}h ${m}m ${s}s`;
+  // 👉 nếu còn >= 1 ngày
+  if(d > 0){
+    return `⏳ ${d} ngày ${h} giờ`;
+  }
+
+  // 👉 nếu < 1 ngày
+  return `⏳ ${h}h ${m}m ${s}s`;
 }
 
 /* ===== PARSE CONTENT ===== */
