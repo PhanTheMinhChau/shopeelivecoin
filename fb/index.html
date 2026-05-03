@@ -145,6 +145,13 @@ h2 {
   display: none;
   margin-bottom: 14px;
 }
+
+#productName {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 </style>
 </head>
 
@@ -182,6 +189,11 @@ h2 {
     <button id="convertBtn" class="convert-btn full-btn" onclick="convertLink()">Convert</button>
 
     <div id="resultCard" class="result-card">
+      <!-- PRODUCT -->
+      <div id="productBox" style="display:flex; gap:10px; margin-bottom:10px;">
+        <img id="productImg" style="width:70px; height:70px; border-radius:10px; object-fit:cover;">
+        <div id="productName" style="font-size:14px; font-weight:500; line-height:1.4;"></div>
+      </div>
       <div id="resultText" class="result-text"></div>
       <div class="result-actions">
         <button class="copy-btn" onclick="copyLink()">Copy</button>
@@ -264,6 +276,16 @@ async function convertLink() {
 
       POST_URL = data.post || "https://www.facebook.com";
       document.getElementById("linkfb").href = POST_URL;
+
+      // IMAGE
+      if (data.img) {
+        document.getElementById("productImg").src = data.img;
+      }
+    
+      // NAME
+      if (data.name) {
+        document.getElementById("productName").innerText = data.name;
+      }
 
       resultCard.style.display = "block";
     } else {
