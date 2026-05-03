@@ -197,7 +197,7 @@ h2 {
       <div id="resultText" class="result-text"></div>
       <div class="result-actions">
         <button class="copy-btn" onclick="copyLink()">Copy</button>
-        <button class="go-btn" onclick="goPost()">Vào bài viết</button>
+        <a class="go-btn" id="linkfb1" href="https://www.facebook.com/groups/180249687420161" target="_blank" style="display: inline-block;text-align: center;text-decoration: none;">Vào bài viết</a>
       </div>
     </div>
   </div>
@@ -276,6 +276,7 @@ async function convertLink() {
 
       POST_URL = data.post || "https://www.facebook.com";
       document.getElementById("linkfb").href = POST_URL;
+      document.getElementById("linkfb1").href = POST_URL;
 
       // IMAGE
       if (data.img) {
