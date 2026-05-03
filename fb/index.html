@@ -51,13 +51,22 @@ h2 {
 }
 
 .convert-btn {
-  width: 50px;
   border: none;
   border-radius: 12px;
   background: #ee4d2d;
   color: white;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
+}
+
+.paste-btn {
+  width: 50px;
+}
+
+.full-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
 }
 
 .convert-btn.loading {
@@ -128,13 +137,6 @@ h2 {
   justify-content: center;
 }
 
-/* VOUCHER */
-.voucher-box img {
-  width: 100%;
-  border-radius: 14px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-}
-
 /* LOADING */
 .loading-text {
   text-align: center;
@@ -158,9 +160,9 @@ h2 {
       <div class="step"><div class="step-number">2</div><div>Dán link → chuyển đổi → sao chép link mới</div></div>
       <div class="step">
         <div class="step-number">3</div>
-        <div class="step-text">
+        <div>
           Vào bài viết:
-          <a id="linkfb" href="https://www.facebook.com/share/p/173XKZG32o/?mibextid=wwXIfr" target="_blank">fb.com/534634356</a>
+          <a id="linkfb" href="https://www.facebook.com" target="_blank">Link Facebook</a>
           → bình luận link vừa sao chép
         </div>
       </div>
@@ -174,8 +176,10 @@ h2 {
 
     <div class="input-group">
       <input id="urlInput" class="input" placeholder="Dán link Shopee..." />
-      <button class="convert-btn" onclick="convertLink()">→</button>
+      <button class="convert-btn paste-btn" onclick="pasteLink()">📋</button>
     </div>
+
+    <button id="convertBtn" class="convert-btn full-btn" onclick="convertLink()">Convert</button>
 
     <div id="resultCard" class="result-card">
       <div id="resultText" class="result-text"></div>
@@ -187,33 +191,51 @@ h2 {
   </div>
 
   <div id="loading" class="loading-text">Đang xử lý...</div>
-  <!-- VOUCHER HIỂN THỊ LUÔN -->
-  <div class="card voucher-box">
-    <a target="_blank">
-      <img src="../img/voucherfb.jpg" alt="Voucher">
-    </a>
-  </div>
 
 </div>
 
 <script>
 let currentLink = "";
-let POST_URL = "https://www.facebook.com/share/p/18XqTP6TEc/?mibextid=wwXIfr";
+let POST_URL = "https://www.facebook.com";
 
+/* DÁN */
+async function pasteLink() {
+  const input = document.getElementById("urlInput");
+
+  try {
+    const text = await navigator.clipboard.readText();
+
+    if (!text) {
+      alert("Clipboard trống 😅");
+      return;
+    }
+
+    input.value = text;
+
+  } catch (err) {
+    alert("Không thể dán 😢");
+  }
+}
+
+/* CONVERT */
 async function convertLink() {
   const url = document.getElementById("urlInput").value.trim();
   const loading = document.getElementById("loading");
   const resultCard = document.getElementById("resultCard");
-  const btn = document.querySelector(".convert-btn");
+  const btn = document.getElementById("convertBtn");
 
   if (!url) {
     alert("Nhập link trước 😅");
     return;
   }
 
+  if (!url.includes("shp.ee") && !url.includes("shopee")) {
+    alert("Link không phải Shopee 😅");
+    return;
+  }
+
   btn.classList.add("loading");
-  btn.disabled = true;
-  btn.innerText = "...";
+  btn.innerHTML = "⏳";
 
   resultCard.style.display = "none";
   loading.style.display = "block";
@@ -225,12 +247,19 @@ async function convertLink() {
       body: JSON.stringify({ url })
     });
 
+    if (!res.ok) {
+      throw new Error("API lỗi: " + res.status);
+    }
+
     const data = await res.json();
 
     if (data.link) {
       currentLink = data.link;
       document.getElementById("resultText").innerText = data.link;
-      POST_URL = data.post;
+
+      POST_URL = data.post || "https://www.facebook.com";
+      document.getElementById("linkfb").href = POST_URL;
+
       resultCard.style.display = "block";
     } else {
       alert("Không có dữ liệu 😢");
@@ -242,18 +271,33 @@ async function convertLink() {
 
   loading.style.display = "none";
   btn.classList.remove("loading");
-  btn.disabled = false;
-  btn.innerText = "→";
+  btn.innerHTML = "Convert";
 }
 
+/* COPY */
 function copyLink() {
   if (!currentLink) return;
 
-  navigator.clipboard.writeText(currentLink)
-    .then(() => alert("Đã copy 🎉"))
-    .catch(() => alert("Copy lỗi"));
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(currentLink)
+      .then(() => alert("Đã copy 🎉"))
+      .catch(fallbackCopy);
+  } else {
+    fallbackCopy();
+  }
 }
 
+function fallbackCopy() {
+  const temp = document.createElement("textarea");
+  temp.value = currentLink;
+  document.body.appendChild(temp);
+  temp.select();
+  document.execCommand("copy");
+  document.body.removeChild(temp);
+  alert("Đã copy 🎉");
+}
+
+/* OPEN POST */
 function goPost() {
   window.open(POST_URL, "_blank");
 }
