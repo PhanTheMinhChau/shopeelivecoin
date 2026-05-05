@@ -152,6 +152,105 @@ h2 {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+.voucher {
+  display: flex;
+  width: 600px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 20px auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* LEFT */
+.left {
+  width: 150px;
+  background: #ee4d2d;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.left::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  background: radial-gradient(circle at 6px 12px, #fff 6px, transparent 7px) repeat-y;
+  background-size: 12px 24px;
+}
+
+/* LOGO */
+.logo img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  padding: 5px; /* giống Shopee */
+}
+
+.brand {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+/* RIGHT */
+.right {
+  flex: 1;
+  padding: 15px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.subtitle {
+  color: #666;
+  margin: 5px 0;
+}
+
+.badge {
+  display: inline-block;
+  border: 1px solid #ee4d2d;
+  color: #ee4d2d;
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+/* PROGRESS */
+.progress {
+  height: 6px;
+  background: #eee;
+  border-radius: 10px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  background: linear-gradient(to right, #ee4d2d, orange);
+}
+
+/* BOTTOM */
+.bottom {
+  font-size: 13px;
+  color: #666;
+}
+
+.bottom a {
+  color: #2a6df4;
+  text-decoration: none;
+  margin-left: 5px;
+}
 </style>
 </head>
 
@@ -205,9 +304,54 @@ h2 {
   <div id="loading" class="loading-text">Đang xử lý...</div>
 
   <div class="card voucher-box" bis_skin_checked="1">
-    <a target="_blank">
-      <img style="width:100%" src="https://cf.shopee.vn/file/sg-11134209-820n2-mns2f97ssxdv12" alt="Voucher">
-    </a>
+    <div class="voucher">
+      <div class="left">
+        <div class="logo">
+          <img src="https://down-vn.img.susercontent.com/file/vn-11134004-820l4-mhk1n5cuptl08e">
+        </div>
+        <div class="brand">Facebook</div>
+      </div>
+    
+      <div class="right">
+        <div class="title">Giảm 22% Giảm tối đa 500k₫</div>
+        <div class="subtitle">Đơn Tối Thiểu 50k₫</div>
+        <div class="badge">Độc Quyền Facebook</div>
+    
+        <div class="progress">
+          <div class="bar" style="width:91%"></div>
+        </div>
+    
+        <div class="bottom">
+          Đã dùng 91% 
+          <a href="#">Điều Kiện</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="voucher">
+      <div class="left">
+        <div class="logo">
+          <img src="https://down-vn.img.susercontent.com/file/vn-11134004-820l4-mhk1n5cuptl08e">
+        </div>
+        <div class="brand">Facebook</div>
+      </div>
+    
+      <div class="right">
+        <div class="title">Giảm 20% Giảm tối đa 250k₫</div>
+        <div class="subtitle">Đơn Tối Thiểu 50k₫</div>
+        <div class="badge">Độc Quyền Facebook</div>
+    
+        <div class="progress">
+          <div class="bar" style="width:91%"></div>
+        </div>
+    
+        <div class="bottom">
+          Đã dùng 91% 
+          <a href="#">Điều Kiện</a>
+        </div>
+      </div>
+    </div>
+    
   </div>
 </div>
 
