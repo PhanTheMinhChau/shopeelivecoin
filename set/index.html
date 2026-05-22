@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tạo Code localStorage</title>
+
+<style>
+    body{
+        font-family: Arial, sans-serif;
+        background:#111;
+        color:#fff;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        min-height:100vh;
+        margin:0;
+    }
+
+    .box{
+        width:420px;
+        background:#1e1e1e;
+        padding:25px;
+        border-radius:16px;
+        box-shadow:0 0 20px rgba(0,0,0,.5);
+    }
+
+    h2{
+        margin-top:0;
+        text-align:center;
+    }
+
+    .row{
+        margin-bottom:15px;
+    }
+
+    label{
+        display:block;
+        margin-bottom:6px;
+    }
+
+    input{
+        width:100%;
+        padding:10px;
+        border:none;
+        border-radius:10px;
+        background:#2a2a2a;
+        color:#fff;
+        font-size:16px;
+        box-sizing:border-box;
+    }
+
+    textarea{
+        width:100%;
+        height:180px;
+        margin-top:15px;
+        background:#000;
+        color:#00ff88;
+        border:none;
+        border-radius:10px;
+        padding:12px;
+        font-size:14px;
+        resize:none;
+        box-sizing:border-box;
+    }
+
+    button{
+        width:100%;
+        padding:12px;
+        margin-top:12px;
+        border:none;
+        border-radius:10px;
+        background:#00aa66;
+        color:white;
+        font-size:16px;
+        cursor:pointer;
+    }
+
+    button:hover{
+        opacity:.9;
+    }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Tạo Code localStorage</h2>
+
+    <div class="row">
+        <label>xcoin</label>
+        <input type="number" id="xcoin" step="50">
+    </div>
+
+    <div class="row">
+        <label>gcoin</label>
+        <input type="number" id="gcoin" step="50">
+    </div>
+
+    <div class="row">
+        <label>tcoin</label>
+        <input type="number" id="tcoin" step="50">
+    </div>
+
+    <textarea id="output" readonly></textarea>
+
+    <button onclick="copyCode()">Copy Code</button>
+</div>
+
+<script>
+const xcoinInput = document.getElementById('xcoin');
+const gcoinInput = document.getElementById('gcoin');
+const tcoinInput = document.getElementById('tcoin');
+
+xcoinInput.value = localStorage.getItem('save_xcoin') || 600;
+gcoinInput.value = localStorage.getItem('save_gcoin') || 700;
+tcoinInput.value = localStorage.getItem('save_tcoin') || 400;
+
+function generateCode(){
+    return `javascript:localStorage.setItem('xcoin', ${xcoinInput.value});localStorage.setItem('gcoin', ${gcoinInput.value});localStorage.setItem('tcoin', ${tcoinInput.value});`;
+}
+
+function updateCode(){
+
+    localStorage.setItem('save_xcoin', xcoinInput.value);
+    localStorage.setItem('save_gcoin', gcoinInput.value);
+    localStorage.setItem('save_tcoin', tcoinInput.value);
+
+    document.getElementById('output').value = generateCode();
+}
+
+function copyCode(){
+    const output = document.getElementById('output');
+
+    output.removeAttribute("readonly");
+    output.select();
+    output.setSelectionRange(0, 99999);
+
+    document.execCommand("copy");
+
+    output.setAttribute("readonly", true);
+
+    alert("Đã copy!");
+}
+
+document.querySelectorAll('input').forEach(input=>{
+    input.addEventListener('input', updateCode);
+});
+
+updateCode();
+</script>
+
+</body>
+</html>
