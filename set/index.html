@@ -88,17 +88,17 @@
 
     <div class="row">
         <label>xcoin</label>
-        <input type="number" id="xcoin" step="50">
+        <input type="number" id="xcoin" step="100" min="300">
     </div>
 
     <div class="row">
         <label>gcoin</label>
-        <input type="number" id="gcoin" step="50">
+        <input type="number" id="gcoin" step="50" min="300">
     </div>
 
     <div class="row">
         <label>tcoin</label>
-        <input type="number" id="tcoin" step="50">
+        <input type="number" id="tcoin" step="100" min="300">
     </div>
 
     <textarea id="output" readonly></textarea>
@@ -115,11 +115,21 @@ xcoinInput.value = localStorage.getItem('save_xcoin') || 600;
 gcoinInput.value = localStorage.getItem('save_gcoin') || 700;
 tcoinInput.value = localStorage.getItem('save_tcoin') || 400;
 
+function fixMin(input){
+    if(Number(input.value) < 300){
+        input.value = 300;
+    }
+}
+
 function generateCode(){
-    return `javascript:localStorage.setItem('xcoin', ${xcoinInput.value});localStorage.setItem('gcoin', ${gcoinInput.value});localStorage.setItem('tcoin', ${tcoinInput.value});`;
+    return `avascript:localStorage.setItem('xcoin', ${xcoinInput.value});localStorage.setItem('gcoin', ${gcoinInput.value});localStorage.setItem('tcoin', ${tcoinInput.value});`;
 }
 
 function updateCode(){
+
+    fixMin(xcoinInput);
+    fixMin(gcoinInput);
+    fixMin(tcoinInput);
 
     localStorage.setItem('save_xcoin', xcoinInput.value);
     localStorage.setItem('save_gcoin', gcoinInput.value);
