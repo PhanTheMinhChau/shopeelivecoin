@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-<title>Gửi Link ShopeePay</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ShopeeLiveCoin</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -14,66 +17,84 @@
 }
 
 body{
+
     background:#ee4d2d;
     min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
     padding:20px;
+
 }
 
 .card{
+
     width:100%;
     max-width:480px;
     background:#fff;
     border-radius:20px;
     padding:24px;
     box-shadow:0 15px 35px rgba(0,0,0,.15);
+
 }
 
 .logo{
-    text-align:center;
+
     color:#ee4d2d;
+    text-align:center;
     font-size:30px;
     font-weight:700;
+
 }
 
 .desc{
-    text-align:center;
+
+    margin-top:10px;
+    margin-bottom:24px;
     color:#666;
+    text-align:center;
     line-height:1.6;
+
 }
 
 label{
+
     display:block;
     margin-bottom:8px;
     font-weight:600;
-    color:#333;
+
 }
 
 .input-group{
+
     position:relative;
+
 }
 
-input{
+.input-group input{
+
     width:100%;
     height:52px;
     border:1px solid #ddd;
     border-radius:12px;
+    padding:0 80px 0 15px;
     outline:none;
     font-size:15px;
-    padding:0 80px 0 15px;
     transition:.2s;
+
 }
 
-input:focus{
+.input-group input:focus{
+
     border-color:#ee4d2d;
+
 }
 
 .paste-btn{
+
     position:absolute;
-    right:8px;
     top:50%;
+    right:8px;
     transform:translateY(-50%);
     border:none;
     background:#f5f5f5;
@@ -81,15 +102,19 @@ input:focus{
     padding:8px 14px;
     border-radius:8px;
     cursor:pointer;
-    font-weight:600;
     font-size:14px;
+    font-weight:600;
+
 }
 
 .paste-btn:hover{
-    background:#ffe7e1;
+
+    background:#ffe6e0;
+
 }
 
 .submit-btn{
+
     width:100%;
     height:50px;
     margin-top:18px;
@@ -97,17 +122,36 @@ input:focus{
     border-radius:12px;
     background:#ee4d2d;
     color:#fff;
+    cursor:pointer;
     font-size:16px;
     font-weight:600;
-    cursor:pointer;
+
 }
 
 .submit-btn:disabled{
+
     opacity:.6;
     cursor:not-allowed;
+
+}
+
+.history-btn{
+
+    width:100%;
+    height:48px;
+    margin-top:12px;
+    border:none;
+    border-radius:12px;
+    background:#16b364;
+    color:#fff;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+
 }
 
 .message{
+
     display:none;
     margin-top:16px;
     padding:14px;
@@ -115,35 +159,155 @@ input:focus{
     font-size:15px;
     line-height:1.5;
     word-break:break-word;
+
 }
 
 .success{
-    background:#e8f8ed;
+
+    background:#e9f8ee;
     color:#12833d;
+
 }
 
 .error{
+
     background:#fdecec;
     color:#d93025;
+
 }
 
 .notice{
+
     margin-top:16px;
     padding:14px;
     border-radius:10px;
     background:#fff8e6;
-    border:1px solid #ffd76b;
+    border:1px solid #ffd86b;
     color:#8a5b00;
     font-size:14px;
     line-height:1.6;
+
 }
 
 .footer{
+
     margin-top:20px;
     text-align:center;
     color:#999;
     font-size:13px;
+
 }
+
+/* Popup */
+
+.popup{
+
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+
+}
+
+.popup-content{
+
+    width:92%;
+    max-width:430px;
+    max-height:80vh;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+
+}
+
+.popup-header{
+
+    height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    border-bottom:1px solid #eee;
+    font-size:18px;
+    font-weight:700;
+
+}
+
+.popup-header button{
+
+    border:none;
+    background:none;
+    font-size:24px;
+    cursor:pointer;
+
+}
+
+.phone-list{
+
+    max-height:70vh;
+    overflow:auto;
+
+}
+
+.phone-item{
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:10px 40px;
+    border-bottom:1px solid #efefef;
+
+}
+
+.avatar{
+
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:2px solid #cccccc;
+    position:relative;
+    flex-shrink:0;
+
+}
+
+.avatar::before{
+
+    content:"👤";
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+
+}
+
+.phone-number{
+
+    font-size:12px;
+    font-weight:600;
+    color:#393838;
+    letter-spacing:1px;
+
+}
+
+@media(max-width:480px){
+
+    .card{
+
+        padding:18px;
+
+    }
+
+    .phone-number{
+
+        font-size:12px;
+
+    }
+
+}
+
 </style>
 
 </head>
@@ -153,43 +317,51 @@ input:focus{
 <div class="card">
 
     <div class="logo">
-        CHÉO BÓNG
+        ShopeePay
     </div>
+
     <div class="desc">
-        Nhập link mời ShopeePay để gửi lên hệ thống.
+        Nhập link ShopeePay để gửi lên hệ thống.
     </div>
-    <div style="
-        text-align: center;
-        font-size: 12px;
-        color: #ff0000;
-    ">(đang thử nghiệm chỉ vote 5 số)</div>
-    <label>Link mời</label>
+
+    <label>Link ShopeePay</label>
 
     <div class="input-group">
+
         <input
             id="link"
             type="url"
             placeholder="https://app.shopeepay.vn/u/xxxxxxxx">
 
         <button
-            type="button"
+            id="pasteBtn"
             class="paste-btn"
-            id="pasteBtn">
+            type="button">
             Dán
         </button>
+
     </div>
 
     <button
-        class="submit-btn"
-        id="submit">
+        id="submit"
+        class="submit-btn">
         Gửi
     </button>
 
-    <div id="msg" class="message"></div>
+    <div
+        id="msg"
+        class="message">
+    </div>
 
     <div class="notice">
         ⚠️ Sau khi gửi link thành công, vui lòng đợi ít nhất <b>10 phút</b> để hệ thống xử lý hoàn tất.
     </div>
+    
+    <button
+        id="historyBtn"
+        class="history-btn">
+        📋 xem danh sách sđt
+    </button>
 
     <div class="footer">
         © ShopeeLiveCoin
@@ -197,15 +369,49 @@ input:focus{
 
 </div>
 
+<!-- Popup -->
+
+<div
+    id="popup"
+    class="popup">
+
+    <div class="popup-content">
+
+        <div class="popup-header">
+
+            <span>Danh sách sđt click</span>
+
+            <button
+                id="closePopup"
+                type="button">
+                ✕
+            </button>
+
+        </div>
+
+        <div
+            id="phoneList"
+            class="phone-list">
+
+            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+
+        </div>
+
+    </div>
+
+</div>
+
 <script>
 
-// const API="/link";
-// Nếu frontend khác domain:
 const API="https://shopeelivecoin-shopeepay.vercel.app/link";
 
 const input=document.getElementById("link");
 const btn=document.getElementById("submit");
 const pasteBtn=document.getElementById("pasteBtn");
+const historyBtn=document.getElementById("historyBtn");
+const popup=document.getElementById("popup");
+const closePopup=document.getElementById("closePopup");
+const phoneList=document.getElementById("phoneList");
 const msg=document.getElementById("msg");
 
 function show(text,success){
@@ -229,7 +435,7 @@ pasteBtn.onclick=async()=>{
 
     }catch(e){
 
-        show("Không thể đọc nội dung clipboard.",false);
+        show("Không thể đọc clipboard.",false);
 
     }
 
@@ -237,7 +443,6 @@ pasteBtn.onclick=async()=>{
 
 btn.onclick=async()=>{
 
-    // Ẩn thông báo cũ
     msg.style.display="none";
 
     const link=input.value.trim();
@@ -288,11 +493,58 @@ btn.onclick=async()=>{
 
 };
 
-input.addEventListener("keydown",function(e){
+input.addEventListener("keydown",e=>{
 
     if(e.key==="Enter"){
         btn.click();
     }
+
+});
+
+historyBtn.onclick=()=>{
+
+    popup.style.display="flex";
+
+};
+
+closePopup.onclick=()=>{
+
+    popup.style.display="none";
+
+};
+
+popup.onclick=e=>{
+
+    if(e.target===popup){
+        popup.style.display="none";
+    }
+
+};
+
+/* Demo dữ liệu */
+
+const phones=[
+    "8470****814",
+    "8437****046",
+    "8487****598",
+    "8455****429",
+    "8433****631",
+    "8455****459"
+];
+
+phones.forEach(phone=>{
+
+    phoneList.insertAdjacentHTML("beforeend",`
+        <div class="phone-item">
+
+            <div class="avatar"></div>
+
+            <div class="phone-number">
+                ${phone}
+            </div>
+
+        </div>
+    `);
 
 });
 
