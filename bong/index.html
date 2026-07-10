@@ -2,8 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gửi Link ShopeePay</title>
 
 <style>
@@ -40,8 +39,7 @@ body{
 }
 
 .desc{
-    margin-top:10px;
-    margin-bottom:24px;
+    margin:10px 0 24px;
     color:#666;
     text-align:center;
     line-height:1.6;
@@ -94,10 +92,6 @@ label{
     background:#ffe7e1;
 }
 
-.paste-btn:active{
-    transform:translateY(-50%) scale(.95);
-}
-
 .submit-btn{
     width:100%;
     height:50px;
@@ -112,10 +106,6 @@ label{
     transition:.2s;
 }
 
-.submit-btn:active{
-    transform:scale(.98);
-}
-
 .submit-btn:disabled{
     opacity:.6;
     cursor:not-allowed;
@@ -127,6 +117,7 @@ label{
     padding:14px;
     border-radius:10px;
     font-size:15px;
+    line-height:1.5;
 }
 
 .success{
@@ -140,22 +131,19 @@ label{
 }
 
 .footer{
-    margin-top:18px;
+    margin-top:20px;
     text-align:center;
     color:#999;
     font-size:13px;
 }
 </style>
-
 </head>
 
 <body>
 
 <div class="card">
 
-    <div class="logo">
-        ShopeePay
-    </div>
+    <div class="logo">ShopeePay</div>
 
     <div class="desc">
         Nhập link mời ShopeePay để gửi lên hệ thống.
@@ -168,12 +156,12 @@ label{
             id="link"
             type="url"
             placeholder="https://app.shopeepay.vn/u/xxxxxxxx"
-        >
+            autocomplete="off">
 
         <button
             type="button"
-            class="paste-btn"
-            id="pasteBtn">
+            id="pasteBtn"
+            class="paste-btn">
             Dán
         </button>
     </div>
@@ -193,8 +181,8 @@ label{
 </div>
 
 <script>
-// Hoặc:
-const API = "https://shopeelivecoin-shopeepay.vercel.app/link";
+// Nếu frontend khác domain thì đổi thành:
+const API="https://shopeelivecoin-shopeepay.vercel.app/link";
 
 const input=document.getElementById("link");
 const btn=document.getElementById("submit");
@@ -202,44 +190,50 @@ const pasteBtn=document.getElementById("pasteBtn");
 const msg=document.getElementById("msg");
 
 function show(text,success){
-
-    msg.style.display="block";
     msg.className="message "+(success?"success":"error");
-    msg.innerText=text;
+    msg.textContent=text;
+    msg.style.display="block";
 }
 
-pasteBtn.onclick=async()=>{
+function clearMessage(){
+    msg.style.display="none";
+    msg.textContent="";
+    msg.className="message";
+}
+
+pasteBtn.addEventListener("click",async()=>{
+
+    clearMessage();
 
     try{
-
         const text=await navigator.clipboard.readText();
 
         if(text){
             input.value=text.trim();
             input.focus();
+        }else{
+            show("Clipboard đang trống.",false);
         }
 
     }catch(e){
-
         show("Không thể đọc clipboard.",false);
-
     }
 
-};
+});
 
-btn.onclick=async()=>{
+btn.addEventListener("click",async()=>{
+
+    clearMessage();
 
     const link=input.value.trim();
 
     if(!link){
-
         show("Vui lòng nhập link.",false);
         return;
-
     }
 
     btn.disabled=true;
-    btn.innerText="Đang gửi...";
+    btn.textContent="Đang gửi...";
 
     try{
 
@@ -270,20 +264,26 @@ btn.onclick=async()=>{
 
         show("Không thể kết nối tới máy chủ.",false);
 
+    }finally{
+
+        btn.disabled=false;
+        btn.textContent="Gửi";
+
     }
 
-    btn.disabled=false;
-    btn.innerText="Gửi";
-
-};
+});
 
 input.addEventListener("keydown",function(e){
 
     if(e.key==="Enter"){
+        e.preventDefault();
         btn.click();
     }
 
 });
+
+// Khi người dùng sửa link thì tự ẩn thông báo cũ
+input.addEventListener("input",clearMessage);
 
 </script>
 
