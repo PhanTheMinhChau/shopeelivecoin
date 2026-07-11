@@ -17,14 +17,12 @@
 }
 
 body{
-
-    background:#ee4d2d;
-    min-height:100vh;
+    background:#faefee;
     display:flex;
+    flex-direction:column;
     justify-content:center;
     align-items:center;
-    padding:20px;
-
+    padding:0 20px 20px 20px;
 }
 
 .card{
@@ -379,12 +377,19 @@ label{
     }
 }
 
+.cover{
+    display:block;
+    width:min(100%, 480px);
+    aspect-ratio:16/7;
+    object-fit:cover;
+}
+
 </style>
 
 </head>
 
 <body>
-
+<img class="cover" src="https://shopeelivecoin.com/img/bong.png" alt="Banner">
 <div class="card">
 
     <div class="logo">
