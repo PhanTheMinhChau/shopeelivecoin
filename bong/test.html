@@ -344,6 +344,9 @@ label{
 }
 
 .status-ok{
+    display:flex;
+    align-items:center;
+    justify-content:center;
     width:100%;
     height:46px;
     border:none;
@@ -352,7 +355,17 @@ label{
     color:#fff;
     font-size:15px;
     font-weight:600;
+    text-decoration:none;
     cursor:pointer;
+    transition:.2s;
+}
+
+.status-ok:hover{
+    background:#d84326;
+}
+
+.status-ok:active{
+    transform:scale(.98);
 }
 
 @keyframes popupShow{
