@@ -509,22 +509,31 @@ const statusOk=document.getElementById("statusOk");
 
 function show(text, success){
 
-    statusBox.className="status-box "+(success?"success":"error");
+    statusBox.className = "status-box " + (success ? "success" : "error");
+    statusText.innerText = text;
 
-    statusText.innerText=text;
+    if (success) {
+        statusOk.href = "https://s.shopee.vn/hsgdhgs";
+    } else {
+        statusOk.removeAttribute("href");
+    }
 
-    statusPopup.style.display="flex";
-
+    statusPopup.style.display = "flex";
 }
 
 statusOk.onclick = (e) => {
 
+    statusPopup.style.display = "none";
+    if (!statusOk.hasAttribute("href")) {
+        e.preventDefault();
+        return;
+    }
     e.preventDefault();
 
-    statusPopup.style.display = "none";
+    const url = statusOk.href;
 
     setTimeout(() => {
-        window.location.replace(statusOk.href);
+        window.location.href = url;
     }, 50);
 
 };
