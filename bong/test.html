@@ -308,6 +308,64 @@ label{
 
 }
 
+.status-popup{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+}
+
+.status-box{
+    width:90%;
+    max-width:360px;
+    background:#fff;
+    border-radius:18px;
+    padding:24px;
+    text-align:center;
+    animation:popupShow .2s ease;
+}
+
+.status-box.success{
+    border-top:6px solid #16b364;
+}
+
+.status-box.error{
+    border-top:6px solid #ee4d2d;
+}
+
+#statusText{
+    font-size:16px;
+    line-height:1.6;
+    margin-bottom:22px;
+    word-break:break-word;
+}
+
+.status-ok{
+    width:100%;
+    height:46px;
+    border:none;
+    border-radius:12px;
+    background:#ee4d2d;
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+@keyframes popupShow{
+    from{
+        transform:scale(.9);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
 </style>
 
 </head>
@@ -406,6 +464,19 @@ label{
 
 </div>
 
+<div id="statusPopup" class="status-popup">
+    <div id="statusBox" class="status-box">
+        <div id="statusText"></div>
+
+    <a
+        id="statusOk"
+        class="status-ok"
+        href="https://s.shopee.vn/hsgdhgs" target="_blank">
+        OK
+    </a>
+    </div>
+</div>
+
 <script>
 
 const API="https://shopeelivecoin-shopeepay.vercel.app/link";
@@ -417,15 +488,41 @@ const historyBtn=document.getElementById("historyBtn");
 const popup=document.getElementById("popup");
 const closePopup=document.getElementById("closePopup");
 const phoneList=document.getElementById("phoneList");
-const msg=document.getElementById("msg");
 
-function show(text,success){
+const statusPopup=document.getElementById("statusPopup");
+const statusBox=document.getElementById("statusBox");
+const statusText=document.getElementById("statusText");
+const statusOk=document.getElementById("statusOk");
 
-    msg.className="message "+(success?"success":"error");
-    msg.innerText=text;
-    msg.style.display="block";
+function show(text, success){
+
+    statusBox.className="status-box "+(success?"success":"error");
+
+    statusText.innerText=text;
+
+    statusPopup.style.display="flex";
 
 }
+
+statusOk.onclick = (e) => {
+
+    e.preventDefault();
+
+    statusPopup.style.display = "none";
+
+    setTimeout(() => {
+        window.location.replace(statusOk.href);
+    }, 50);
+
+};
+
+statusPopup.onclick=e=>{
+
+    if(e.target===statusPopup){
+        statusPopup.style.display="none";
+    }
+
+};
 
 pasteBtn.onclick=async()=>{
 
@@ -447,8 +544,6 @@ pasteBtn.onclick=async()=>{
 };
 
 btn.onclick=async()=>{
-
-    msg.style.display="none";
 
     const link=input.value.trim();
 
