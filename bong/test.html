@@ -541,7 +541,7 @@ statusOk.onclick = (e) => {
 statusPopup.onclick=e=>{
 
     if(e.target===statusPopup){
-        statusPopup.style.display="none";
+        // statusPopup.style.display="none";
     }
 
 };
@@ -574,6 +574,34 @@ btn.onclick=async()=>{
         show("Vui lòng nhập link.",false);
         return;
 
+    }
+    
+    try {
+    
+        const url = new URL(link);
+    
+        const isShareLink =
+            url.protocol === "https:" &&
+            url.hostname === "app.shopeepay.vn" &&
+            url.pathname.startsWith("/u/");
+    
+        const isTournamentLink =
+            url.protocol === "https:" &&
+            url.hostname === "shopee.vn" &&
+            url.pathname === "/wallet/promotion/tournament";
+    
+        if (!isShareLink && !isTournamentLink) {
+    
+            show("Link không đúng định dạng.", false);
+            return;
+    
+        }
+    
+    } catch {
+    
+        show("Link không đúng định dạng.", false);
+        return;
+    
     }
 
     btn.disabled=true;
