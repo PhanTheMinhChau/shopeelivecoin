@@ -506,14 +506,42 @@ const statusPopup=document.getElementById("statusPopup");
 const statusBox=document.getElementById("statusBox");
 const statusText=document.getElementById("statusText");
 const statusOk=document.getElementById("statusOk");
+const links = [
+  "https://s.shopee.vn/4qDxS3OMNU",
+  "https://s.shopee.vn/4fuXFkOziT",
+  "https://s.shopee.vn/5AqnqfN5ha",
+  "https://s.shopee.vn/50XNeMNj2Z",
+  "https://s.shopee.vn/4AyGepQtjQ",
+  "https://s.shopee.vn/40eqSWRX4P",
+  "https://s.shopee.vn/4Vb73RPd3W",
+  "https://s.shopee.vn/4LHgr8QGOV",
+  "https://s.shopee.vn/60PuqCJv0q",
+  "https://s.shopee.vn/6AjL2VJHft",
+  "https://s.shopee.vn/6L2lEoIeKw",
+  "https://s.shopee.vn/6VMBR7I0zz",
+  "https://s.shopee.vn/5LAE2yMSMm",
+  "https://s.shopee.vn/5VTeFHLp1p",
+  "https://s.shopee.vn/5fn4RaLBgs",
+  "https://s.shopee.vn/5q6UdtKYLv",
+  "https://s.shopee.vn/7KvIQeEqJE",
+  "https://s.shopee.vn/7VEicxECyH",
+  "https://s.shopee.vn/7fY8pGDZdK",
+  "https://s.shopee.vn/7prZ1ZCwIN",
+  "https://s.shopee.vn/6ffbdQHNfA",
+  "https://s.shopee.vn/6pz1pjGkKD",
+  "https://s.shopee.vn/70IS22G6zG",
+  "https://s.shopee.vn/7AbsELFTeJ",
+  "https://s.shopee.vn/8fQg169lbc"
+];
+
+const randomLink = links[Math.floor(Math.random() * links.length)];
 
 function show(text, success){
 
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
-
     if (success) {
-        statusOk.href = "https://s.shopee.vn/hsgdhgs";
+        statusOk.href = links[Math.floor(Math.random() * links.length)];;
     } else {
         statusOk.removeAttribute("href");
     }
