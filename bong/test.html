@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+<title>Chéo bóng ShopeePay</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+
+body{
+
+    background:#ee4d2d;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+
+}
+
+.card{
+
+    width:100%;
+    max-width:480px;
+    background:#fff;
+    border-radius:20px;
+    padding:24px;
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+}
+
+.logo{
+
+    color:#ee4d2d;
+    text-align:center;
+    font-size:30px;
+    font-weight:700;
+
+}
+
+.desc{
+
+    margin-top:10px;
+    margin-bottom:5px;
+    color:#666;
+    text-align:center;
+    line-height:1.6;
+
+}
+
+label{
+
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+
+}
+
+.input-group{
+
+    position:relative;
+
+}
+
+.input-group input{
+
+    width:100%;
+    height:52px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:0 80px 0 15px;
+    outline:none;
+    font-size:15px;
+    transition:.2s;
+
+}
+
+.input-group input:focus{
+
+    border-color:#ee4d2d;
+
+}
+
+.paste-btn{
+
+    position:absolute;
+    top:50%;
+    right:8px;
+    transform:translateY(-50%);
+    border:none;
+    background:#f5f5f5;
+    color:#ee4d2d;
+    padding:8px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+
+}
+
+.paste-btn:hover{
+
+    background:#ffe6e0;
+
+}
+
+.submit-btn{
+
+    width:100%;
+    height:50px;
+    margin-top:18px;
+    border:none;
+    border-radius:12px;
+    background:#ee4d2d;
+    color:#fff;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+
+}
+
+.submit-btn:disabled{
+
+    opacity:.6;
+    cursor:not-allowed;
+
+}
+
+.history-btn{
+
+    width:100%;
+    height:48px;
+    margin-top:12px;
+    border:none;
+    border-radius:12px;
+    background:#16b364;
+    color:#fff;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+
+}
+
+.message{
+
+    display:none;
+    margin-top:16px;
+    padding:14px;
+    border-radius:10px;
+    font-size:15px;
+    line-height:1.5;
+    word-break:break-word;
+
+}
+
+.success{
+
+    background:#e9f8ee;
+    color:#12833d;
+
+}
+
+.error{
+
+    background:#fdecec;
+    color:#d93025;
+
+}
+
+.notice{
+
+    margin-top:16px;
+    padding:14px;
+    border-radius:10px;
+    background:#fff8e6;
+    border:1px solid #ffd86b;
+    color:#8a5b00;
+    font-size:14px;
+    line-height:1.6;
+
+}
+
+.footer{
+
+    margin-top:20px;
+    text-align:center;
+    color:#999;
+    font-size:13px;
+
+}
+
+/* Popup */
+
+.popup{
+
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+
+}
+
+.popup-content{
+
+    width:92%;
+    max-width:430px;
+    max-height:80vh;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+
+}
+
+.popup-header{
+
+    height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    border-bottom:1px solid #eee;
+    font-size:18px;
+    font-weight:700;
+
+}
+
+.popup-header button{
+
+    border:none;
+    background:none;
+    font-size:24px;
+    cursor:pointer;
+
+}
+
+.phone-list{
+
+    max-height:70vh;
+    overflow:auto;
+
+}
+
+.phone-item{
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:10px 40px;
+    border-bottom:1px solid #efefef;
+
+}
+
+.avatar{
+
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:2px solid #cccccc;
+    position:relative;
+    flex-shrink:0;
+
+}
+
+.avatar::before{
+
+    content:"👤";
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+
+}
+
+.phone-number{
+
+    font-size:12px;
+    font-weight:600;
+    color:#393838;
+    letter-spacing:1px;
+
+}
+
+@media(max-width:480px){
+
+    .card{
+
+        padding:18px;
+
+    }
+
+    .phone-number{
+
+        font-size:12px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="logo">
+        Chéo bóng
+    </div>
+
+    <div class="desc">
+        Nhập link mời để gửi lên hệ thống.
+    </div>
+    <div style="
+        text-align: center;
+        font-size: 12px;
+        color: #ff0000;
+    ">(đang thử nghiệm chỉ vote 8 số)</div>
+
+    <label>Link mời</label>
+
+    <div class="input-group">
+
+        <input
+            id="link"
+            type="url"
+            placeholder="https://app.shopeepay.vn/u/xxxxxxxx">
+
+        <button
+            id="pasteBtn"
+            class="paste-btn"
+            type="button">
+            Dán
+        </button>
+
+    </div>
+
+    <button
+        id="submit"
+        class="submit-btn">
+        Gửi
+    </button>
+
+    <div
+        id="msg"
+        class="message">
+    </div>
+
+    <div class="notice">
+        ⚠️ Sau khi gửi link thành công, vui lòng đợi ít nhất <b>10 phút</b> để hệ thống xử lý hoàn tất.
+    </div>
+    
+    <button
+        id="historyBtn"
+        class="history-btn">
+        📋 xem danh sách sđt
+    </button>
+
+    <div class="footer">
+        © ShopeeLiveCoin
+    </div>
+
+</div>
+
+<!-- Popup -->
+
+<div
+    id="popup"
+    class="popup">
+
+    <div class="popup-content">
+
+        <div class="popup-header">
+
+            <span>Danh sách sđt click</span>
+
+            <button
+                id="closePopup"
+                type="button">
+                ✕
+            </button>
+
+        </div>
+
+        <div
+            id="phoneList"
+            class="phone-list">
+
+            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const API="https://shopeelivecoin-shopeepay.vercel.app/link";
+
+const input=document.getElementById("link");
+const btn=document.getElementById("submit");
+const pasteBtn=document.getElementById("pasteBtn");
+const historyBtn=document.getElementById("historyBtn");
+const popup=document.getElementById("popup");
+const closePopup=document.getElementById("closePopup");
+const phoneList=document.getElementById("phoneList");
+const msg=document.getElementById("msg");
+
+function show(text,success){
+
+    msg.className="message "+(success?"success":"error");
+    msg.innerText=text;
+    msg.style.display="block";
+
+}
+
+pasteBtn.onclick=async()=>{
+
+    try{
+
+        const text=await navigator.clipboard.readText();
+
+        if(text){
+            input.value=text.trim();
+            input.focus();
+        }
+
+    }catch(e){
+
+        show("Không thể đọc clipboard.",false);
+
+    }
+
+};
+
+btn.onclick=async()=>{
+
+    msg.style.display="none";
+
+    const link=input.value.trim();
+
+    if(!link){
+
+        show("Vui lòng nhập link.",false);
+        return;
+
+    }
+
+    btn.disabled=true;
+    btn.innerText="Đang gửi...";
+
+    try{
+
+        const response=await fetch(API,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                link
+            })
+        });
+
+        const data=await response.json();
+
+        if(response.ok){
+
+            show(data.message || "Gửi thành công.",true);
+            input.value="";
+
+        }else{
+
+            show(data.detail || "Có lỗi xảy ra.",false);
+
+        }
+
+    }catch(e){
+
+        show("Không thể kết nối tới máy chủ.",false);
+
+    }
+
+    btn.disabled=false;
+    btn.innerText="Gửi";
+
+};
+
+input.addEventListener("keydown",e=>{
+
+    if(e.key==="Enter"){
+        btn.click();
+    }
+
+});
+
+historyBtn.onclick=()=>{
+
+    popup.style.display="flex";
+
+};
+
+closePopup.onclick=()=>{
+
+    popup.style.display="none";
+
+};
+
+popup.onclick=e=>{
+
+    if(e.target===popup){
+        popup.style.display="none";
+    }
+
+};
+
+/* Demo dữ liệu */
+
+const phones=[
+    "8470****814",
+    "8437****046",
+    "8487****598",
+    "8455****429",
+    "8433****631",
+    "8455****459",
+    "8485****939",
+    "8489****451",
+];
+
+phones.forEach(phone=>{
+
+    phoneList.insertAdjacentHTML("beforeend",`
+        <div class="phone-item">
+
+            <div class="avatar"></div>
+
+            <div class="phone-number">
+                ${phone}
+            </div>
+
+        </div>
+    `);
+
+});
+
+</script>
+
+</body>
+</html>
