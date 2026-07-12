@@ -608,32 +608,39 @@ btn.onclick=async()=>{
 
     }
     
-    try {
+    const match = link.match(/https?:\/\/[^\s]+/);
     
+    if (!match) {
+        show("Không tìm thấy link hợp lệ.", false);
+        return;
+    }
+    
+    link = match[0];
+    
+    try {
         const url = new URL(link);
     
-        const isShareLink =
-            url.protocol === "https:" &&
-            url.hostname === "app.shopeepay.vn" &&
-            url.pathname.startsWith("/u/");
+        const valid =
+            (url.protocol === "https:" &&
+                url.hostname === "app.shopeepay.vn" &&
+                url.pathname.startsWith("/u/")) ||
     
-        const isTournamentLink =
-            url.protocol === "https:" &&
-            url.hostname === "shopee.vn" &&
-            url.pathname === "/wallet/promotion/tournament";
+            (url.protocol === "https:" &&
+                url.hostname === "shopee.vn" &&
+                url.pathname === "/wallet/promotion/tournament/");
+
+            (url.protocol === "https:" &&
+                url.hostname === "shopee.vn" &&
+                url.pathname === "/wallet/promotion/tournament/");
     
-        if (!isShareLink && !isTournamentLink) {
-    
+        if (!valid) {
             show("Link không đúng định dạng.", false);
             return;
-    
         }
     
     } catch {
-    
         show("Link không đúng định dạng.", false);
         return;
-    
     }
 
     btn.disabled=true;
