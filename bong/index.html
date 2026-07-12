@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Đang bảo trì</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+
+<title>Chéo bóng ShopeePay</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -16,119 +18,723 @@
 
 body{
     background:#f4e8e7;
-    min-height:100vh;
     display:flex;
     flex-direction:column;
+    justify-content:center;
     align-items:center;
 }
 
-.cover{
-    display:block;
-    width:min(100%,480px);
-    aspect-ratio:16/7;
-    object-fit:cover;
-}
-
 .card{
-    width:calc(100% - 40px);
+
+    margin: 0 20px;
     max-width:480px;
-    margin:0 20px;
     background:#fff;
     border-radius:20px;
-    padding:38px 28px;
-    text-align:center;
-    box-shadow:0 15px 35px rgba(0,0,0,.12);
+    padding:24px;
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+
 }
 
-.icon{
-    font-size:68px;
-    margin-bottom:18px;
-}
+.logo{
 
-h1{
     color:#ee4d2d;
+    text-align:center;
     font-size:30px;
-    margin-bottom:16px;
+    font-weight:700;
+
 }
 
 .desc{
+
+    margin-top:10px;
+    margin-bottom:5px;
     color:#666;
-    line-height:1.8;
+    text-align:center;
+    line-height:1.6;
+
+}
+
+label{
+
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+
+}
+
+.input-group{
+
+    position:relative;
+
+}
+
+.input-group input{
+
+    width:100%;
+    height:52px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:0 80px 0 15px;
+    outline:none;
+    font-size:15px;
+    transition:.2s;
+
+}
+
+.input-group input:focus{
+
+    border-color:#ee4d2d;
+
+}
+
+.paste-btn{
+
+    position:absolute;
+    top:50%;
+    right:8px;
+    transform:translateY(-50%);
+    border:none;
+    background:#f5f5f5;
+    color:#ee4d2d;
+    padding:8px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+
+}
+
+.paste-btn:hover{
+
+    background:#ffe6e0;
+
+}
+
+.submit-btn{
+
+    width:100%;
+    height:50px;
+    margin-top:18px;
+    border:none;
+    border-radius:12px;
+    background:#ee4d2d;
+    color:#fff;
+    cursor:pointer;
     font-size:16px;
+    font-weight:600;
+
+}
+
+.submit-btn:disabled{
+
+    opacity:.6;
+    cursor:not-allowed;
+
+}
+
+.history-btn{
+
+    width:100%;
+    height:48px;
+    margin-top:12px;
+    border:none;
+    border-radius:12px;
+    background:#16b364;
+    color:#fff;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:600;
+
+}
+
+.message{
+
+    display:none;
+    margin-top:16px;
+    padding:14px;
+    border-radius:10px;
+    font-size:15px;
+    line-height:1.5;
+    word-break:break-word;
+
+}
+
+.success{
+
+    background:#e9f8ee;
+    color:#12833d;
+
+}
+
+.error{
+
+    background:#fdecec;
+    color:#d93025;
+
 }
 
 .notice{
-    margin:28px 0;
-    padding:18px;
-    border-radius:16px;
+
+    margin-top:16px;
+    padding:14px;
+    border-radius:10px;
     background:#fff8e6;
     border:1px solid #ffd86b;
-}
-
-.notice-title{
     color:#8a5b00;
     font-size:14px;
-    margin-bottom:8px;
-}
+    line-height:1.6;
 
-.time{
-    color:#ee4d2d;
-    font-size:32px;
-    font-weight:700;
 }
 
 .footer{
-    margin-top:30px;
+
+    margin-top:20px;
+    text-align:center;
     color:#999;
-    font-size:14px;
-    line-height:1.8;
+    font-size:13px;
+
+}
+
+/* Popup */
+
+.popup{
+
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+
+}
+
+.popup-content{
+
+    width:92%;
+    max-width:300px;
+    max-height:80vh;
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+
+}
+
+.popup-header{
+
+    height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    border-bottom:1px solid #eee;
+    font-size:18px;
+    font-weight:700;
+
+}
+
+.popup-header button{
+
+    border:none;
+    background:none;
+    font-size:24px;
+    cursor:pointer;
+
+}
+
+.phone-list{
+
+    max-height:70vh;
+    overflow:auto;
+
+}
+
+.phone-item{
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:10px 20%;
+    border-bottom:0.5px solid #efefef;
+
+}
+
+.avatar{
+
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:2px solid #cccccc;
+    position:relative;
+    flex-shrink:0;
+
+}
+
+.avatar::before{
+
+    content:"👤";
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+
+}
+
+.phone-number{
+
+    font-size:12px;
+    font-weight:600;
+    color:#393838;
+    letter-spacing:1px;
+
 }
 
 @media(max-width:480px){
 
     .card{
-        padding:30px 22px;
+
+        padding:18px;
+
     }
 
-    h1{
-        font-size:26px;
-    }
+    .phone-number{
 
-    .time{
-        font-size:28px;
+        font-size:12px;
+
     }
 
 }
+
+.status-popup{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    justify-content:center;
+    align-items:center;
+    z-index:10000;
+}
+
+.status-box{
+    width:90%;
+    max-width:360px;
+    background:#fff;
+    border-radius:18px;
+    padding:24px;
+    text-align:center;
+    animation:popupShow .2s ease;
+}
+
+.status-box.success{
+    border-top:6px solid #16b364;
+}
+
+.status-box.error{
+    border-top:6px solid #ee4d2d;
+}
+
+#statusText{
+    font-size:16px;
+    line-height:1.6;
+    margin-bottom:22px;
+    word-break:break-word;
+}
+
+.status-ok{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    height:46px;
+    border:none;
+    border-radius:12px;
+    background:#ee4d2d;
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    text-decoration:none;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.status-ok:hover{
+    background:#d84326;
+}
+
+.status-ok:active{
+    transform:scale(.98);
+}
+
+@keyframes popupShow{
+    from{
+        transform:scale(.9);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.cover{
+    display:block;
+    width:min(100%, 480px);
+    aspect-ratio:16/7;
+    object-fit:cover;
+}
+
 </style>
+
 </head>
 
 <body>
-
 <img class="cover" src="https://shopeelivecoin.com/img/bong.png" alt="Banner">
-
 <div class="card">
 
-    <div class="icon">🛠️</div>
-
-    <h1>Web đang được bảo trì</h1>
-
- 
-    <div class="notice">
-        <div class="notice-title">
-            sẽ hoạt động trở lại vào
-        </div>
-
-        <div class="time">
-            08:00 sáng
-        </div>
+    <div class="logo">
+        Chéo bóng
     </div>
 
+    <div class="desc">
+        Nhập link mời để gửi lên hệ thống.
+    </div>
+    <!-- <div style="
+        text-align: center;
+        font-size: 12px;
+        color: #ff0000;
+    ">(đang thử nghiệm chỉ vote 8 số)</div> -->
+
+    <label>Link mời</label>
+
+    <div class="input-group">
+
+        <input
+            id="link"
+            type="url"
+            placeholder="https://app.shopeepay.vn/u/xxxxxxxx">
+
+        <button
+            id="pasteBtn"
+            class="paste-btn"
+            type="button">
+            Dán
+        </button>
+
+    </div>
+
+    <button
+        id="submit"
+        class="submit-btn">
+        Gửi
+    </button>
+
+    <div
+        id="msg"
+        class="message">
+    </div>
+
+    <div class="notice">
+        ⚠️ Sau khi gửi link thành công, vui lòng đợi trong vòng <b>10 phút</b> để hệ thống xử lý hoàn tất.
+    </div>
+    
+    <button
+        id="historyBtn"
+        class="history-btn">
+        📋 xem danh sách sđt
+    </button>
+
     <div class="footer">
-        <br><br>
         © ShopeeLiveCoin
     </div>
 
 </div>
+
+<!-- Popup -->
+
+<div
+    id="popup"
+    class="popup">
+
+    <div class="popup-content">
+
+        <div class="popup-header">
+
+            <span>Danh sách sđt click</span>
+
+            <button
+                id="closePopup"
+                type="button">
+                ✕
+            </button>
+
+        </div>
+
+        <div
+            id="phoneList"
+            class="phone-list">
+
+            <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+
+        </div>
+
+    </div>
+
+</div>
+
+<div id="statusPopup" class="status-popup">
+    <div id="statusBox" class="status-box">
+        <div id="statusText"></div>
+
+    <a
+        id="statusOk"
+        class="status-ok"
+        href="https://s.shopee.vn/hsgdhgs" target="_blank">
+        OK
+    </a>
+    </div>
+</div>
+
+<script>
+
+const API="https://shopeelivecoin-shopeepay.vercel.app/link";
+
+const input=document.getElementById("link");
+const btn=document.getElementById("submit");
+const pasteBtn=document.getElementById("pasteBtn");
+const historyBtn=document.getElementById("historyBtn");
+const popup=document.getElementById("popup");
+const closePopup=document.getElementById("closePopup");
+const phoneList=document.getElementById("phoneList");
+
+const statusPopup=document.getElementById("statusPopup");
+const statusBox=document.getElementById("statusBox");
+const statusText=document.getElementById("statusText");
+const statusOk=document.getElementById("statusOk");
+const links = [
+  "https://s.shopee.vn/4qDxS3OMNU",
+  "https://s.shopee.vn/4fuXFkOziT",
+  "https://s.shopee.vn/5AqnqfN5ha",
+  "https://s.shopee.vn/50XNeMNj2Z",
+  "https://s.shopee.vn/4AyGepQtjQ",
+  "https://s.shopee.vn/40eqSWRX4P",
+  "https://s.shopee.vn/4Vb73RPd3W",
+  "https://s.shopee.vn/4LHgr8QGOV",
+  "https://s.shopee.vn/60PuqCJv0q",
+  "https://s.shopee.vn/6AjL2VJHft",
+  "https://s.shopee.vn/6L2lEoIeKw",
+  "https://s.shopee.vn/6VMBR7I0zz",
+  "https://s.shopee.vn/5LAE2yMSMm",
+  "https://s.shopee.vn/5VTeFHLp1p",
+  "https://s.shopee.vn/5fn4RaLBgs",
+  "https://s.shopee.vn/5q6UdtKYLv",
+  "https://s.shopee.vn/7KvIQeEqJE",
+  "https://s.shopee.vn/7VEicxECyH",
+  "https://s.shopee.vn/7fY8pGDZdK",
+  "https://s.shopee.vn/7prZ1ZCwIN",
+  "https://s.shopee.vn/6ffbdQHNfA",
+  "https://s.shopee.vn/6pz1pjGkKD",
+  "https://s.shopee.vn/70IS22G6zG",
+  "https://s.shopee.vn/7AbsELFTeJ",
+  "https://s.shopee.vn/8fQg169lbc"
+];
+
+const randomLink = links[Math.floor(Math.random() * links.length)];
+
+function show(text, success){
+
+    statusBox.className = "status-box " + (success ? "success" : "error");
+    statusText.innerText = text;
+    if (success) {
+        statusOk.href = links[Math.floor(Math.random() * links.length)];;
+    } else {
+        statusOk.removeAttribute("href");
+    }
+
+    statusPopup.style.display = "flex";
+}
+
+statusOk.onclick = (e) => {
+
+    statusPopup.style.display = "none";
+    if (!statusOk.hasAttribute("href")) {
+        e.preventDefault();
+        return;
+    }
+    e.preventDefault();
+
+    const url = statusOk.href;
+
+    setTimeout(() => {
+        window.location.href = url;
+    }, 50);
+
+};
+
+statusPopup.onclick=e=>{
+
+    if(e.target===statusPopup){
+        // statusPopup.style.display="none";
+    }
+
+};
+
+pasteBtn.onclick=async()=>{
+
+    try{
+
+        const text=await navigator.clipboard.readText();
+
+        if(text){
+            input.value=text.trim();
+            input.focus();
+        }
+
+    }catch(e){
+
+        show("Không thể đọc clipboard.",false);
+
+    }
+
+};
+
+btn.onclick=async()=>{
+
+    const link=input.value.trim();
+
+    if(!link){
+
+        show("Vui lòng nhập link.",false);
+        return;
+
+    }
+    
+    try {
+    
+        const url = new URL(link);
+    
+        const isShareLink =
+            url.protocol === "https:" &&
+            url.hostname === "app.shopeepay.vn" &&
+            url.pathname.startsWith("/u/");
+    
+        const isTournamentLink =
+            url.protocol === "https:" &&
+            url.hostname === "shopee.vn" &&
+            url.pathname === "/wallet/promotion/tournament";
+    
+        if (!isShareLink && !isTournamentLink) {
+    
+            show("Link không đúng định dạng.", false);
+            return;
+    
+        }
+    
+    } catch {
+    
+        show("Link không đúng định dạng.", false);
+        return;
+    
+    }
+
+    btn.disabled=true;
+    btn.innerText="Đang gửi...";
+
+    try{
+
+        const response=await fetch(API,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                link
+            })
+        });
+
+        const data=await response.json();
+
+        if(response.ok){
+
+            show(data.message || "Gửi thành công.",true);
+            input.value="";
+
+        }else{
+
+            show(data.detail || "Có lỗi xảy ra.",false);
+
+        }
+
+    }catch(e){
+
+        show("Không thể kết nối tới máy chủ.",false);
+
+    }
+
+    btn.disabled=false;
+    btn.innerText="Gửi";
+
+};
+
+input.addEventListener("keydown",e=>{
+
+    if(e.key==="Enter"){
+        btn.click();
+    }
+
+});
+
+historyBtn.onclick=()=>{
+
+    popup.style.display="flex";
+
+};
+
+closePopup.onclick=()=>{
+
+    popup.style.display="none";
+
+};
+
+popup.onclick=e=>{
+
+    if(e.target===popup){
+        popup.style.display="none";
+    }
+
+};
+
+/* Demo dữ liệu */
+
+const phones=[
+    "8436****232",
+    "8437****046",
+    "8487****598",
+    "8455****429",
+    "8433****631",
+    "8455****459",
+    "8485****939",
+    "8489****451",
+    "8489****018",
+    "8481****464"
+];
+
+phones.forEach(phone=>{
+
+    phoneList.insertAdjacentHTML("beforeend",`
+        <div class="phone-item">
+
+            <div class="avatar"></div>
+
+            <div class="phone-number">
+                ${phone}
+            </div>
+
+        </div>
+    `);
+
+});
+
+</script>
 
 </body>
 </html>
