@@ -599,26 +599,26 @@ pasteBtn.onclick=async()=>{
 
 btn.onclick=async()=>{
 
-    const link=input.value.trim();
+    const linkx=input.value.trim();
 
-    if(!link){
+    if(!linkx){
 
         show("Vui lòng nhập link.",false);
         return;
 
     }
     
-    const match = link.match(/https?:\/\/[^\s]+/);
+    const match = linkx.match(/https?:\/\/[^\s]+/);
     
     if (!match) {
         show("Không tìm thấy link hợp lệ.", false);
         return;
     }
     
-    linkx = match[0];
+    link = match[0];
     
     try {
-        const url = new URL(linkx);
+        const url = new URL(link);
     
         const valid =
             (url.protocol === "https:" &&
