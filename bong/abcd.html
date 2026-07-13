@@ -621,8 +621,13 @@ btn.onclick=async()=>{
             url.protocol === "https:" &&
             url.hostname === "shopee.vn" &&
             url.pathname === "/wallet/promotion/tournament";
+
+        const isTournamentLink1 =
+            url.protocol === "https:" &&
+            url.hostname === "shopee.vn" &&
+            url.pathname === "/universal-link/wallet/promotion/tournament?";
     
-        if (!isShareLink && !isTournamentLink) {
+        if (!isShareLink && !isTournamentLink && isTournamentLink1) {
     
             show("Link không đúng định dạng.", false);
             return;
@@ -711,7 +716,7 @@ const phones=[
     "8487****598",
     "8455****429",
     "8433****631",
-    "8455****459",
+    "8484****589",
     "8485****939",
     "8489****451",
     "8489****018",
