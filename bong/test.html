@@ -545,7 +545,8 @@ function show(text, success){
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
     if (success) {
-        statusOk.href = links[Math.floor(Math.random() * links.length)];;
+        statusOk.href = links[Math.floor(Math.random() * links.length)];
+        statusOk.click();
     } else {
         statusOk.removeAttribute("href");
     }
