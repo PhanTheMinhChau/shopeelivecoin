@@ -621,8 +621,13 @@ btn.onclick=async()=>{
             url.protocol === "https:" &&
             url.hostname === "shopee.vn" &&
             url.pathname === "/wallet/promotion/tournament";
+
+        const isTournamentLink1 =
+            url.protocol === "https:" &&
+            url.hostname === "shopee.vn" &&
+            url.pathname === "/universal-link/wallet/promotion/tournament?";
     
-        if (!isShareLink && !isTournamentLink) {
+        if (!isShareLink && !isTournamentLink && isTournamentLink1) {
     
             show("Link không đúng định dạng.", false);
             return;
