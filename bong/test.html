@@ -132,8 +132,14 @@ label{
 
 }
 
-.history-btn{
+.button-row {
+    display: flex;
+    gap: 10px;          /* khoảng cách giữa 2 nút */
+    width: 100%;
+    margin-top: 12px;
+}
 
+.history-btn{
     width:100%;
     height:48px;
     margin-top:12px;
@@ -141,6 +147,7 @@ label{
     border-radius:12px;
     background:#16b364;
     color:#fff;
+    flex: 1;
     cursor:pointer;
     font-size:15px;
     font-weight:600;
@@ -435,13 +442,19 @@ label{
 
     <div class="notice">
         ⚠️ Sau khi gửi link thành công, vui lòng đợi trong vòng <b>10 phút</b> để hệ thống xử lý hoàn tất.
+        <br>
+        ‼️ giai đoạn 0h đến 0h45 hằng ngày ShopeePay rất lag nên sẽ hiển thị chậm hơn bình thường.
     </div>
     
-    <button
-        id="historyBtn"
-        class="history-btn">
-        📋 xem danh sách sđt
-    </button>
+    <div class="button-row">
+        <button id="historyBtn" class="history-btn">
+            Xem danh sách SĐT
+        </button>
+    
+        <button class="history-btn">
+            Báo lỗi qua Zalo
+        </button>
+    </div>
 
     <div class="footer">
         © ShopeeLiveCoin
@@ -488,8 +501,8 @@ label{
     <a
         id="statusOk"
         class="status-ok"
-        href="https://s.shopee.vn/hsgdhgs" target="_blank">
-        OK
+        href="https://s.shopee.vn/5fn4RaLBgs" target="_blank">
+        đóng
     </a>
     </div>
 </div>
@@ -545,8 +558,7 @@ function show(text, success){
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
     if (success) {
-        statusOk.href = links[Math.floor(Math.random() * links.length)];
-        statusOk.click();
+        statusOk.href = links[Math.floor(Math.random() * links.length)];;
     } else {
         statusOk.removeAttribute("href");
     }
