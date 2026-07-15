@@ -132,6 +132,13 @@ label{
 
 }
 
+.button-row {
+    display: flex;
+    gap: 10px;          /* khoảng cách giữa 2 nút */
+    width: 100%;
+    margin-top: 12px;
+}
+
 .history-btn{
 
     width:100%;
@@ -527,11 +534,15 @@ label{
         ‼️ giai đoạn 0h đến 0h45 hằng ngày ShopeePay rất lag nên sẽ hiển thị chậm hơn bình thường.
     </div>
     
-    <button
-        id="historyBtn"
-        class="history-btn">
-        📋 xem danh sách sđt
-    </button>
+    <div class="button-row">
+        <button id="historyBtn" class="history-btn">
+            Xem danh sách SĐT
+        </button>
+    
+        <button class="history-btn">
+            Báo lỗi qua Zalo
+        </button>
+    </div>
 
 </div>
 
@@ -540,15 +551,15 @@ label{
 
     <div class="banner-list" id="bannerList">
 
-        <a class="banner-item" href="https://shopeelivecoin.com/flashsale/">
+        <a class="banner-item" href="https://shopeelivecoin.com/flashsale/" target="_blank">
             <img src="https://shopeelivecoin.com/img/flasksalebanner.png">
         </a>
 
-        <a class="banner-item" href="https://t.me/xueshopee">
+        <a class="banner-item" href="https://t.me/xueshopee" target="_blank">
             <img src="https://shopeelivecoin.com/img/xuebanner.png">
         </a>
 
-        <a class="banner-item" href="https://t.me/shopeelivexucoin">
+        <a class="banner-item" href="https://t.me/shopeelivexucoin" target="_blank">
             <img src="https://shopeelivecoin.com/img/tuixubanner.png">
         </a>
 
