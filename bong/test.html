@@ -132,22 +132,15 @@ label{
 
 }
 
-.button-row {
-    display: flex;
-    gap: 10px;          /* khoảng cách giữa 2 nút */
-    width: 100%;
-    margin-top: 12px;
-}
-
 .history-btn{
+
     width:100%;
     height:48px;
     margin-top:12px;
     border:none;
     border-radius:12px;
-    background:#0683fa;
+    background:#16b364;
     color:#fff;
-    flex: 1;
     cursor:pointer;
     font-size:15px;
     font-weight:600;
@@ -390,6 +383,88 @@ label{
     object-fit:cover;
 }
 
+.banner-card{
+    margin:16px 20px 24px;
+    width:calc(100% - 40px);
+    max-width:480px;
+    background:#fff;
+    border-radius:20px;
+    padding:16px;
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.banner-title{
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.banner-list{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+}
+
+.banner-list::-webkit-scrollbar{
+    display:none;
+}
+
+.banner-slider{
+    display:flex;
+    overflow-x:auto;
+    overflow-y:hidden;
+    width:100%;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    touch-action:pan-x;
+    scrollbar-width:none;
+}
+
+.banner-slider::-webkit-scrollbar{
+    display:none;
+}
+
+.banner-item{
+    min-width:100%;
+    max-width:100%;
+    flex:0 0 100%;
+    scroll-snap-align:start;
+}
+
+.banner-item img{
+    display:block;
+    width:100%;
+    border-radius:14px;
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-drag:none;
+}
+
+.banner-dots{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:14px;
+}
+
+.banner-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#d8d8d8;
+    transition:.25s;
+    cursor:pointer;
+}
+
+.banner-dot.active{
+    width:24px;
+    border-radius:999px;
+    background:#ee4d2d;
+}
+
 </style>
 
 </head>
@@ -440,24 +515,53 @@ label{
         class="message">
     </div>
 
+    <div class="notice" style="
+    color: #ff0000;
+">
+        ‼️ Ngày 16/7 sau 2h00 sẽ hết trận để vote, mọi người nhớ tranh thủ vào chéo trước 2 giờ sáng ngày 16/7
+    </div>
+
     <div class="notice">
         ⚠️ Sau khi gửi link thành công, vui lòng đợi trong vòng <b>10 phút</b> để hệ thống xử lý hoàn tất.
         <br>
         ‼️ giai đoạn 0h đến 0h45 hằng ngày ShopeePay rất lag nên sẽ hiển thị chậm hơn bình thường.
     </div>
     
-    <div class="button-row">
-        <button id="historyBtn" class="history-btn">
-            Xem danh sách SĐT
-        </button>
-    
-        <button class="history-btn">
-            Báo lỗi qua Zalo
-        </button>
-    </div>
+    <button
+        id="historyBtn"
+        class="history-btn">
+        📋 xem danh sách sđt
+    </button>
 
     <div class="footer">
         © ShopeeLiveCoin
+    </div>
+
+</div>
+
+
+<div class="banner-card">
+
+    <div class="banner-list" id="bannerList">
+
+        <div class="banner-item" href="https://example.com/1">
+            <img src="https://picsum.photos/800/300?1">
+        </div>
+
+        <div class="banner-item" href="https://example.com/2">
+            <img src="https://picsum.photos/800/300?2">
+        </div>
+
+        <div class="banner-item" href="https://example.com/3">
+            <img src="https://picsum.photos/800/300?3">
+        </div>
+
+    </div>
+
+    <div class="banner-dots">
+        <span class="banner-dot active"></span>
+        <span class="banner-dot"></span>
+        <span class="banner-dot"></span>
     </div>
 
 </div>
@@ -749,6 +853,32 @@ phones.forEach(phone=>{
 
         </div>
     `);
+
+});
+
+const bannerList = document.getElementById("bannerList");
+const dots = document.querySelectorAll(".banner-dot");
+
+bannerList.addEventListener("scroll", () => {
+
+    const index = Math.round(
+        bannerList.scrollLeft / bannerList.clientWidth
+    );
+
+    dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+    });
+
+});
+
+dots.forEach((dot, index) => {
+
+    dot.onclick = () => {
+        bannerList.scrollTo({
+            left: index * bannerList.clientWidth,
+            behavior: "smooth"
+        });
+    };
 
 });
 
