@@ -801,57 +801,6 @@ input.addEventListener("keydown",e=>{
 
 });
 
-historyBtn.onclick=()=>{
-
-    popup.style.display="flex";
-
-};
-
-closePopup.onclick=()=>{
-
-    popup.style.display="none";
-
-};
-
-popup.onclick=e=>{
-
-    if(e.target===popup){
-        popup.style.display="none";
-    }
-
-};
-
-/* Demo dữ liệu */
-
-const phones=[
-    "8436****232",
-    "8437****046",
-    "8487****598",
-    "8455****429",
-    "8433****631",
-    "8484****589",
-    "8485****939",
-    "8489****451",
-    "8489****018",
-    "8481****464"
-];
-
-phones.forEach(phone=>{
-
-    phoneList.insertAdjacentHTML("beforeend",`
-        <div class="phone-item">
-
-            <div class="avatar"></div>
-
-            <div class="phone-number">
-                ${phone}
-            </div>
-
-        </div>
-    `);
-
-});
-
 const bannerList = document.getElementById("bannerList");
 const dots = document.querySelectorAll(".banner-dot");
 
