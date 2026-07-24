@@ -699,23 +699,20 @@ statusPopup.onclick=e=>{
 
 };
 
-pasteBtn.onclick=async()=>{
+pasteBtn.onclick = async () => {
+    try {
+        const text = (await navigator.clipboard.readText()).trim();
+        const match = text.match(/https?:\/\/\S+/);
 
-    try{
-
-        const text=await navigator.clipboard.readText();
-
-        if(text){
-            input.value=text.trim();
+        if (match) {
+            input.value = match[0];
             input.focus();
+        } else {
+            show("Clipboard không chứa liên kết.", false);
         }
-
-    }catch(e){
-
-        show("Không thể đọc clipboard.",false);
-
+    } catch (err) {
+        show("Không thể đọc clipboard.", false);
     }
-
 };
 
 btn.onclick=async()=>{
