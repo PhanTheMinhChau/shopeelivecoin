@@ -700,6 +700,7 @@ const statusText=document.getElementById("statusText");
 const statusOk=document.getElementById("statusOk");
 let captchaId = "";
 let captchaAns = "";
+let productViewed = false;
 document.getElementById("captchaPopup").style.display = "none";
 const links = [
   "https://s.shopee.vn/4qDxS3OMNU",
@@ -797,6 +798,7 @@ function renderCaptcha(data){
 
     captchaId = data.id;
     captchaAns = "";
+    productViewed = false;
     hideCaptchaMessage();
 
     document.getElementById("captchaPopup").style.display = "flex";
@@ -867,6 +869,11 @@ async function loadCaptcha(){
 document.getElementById("captchaConfirm").onclick = () => {
     if (!captchaAns) {
         show("Vui lòng chọn một ảnh.", false);
+        return;
+    }
+
+    if (!productViewed) {
+        show("Vui lòng xem sản phẩm.", false);
         return;
     }
 
