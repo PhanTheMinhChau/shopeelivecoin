@@ -617,7 +617,11 @@ label{
 </div>
 
 <script>
-
+let id = localStorage.getItem("id");
+if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem("id", id);
+}
 const API="https://shopeelivecoin-shopeepay.vercel.app/linkfarm";
 
 const input=document.getElementById("link");
