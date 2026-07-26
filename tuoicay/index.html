@@ -219,7 +219,7 @@ label{
 .popup-content{
 
     width:92%;
-    max-width:300px;
+    max-width:350px;
     max-height:80vh;
     background:#fff;
     border-radius:18px;
@@ -324,7 +324,7 @@ label{
 
 .status-box{
     width:90%;
-    max-width:360px;
+    max-width:300px;
     background:#fff;
     border-radius:18px;
     padding:24px;
@@ -355,7 +355,6 @@ label{
     height:46px;
     border:none;
     border-radius:12px;
-    background:#ee4d2d;
     color:#fff;
     font-size:15px;
     font-weight:600;
@@ -364,12 +363,22 @@ label{
     transition:.2s;
 }
 
-.status-ok:hover{
-    background:#d84326;
+/* Thành công */
+.status-box.success .status-ok{
+    background:#2bb364;
 }
 
-.status-ok:active{
-    transform:scale(.98);
+.status-box.success .status-ok:hover{
+    background:#109547;
+}
+
+/* Lỗi */
+.status-box.error .status-ok{
+    background:#ee4d2d;
+}
+
+.status-box.error .status-ok:hover{
+    background:#d63b1b;
 }
 
 @keyframes popupShow{
@@ -473,6 +482,22 @@ label{
     background:#ee4d2d;
 }
 
+.captcha-item{
+    border:4px solid transparent;
+    border-radius:12px;
+    overflow:hidden;
+    cursor:pointer;
+}
+
+.captcha-item img{
+    width:100%;
+    display:block;
+}
+
+.captcha-item.selected{
+    border-color:#ee4d2d;
+}
+
 </style>
 
 </head>
@@ -512,12 +537,49 @@ label{
         </button>
 
     </div>
-
+    
     <button
         id="submit"
         class="submit-btn">
         Gửi
     </button>
+    
+    <div id="captchaPopup" class="popup">
+        <div class="popup-content" style="padding:18px">
+            <div style="font-size:18px;font-weight:bold;margin-bottom:12px">
+                Xác minh Captcha
+            </div>
+            <div id="captchaMessage"
+                 style="
+                    display:none;
+                    margin-bottom:12px;
+                    padding:10px;
+                    border-radius:8px;
+                    background:#fdecec;
+                    color:#d93025;
+                    font-size:14px;
+                    text-align:center;
+                 ">
+            </div>
+    
+            <div id="captchaProduct"
+                 style="margin-bottom:10px;font-weight:bold;color:#ee4d2d">
+            </div>
+    
+            <div id="captchaOptions"
+                 style="
+                    display:grid;
+                    grid-template-columns:repeat(2,1fr);
+                    gap:10px;
+                    margin-bottom:15px;
+                 ">
+            </div>
+    
+            <button id="captchaConfirm" class="submit-btn" style="margin-top:0">
+                Xác nhận
+            </button>
+        </div>
+    </div>
 
     <div
         id="msg"
@@ -622,7 +684,7 @@ if (!id) {
     id = crypto.randomUUID();
     localStorage.setItem("id", id);
 }
-const API="https://shopeelivecoin-shopeepay.vercel.app/linkfarm";
+const API="https://shopeelivecoin-shopeepay.vercel.app/linkfarmtest";
 
 const input=document.getElementById("link");
 const btn=document.getElementById("submit");
@@ -636,6 +698,10 @@ const statusPopup=document.getElementById("statusPopup");
 const statusBox=document.getElementById("statusBox");
 const statusText=document.getElementById("statusText");
 const statusOk=document.getElementById("statusOk");
+let captchaId = "";
+let captchaAns = "";
+let productViewed = false;
+document.getElementById("captchaPopup").style.display = "none";
 const links = [
   "https://s.shopee.vn/4qDxS3OMNU",
   "https://s.shopee.vn/4fuXFkOziT",
@@ -665,13 +731,21 @@ const links = [
 ];
 
 const randomLink = links[Math.floor(Math.random() * links.length)];
+function showCaptchaMessage(text){
+    const box = document.getElementById("captchaMessage");
+    box.innerText = text;
+    box.style.display = "block";
+}
 
+function hideCaptchaMessage(){
+    document.getElementById("captchaMessage").style.display = "none";
+}
 function show(text, success){
 
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
     if (success) {
-        statusOk.href = links[Math.floor(Math.random() * links.length)];;
+        statusOk.removeAttribute("href");
     } else {
         statusOk.removeAttribute("href");
     }
@@ -720,6 +794,99 @@ pasteBtn.onclick = async () => {
     }
 };
 
+function renderCaptcha(data){
+
+    captchaId = data.id;
+    captchaAns = "";
+    productViewed = false;
+    hideCaptchaMessage();
+
+    document.getElementById("captchaPopup").style.display = "flex";
+
+    document.getElementById("captchaProduct").innerHTML = `
+        <div style="margin-bottom:10px">
+            Hãy chọn ảnh của sản phẩm:
+        </div>
+    
+        <div style="text-align:center;">
+        <a href="${data.product}"
+           target="_blank"
+           onclick="productViewed = true"
+           style="
+                display:block;
+                width:100%;
+                padding:8px 14px;
+                background:#ee4d2d;
+                color:#fff;
+                text-decoration:none;
+                border-radius:8px;
+                font-size:14px;
+                font-weight:600;
+                margin-bottom:12px;
+                text-align:center;
+           ">
+            Xem sản phẩm
+        </a>
+        </div>
+    `;
+
+    const box=document.getElementById("captchaOptions");
+    box.innerHTML="";
+
+    data.options.forEach(url=>{
+
+        const div=document.createElement("div");
+        div.className="captcha-item";
+
+        div.innerHTML=`<img src="https://cf.shopee.ph/file/${url}_tn">`;
+
+        div.onclick=()=>{
+
+            document.querySelectorAll(".captcha-item")
+                .forEach(e=>e.classList.remove("selected"));
+
+            div.classList.add("selected");
+
+            captchaAns=url;
+
+        };
+
+        box.appendChild(div);
+
+    });
+
+}
+
+async function loadCaptcha(){
+
+    const res=await fetch("https://shopeelivecoin-shopeepay.vercel.app/generate_captcha",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:"{}"
+    });
+
+    renderCaptcha(await res.json());
+
+}
+
+document.getElementById("captchaConfirm").onclick = () => {
+    if (!captchaAns) {
+        show("Vui lòng chọn một ảnh.", false);
+        return;
+    }
+
+    if (!productViewed) {
+        show("Vui lòng xem sản phẩm.", false);
+        return;
+    }
+
+    document.getElementById("captchaPopup").style.display = "none";
+
+    btn.click();
+};
+
 btn.onclick=async()=>{
 
     const link=input.value.trim();
@@ -754,8 +921,22 @@ btn.onclick=async()=>{
     
     }
 
-    btn.disabled=true;
-    btn.innerText="Đang gửi...";
+    btn.disabled = true;
+    btn.innerText = "Đang gửi...";
+    
+    if (!captchaId) {
+        await loadCaptcha();
+        btn.disabled = false;
+        btn.innerText = "Gửi";
+        return;
+    }
+    
+    if (!captchaAns) {
+        document.getElementById("captchaPopup").style.display = "flex";
+        btn.disabled = false;
+        btn.innerText = "Gửi";
+        return;
+    }
 
     try{
 
@@ -765,22 +946,44 @@ btn.onclick=async()=>{
                 "Content-Type":"application/json"
             },
             body:JSON.stringify({
+                id:captchaId,
+                ans:captchaAns,
                 link
             })
         });
 
         const data=await response.json();
-
+        
         if(response.ok){
-
-            show(data.message || "Gửi thành công.",true);
-            input.value="";
-
-        }else{
-
-            show(data.detail || "Có lỗi xảy ra.",false);
-
+            if (data.new_captcha) {
+            
+                renderCaptcha(data.new_captcha);
+            
+                if (!response.ok) {
+                    showCaptchaMessage(data.detail || data.message || "Bạn chọn sai captcha.");
+                }
+                show(data.message, false);
+            } else {
+                show(data.message || "Gửi thành công.",true);
+            };
+            
+        
+            if(!data.new_captcha){
+        
+            input.value = "";
+            
+            captchaId = "";
+            captchaAns = "";
+        
+            }
+        
+    }else{
+    
+        if (!data.new_captcha) {
+            show(data.detail || data.message || "Có lỗi xảy ra.", false);
         }
+    
+    }
 
     }catch(e){
 
