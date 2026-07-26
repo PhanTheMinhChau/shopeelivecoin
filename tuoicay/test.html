@@ -540,6 +540,18 @@ label{
             <div style="font-size:18px;font-weight:bold;margin-bottom:12px">
                 Xác minh
             </div>
+            <div id="captchaMessage"
+                 style="
+                    display:none;
+                    margin-bottom:12px;
+                    padding:10px;
+                    border-radius:8px;
+                    background:#fdecec;
+                    color:#d93025;
+                    font-size:14px;
+                    text-align:center;
+                 ">
+            </div>
     
             <div id="captchaProduct"
                  style="margin-bottom:10px;font-weight:bold;color:#ee4d2d">
@@ -709,7 +721,15 @@ const links = [
 ];
 
 const randomLink = links[Math.floor(Math.random() * links.length)];
+function showCaptchaMessage(text){
+    const box = document.getElementById("captchaMessage");
+    box.innerText = text;
+    box.style.display = "block";
+}
 
+function hideCaptchaMessage(){
+    document.getElementById("captchaMessage").style.display = "none";
+}
 function show(text, success){
 
     statusBox.className = "status-box " + (success ? "success" : "error");
@@ -768,6 +788,7 @@ function renderCaptcha(data){
 
     captchaId = data.id;
     captchaAns = "";
+    hideCaptchaMessage();
 
     document.getElementById("captchaPopup").style.display = "flex";
 
@@ -909,9 +930,13 @@ btn.onclick=async()=>{
 
         const data=await response.json();
 
-        if(data.new_captcha){
+        if (data.new_captcha) {
         
             renderCaptcha(data.new_captcha);
+        
+            if (!response.ok) {
+                showCaptchaMessage(data.detail || data.message || "Bạn chọn sai captcha.");
+            }
         
         }
         
@@ -928,11 +953,13 @@ btn.onclick=async()=>{
         
             }
         
-        }else{
-        
-            show(data.detail || data.message || "Có lỗi xảy ra.",false);
-        
+    }else{
+    
+        if (!data.new_captcha) {
+            show(data.detail || data.message || "Có lỗi xảy ra.", false);
         }
+    
+    }
 
     }catch(e){
 
