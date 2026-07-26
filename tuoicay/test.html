@@ -938,20 +938,20 @@ btn.onclick=async()=>{
         });
 
         const data=await response.json();
-
-        if (data.new_captcha) {
-        
-            renderCaptcha(data.new_captcha);
-        
-            if (!response.ok) {
-                showCaptchaMessage(data.detail || data.message || "Bạn chọn sai captcha.");
-            }
-        
-        }
         
         if(response.ok){
-        
-            show(data.message || "Gửi thành công.",true);
+            if (data.new_captcha) {
+            
+                renderCaptcha(data.new_captcha);
+            
+                if (!response.ok) {
+                    showCaptchaMessage(data.detail || data.message || "Bạn chọn sai captcha.");
+                }
+                show(data.message, false);
+            } else {
+                show(data.message || "Gửi thành công.",true);
+            };
+            
         
             if(!data.new_captcha){
         
