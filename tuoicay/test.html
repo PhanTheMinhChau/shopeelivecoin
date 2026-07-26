@@ -535,19 +535,28 @@ label{
         Gửi
     </button>
     
-    <div id="captchaBox" style="margin-top:20px;display:none">
-        <label>Chọn đúng hình ảnh</label>
+    <div id="captchaPopup" class="popup">
+        <div class="popup-content" style="padding:18px">
+            <div style="font-size:18px;font-weight:bold;margin-bottom:12px">
+                Xác minh
+            </div>
     
-        <div id="captchaProduct"
-             style="margin-bottom:10px;font-weight:bold;color:#ee4d2d">
-        </div>
+            <div id="captchaProduct"
+                 style="margin-bottom:10px;font-weight:bold;color:#ee4d2d">
+            </div>
     
-        <div id="captchaOptions"
-             style="
-                display:grid;
-                grid-template-columns:repeat(2,1fr);
-                gap:10px;
-             ">
+            <div id="captchaOptions"
+                 style="
+                    display:grid;
+                    grid-template-columns:repeat(2,1fr);
+                    gap:10px;
+                    margin-bottom:15px;
+                 ">
+            </div>
+    
+            <button id="captchaConfirm" class="submit-btn" style="margin-top:0">
+                Xác nhận
+            </button>
         </div>
     </div>
 
@@ -670,6 +679,7 @@ const statusText=document.getElementById("statusText");
 const statusOk=document.getElementById("statusOk");
 let captchaId = "";
 let captchaAns = "";
+document.getElementById("captchaPopup").style.display = "none";
 const links = [
   "https://s.shopee.vn/4qDxS3OMNU",
   "https://s.shopee.vn/4fuXFkOziT",
@@ -759,7 +769,7 @@ function renderCaptcha(data){
     captchaId = data.id;
     captchaAns = "";
 
-    document.getElementById("captchaBox").style.display="block";
+    document.getElementById("captchaPopup").style.display = "flex";
 
     document.getElementById("captchaProduct").innerText =
         "Hãy chọn ảnh của: " + data.product;
@@ -805,7 +815,16 @@ async function loadCaptcha(){
 
 }
 
-loadCaptcha();
+document.getElementById("captchaConfirm").onclick = () => {
+    if (!captchaAns) {
+        show("Vui lòng chọn một ảnh.", false);
+        return;
+    }
+
+    document.getElementById("captchaPopup").style.display = "none";
+
+    btn.click();
+};
 
 btn.onclick=async()=>{
 
@@ -841,12 +860,15 @@ btn.onclick=async()=>{
     
     }
     
-    if(!captchaAns){
     
-        show("Vui lòng chọn captcha.",false);
-    
+    if (!captchaId) {
+        await loadCaptcha();
         return;
+    }
     
+    if (!captchaAns) {
+        document.getElementById("captchaPopup").style.display = "flex";
+        return;
     }
 
     btn.disabled=true;
@@ -880,9 +902,10 @@ btn.onclick=async()=>{
         
             if(!data.new_captcha){
         
-                input.value="";
-        
-                loadCaptcha();
+            input.value = "";
+            
+            captchaId = "";
+            captchaAns = "";
         
             }
         
