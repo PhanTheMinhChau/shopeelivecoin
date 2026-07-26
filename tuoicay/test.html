@@ -355,7 +355,6 @@ label{
     height:46px;
     border:none;
     border-radius:12px;
-    background:#2bb364;
     color:#fff;
     font-size:15px;
     font-weight:600;
@@ -364,12 +363,22 @@ label{
     transition:.2s;
 }
 
-.status-ok:hover{
+/* Thành công */
+.status-box.success .status-ok{
+    background:#2bb364;
+}
+
+.status-box.success .status-ok:hover{
     background:#109547;
 }
 
-.status-ok:active{
-    transform:scale(.98);
+/* Lỗi */
+.status-box.error .status-ok{
+    background:#ee4d2d;
+}
+
+.status-box.error .status-ok:hover{
+    background:#d63b1b;
 }
 
 @keyframes popupShow{
