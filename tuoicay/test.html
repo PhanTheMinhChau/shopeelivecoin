@@ -805,25 +805,27 @@ function renderCaptcha(data){
 
     document.getElementById("captchaProduct").innerHTML = `
         <div style="margin-bottom:10px">
-            Hãy chọn ảnh của sản phẩm:</b>
+            Hãy chọn ảnh của sản phẩm:
         </div>
     
-        <a href="${data.product}"
-           target="_blank"
-           onclick="productViewed = true"
-           style="
-                display:inline-block;
-                padding:8px 14px;
-                background:#ee4d2d;
-                color:#fff;
-                text-decoration:none;
-                border-radius:8px;
-                font-size:14px;
-                font-weight:600;
-                margin-bottom:12px;
-           ">
-            Xem sản phẩm
-        </a>
+        <div style="text-align:center;">
+            <a href="${data.product}"
+               target="_blank"
+               onclick="productViewed = true"
+               style="
+                    display:inline-block;
+                    padding:8px 14px;
+                    background:#ee4d2d;
+                    color:#fff;
+                    text-decoration:none;
+                    border-radius:8px;
+                    font-size:14px;
+                    font-weight:600;
+                    margin-bottom:12px;
+               ">
+                Xem sản phẩm
+            </a>
+        </div>
     `;
 
     const box=document.getElementById("captchaOptions");
