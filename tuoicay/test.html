@@ -909,13 +909,14 @@ btn.onclick=async()=>{
     
     }
 
-    btn.disabled=true;
-    btn.innerText="Đang gửi...";
     
     if (!captchaId) {
         await loadCaptcha();
         return;
     }
+
+    btn.disabled=true;
+    btn.innerText="Đang gửi...";
     
     if (!captchaAns) {
         document.getElementById("captchaPopup").style.display = "flex";
