@@ -771,8 +771,27 @@ function renderCaptcha(data){
 
     document.getElementById("captchaPopup").style.display = "flex";
 
-    document.getElementById("captchaProduct").innerText =
-        "Hãy chọn ảnh của: " + data.product;
+    document.getElementById("captchaProduct").innerHTML = `
+        <div style="margin-bottom:10px">
+            Hãy chọn ảnh của sản phẩm:</b>
+        </div>
+    
+        <a href="${data.product}"
+           target="_blank"
+           style="
+                display:inline-block;
+                padding:8px 14px;
+                background:#ee4d2d;
+                color:#fff;
+                text-decoration:none;
+                border-radius:8px;
+                font-size:14px;
+                font-weight:600;
+                margin-bottom:12px;
+           ">
+            Xem sản phẩm
+        </a>
+    `;
 
     const box=document.getElementById("captchaOptions");
     box.innerHTML="";
