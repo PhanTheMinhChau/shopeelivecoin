@@ -796,66 +796,68 @@ pasteBtn.onclick = async () => {
 };
 
 function renderCaptcha(data){
-
-    captchaId = data.id;
-    captchaAns = "";
-    productViewed = false;
-    hideCaptchaMessage();
-
-    document.getElementById("captchaPopup").style.display = "flex";
-
-    document.getElementById("captchaProduct").innerHTML = `
-        <div style="margin-bottom:10px">
-            Hãy chọn ảnh của sản phẩm:
-        </div>
+    if (data.close) {
+        show(data.message, false);
+    } else {
+        captchaId = data.id;
+        captchaAns = "";
+        productViewed = false;
+        hideCaptchaMessage();
     
-        <div style="text-align:center;">
-        <a href="${data.product}"
-           target="_blank"
-           onclick="productViewed = true"
-           style="
-                display:block;
-                width:100%;
-                padding:8px 14px;
-                background:#ee4d2d;
-                color:#fff;
-                text-decoration:none;
-                border-radius:8px;
-                font-size:14px;
-                font-weight:600;
-                margin-bottom:12px;
-                text-align:center;
-           ">
-            Xem sản phẩm
-        </a>
-        </div>
-    `;
-
-    const box=document.getElementById("captchaOptions");
-    box.innerHTML="";
-
-    data.options.forEach(url=>{
-
-        const div=document.createElement("div");
-        div.className="captcha-item";
-
-        div.innerHTML=`<img src="https://cf.shopee.ph/file/${url}_tn">`;
-
-        div.onclick=()=>{
-
-            document.querySelectorAll(".captcha-item")
-                .forEach(e=>e.classList.remove("selected"));
-
-            div.classList.add("selected");
-
-            captchaAns=url;
-
-        };
-
-        box.appendChild(div);
-
-    });
-
+        document.getElementById("captchaPopup").style.display = "flex";
+    
+        document.getElementById("captchaProduct").innerHTML = `
+            <div style="margin-bottom:10px">
+                Hãy chọn ảnh của sản phẩm:
+            </div>
+        
+            <div style="text-align:center;">
+            <a href="${data.product}"
+               target="_blank"
+               onclick="productViewed = true"
+               style="
+                    display:block;
+                    width:100%;
+                    padding:8px 14px;
+                    background:#ee4d2d;
+                    color:#fff;
+                    text-decoration:none;
+                    border-radius:8px;
+                    font-size:14px;
+                    font-weight:600;
+                    margin-bottom:12px;
+                    text-align:center;
+               ">
+                Xem sản phẩm
+            </a>
+            </div>
+        `;
+    
+        const box=document.getElementById("captchaOptions");
+        box.innerHTML="";
+    
+        data.options.forEach(url=>{
+    
+            const div=document.createElement("div");
+            div.className="captcha-item";
+    
+            div.innerHTML=`<img src="https://cf.shopee.ph/file/${url}_tn">`;
+    
+            div.onclick=()=>{
+    
+                document.querySelectorAll(".captcha-item")
+                    .forEach(e=>e.classList.remove("selected"));
+    
+                div.classList.add("selected");
+    
+                captchaAns=url;
+    
+            };
+    
+            box.appendChild(div);
+    
+        });
+    }
 }
 
 async function loadCaptcha(){
