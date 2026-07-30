@@ -1,21 +1,23 @@
-<!doctype html><html><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+<!doctype html><html><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1">
 <style>
-body{margin:0;font-family:Arial;background:#f5f5f5}header{padding:12px;background:#fff;position:sticky;top:0;box-shadow:0 2px 8px #0002}
+html,body{margin:0;height:100%;overflow:hidden}body{font-family:Arial;background:#f5f5f5}
+header{height:56px;display:flex;align-items:center;padding:0 16px;background:#fff;box-shadow:0 2px 8px #0002}
+#app{height:calc(100vh - 56px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 #gallery{display:flex;gap:16px;padding:16px;align-items:flex-start}.col{flex:1;display:flex;flex-direction:column;gap:16px}
-.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #0002;cursor:pointer}.card img{width:100%;display:block}
-#loading{text-align:center;padding:20px}.spin{width:30px;height:30px;border:4px solid #ddd;border-top-color:#09f;border-radius:50%;animation:s 1s linear infinite;margin:auto}@keyframes s{to{transform:rotate(360deg)}}
-.modal{display:none;position:fixed;inset:0;background:#000d;justify-content:center;align-items:center}.modal.show{display:flex}.modal img{max-width:95vw;max-height:90vh}.btn{position:absolute;color:#fff;font-size:40px;cursor:pointer}.x{top:10px;right:20px}.l{left:20px;top:50%}.r{right:20px;top:50%}
-</style></head><body><header><b>Gallery</b></header><div id=loading><div class=spin></div></div><div id=gallery></div><div id=modal class=modal><div id=closeBtn class="btn x">&times;</div><div id=prev class="btn l">&#10094;</div><img id=full><div id=next class="btn r">&#10095;</div></div>
+.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #0002}.card img{width:100%;display:block}
+#loading{text-align:center;padding:20px}.spin{width:30px;height:30px;border:4px solid #ddd;border-top-color:#09f;border-radius:50%;margin:auto;animation:r 1s linear infinite}@keyframes r{to{transform:rotate(360deg)}}
+.modal{display:none;position:fixed;inset:0;background:#000d;justify-content:center;align-items:center}.modal.show{display:flex}.modal img{max-width:95vw;max-height:90vh}.btn{position:absolute;color:#fff;font-size:40px;cursor:pointer}.x{top:10px;right:20px}.l{left:20px;top:50%}.rr{right:20px;top:50%}
+</style></head><body><header><b>Gallery</b></header><div id=app><div id=loading><div class=spin></div></div><div id=gallery></div></div><div id=modal class=modal><div id=closeBtn class="btn x">&times;</div><div id=prev class="btn l">&#10094;</div><img id=full><div id=next class="btn rr">&#10095;</div></div>
 <script>
-const API="https://script.google.com/macros/s/AKfycbzwrexZCJR85WDJKaW0R6H1-juIWdzYBWrLeIa3whLIHxWBdwoqLXzCJF2qhfWKDEm_/exec";
+const API="https://shopeelivecoin-shopeepay.vercel.app/adc";
+const app=document.getElementById('app');const gallery=document.getElementById('gallery');
 let cols=[],imgs=[],idx=0,cur=0,PAGE=40;
-function makeCols(){gallery.innerHTML="";let n=innerWidth<600?2:innerWidth<1000?3:4;for(let i=0;i<n;i++){let d=document.createElement('div');d.className='col';gallery.appendChild(d);}cols=[...document.querySelectorAll('.col')]}
-makeCols();addEventListener('resize',()=>location.reload());
+function mk(){gallery.innerHTML='';let n=innerWidth<600?2:innerWidth<1000?3:4;for(let i=0;i<n;i++){let d=document.createElement('div');d.className='col';gallery.appendChild(d);}cols=[...document.querySelectorAll('.col')]}
+mk();
 fetch(API).then(r=>r.json()).then(d=>{imgs=d;loading.remove();more();});
-function shortest(){return cols.reduce((a,b)=>a.scrollHeight<=b.scrollHeight?a:b)}
-function more(){let end=Math.min(idx+PAGE,imgs.length);for(;idx<end;idx++){let c=document.createElement('div');c.className='card';c.innerHTML=`<img loading="lazy" src="${imgs[idx].url}">`;let i=idx;c.onclick=()=>{cur=i;full.src=imgs[i].url;modal.classList.add('show')};shortest().appendChild(c);}}
-addEventListener('scroll',()=>{if(innerHeight+scrollY>document.body.offsetHeight-500)more()});
+function short(){return cols.reduce((a,b)=>a.scrollHeight<=b.scrollHeight?a:b)}
+function more(){let end=Math.min(idx+PAGE,imgs.length);for(;idx<end;idx++){let c=document.createElement('div');c.className='card';c.innerHTML=`<img loading="lazy" src="${imgs[idx].url}">`;let i=idx;c.onclick=()=>{cur=i;full.src=imgs[i].url;modal.classList.add('show')};short().appendChild(c)}}
+app.addEventListener('scroll',()=>{if(app.scrollTop+app.clientHeight>app.scrollHeight-500)more()});
 closeBtn.onclick=()=>modal.classList.remove('show');modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show')}
-prev.onclick=()=>{cur=(cur-1+imgs.length)%imgs.length;full.src=imgs[cur].url}
-next.onclick=()=>{cur=(cur+1)%imgs.length;full.src=imgs[cur].url}
+prev.onclick=()=>{cur=(cur-1+imgs.length)%imgs.length;full.src=imgs[cur].url};next.onclick=()=>{cur=(cur+1)%imgs.length;full.src=imgs[cur].url};
 </script></body></html>
