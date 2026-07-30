@@ -1,9 +1,28 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>
-html,body{margin:0;height:100%;overflow:hidden}body{font-family:Arial;background:#f5f5f5}header{height:56px;display:flex;align-items:center;padding:0 16px;background:#fff;box-shadow:0 2px 8px #0002}#app{height:calc(100vh - 56px);overflow-y:auto}#gallery{column-count:2;column-gap:16px;padding:16px}@media(min-width:600px){#gallery{column-count:3}}@media(min-width:1000px){#gallery{column-count:4}}.card{display:inline-block;width:100%;margin:0 0 16px;background:#fff;border-radius:12px;overflow:hidden;break-inside:avoid;cursor:pointer;box-shadow:0 2px 8px #0002}.card img{width:100%;display:block}.modal{display:none;position:fixed;inset:0;background:#000d;justify-content:center;align-items:center}.modal.show{display:flex}.modal img{max-width:95vw;max-height:90vh}.icon-btn{position:absolute;top:16px;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);color:#fff;cursor:pointer}.icon-btn svg{width:22px;height:22px}#downloadBtn{right:72px}#closeBtn{right:20px}#prev,#next{position:absolute;color:#fff;font-size:42px;cursor:pointer;user-select:none}#prev{left:20px}#next{right:20px;top:50%}</style></head><body><header><b>Gallery</b></header><div id=app><div id=gallery></div></div><div id=modal class=modal><div id=downloadBtn class=icon-btn><svg viewBox="0 0 24 24"><path d="M12 3v10m0 0l-4-4m4 4l4-4M5 20h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div id=closeBtn class=icon-btn>✕</div><div id=prev>&#10094;</div><img id=full><div id=next>&#10095;</div></div><script>
-const API="https://shopeelivecoin-shopeepay.vercel.app/adc",gallery=document.getElementById("gallery"),app=document.getElementById("app"),modal=document.getElementById("modal"),full=document.getElementById("full"),downloadBtn=document.getElementById("downloadBtn"),closeBtn=document.getElementById("closeBtn"),prev=document.getElementById("prev"),next=document.getElementById("next");let imgs=[],idx=0,cur=0,PAGE=40;
-fetch(API).then(r=>r.json()).then(d=>{imgs=d;more()});
-function more(){let e=Math.min(idx+PAGE,imgs.length);for(;idx<e;idx++){let c=document.createElement("div");c.className="card";let i=idx;c.innerHTML=`<img loading="lazy" src="${imgs[i].url}">`;c.onclick=()=>{cur=i;full.src=imgs[i].url;modal.classList.add("show")};gallery.appendChild(c)}}
-app.onscroll=()=>{if(app.scrollTop+app.clientHeight>app.scrollHeight-500)more()};
-closeBtn.onclick=()=>modal.classList.remove("show");modal.onclick=e=>{if(e.target===modal)modal.classList.remove("show")};prev.onclick=()=>{cur=(cur-1+imgs.length)%imgs.length;full.src=imgs[cur].url};next.onclick=()=>{cur=(cur+1)%imgs.length;full.src=imgs[cur].url};
-downloadBtn.onclick=async e=>{e.stopPropagation();try{const r=await fetch(imgs[cur].url);const b=await r.blob();const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download="image";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);}catch(err){alert("Không thể tải do CORS của máy chủ ảnh.");console.error(err);}};
+
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0;height:100%}body{font-family:Arial;background:#f5f5f5;overflow:hidden}
+header{height:56px;display:flex;align-items:center;padding:0 16px;background:#fff}
+#app{height:calc(100vh - 56px);overflow:auto}#gallery{display:flex;gap:16px;padding:16px;align-items:flex-start}.col{flex:1;display:flex;flex-direction:column;gap:16px}
+.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #0002;cursor:pointer}.card img{display:block;width:100%;height:auto}
+.modal{display:none;position:fixed;inset:0;background:#000d;justify-content:center;align-items:center}.modal.show{display:flex}
+.modal img{max-width:95vw;max-height:90vh}.close{position:absolute;top:18px;right:22px;font-size:40px;color:#fff;cursor:pointer;font-weight:bold;user-select:none}
+</style></head><body><header><b>Gallery</b></header><div id=app><div id=gallery></div></div>
+<div id=modal class=modal><div class=close id=close>&times;</div><img id=full></div>
+<script>
+const API="https://shopeelivecoin-shopeepay.vercel.app/adc";
+const gallery=document.getElementById("gallery"),app=document.getElementById("app"),modal=document.getElementById("modal"),full=document.getElementById("full"),closeBtn=document.getElementById("close");
+let cols=[],heights=[],imgs=[],idx=0,PAGE=40,current=-1;
+function makeCols(){gallery.innerHTML="";cols=[];heights=[];let n=innerWidth<600?2:innerWidth<1000?3:4;for(let i=0;i<n;i++){let d=document.createElement("div");d.className="col";gallery.appendChild(d);cols.push(d);heights.push(0);}}
+makeCols();fetch(API).then(r=>r.json()).then(d=>{imgs=d;more();});
+function show(i){if(i<0||i>=imgs.length)return;current=i;full.src=imgs[i].url;modal.classList.add("show");if(i>imgs.length-PAGE/2)more();}
+function add(it,i){let t=heights.indexOf(Math.min(...heights));let c=document.createElement("div");c.className="card";c.innerHTML='<img loading="lazy" src="'+it.url+'">';cols[t].appendChild(c);heights[t]+=(cols[t].clientWidth||300)*((it.height||1)/(it.width||1))+16;c.onclick=()=>show(i);}
+function more(){let e=Math.min(idx+PAGE,imgs.length);while(idx<e){add(imgs[idx],idx);idx++;}}
+app.onscroll=()=>{if(app.scrollTop+app.clientHeight>app.scrollHeight-500)more();};
+closeBtn.onclick=()=>modal.classList.remove("show");
+modal.onclick=e=>{if(e.target===modal)modal.classList.remove("show");};
+let sx=0;
+full.addEventListener("touchstart",e=>sx=e.touches[0].clientX);
+full.addEventListener("touchend",e=>{let dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50){if(dx<0)show(current+1);else show(current-1);}});
+document.addEventListener("keydown",e=>{if(!modal.classList.contains("show"))return;if(e.key==="Escape")modal.classList.remove("show");if(e.key==="ArrowRight")show(current+1);if(e.key==="ArrowLeft")show(current-1);});
 </script></body></html>
