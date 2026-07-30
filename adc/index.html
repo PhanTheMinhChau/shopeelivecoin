@@ -1,19 +1,21 @@
-<!doctype html><html lang='vi'><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Gallery</title><style>
-body{margin:0;font-family:Arial;background:#f5f6fb}header{position:sticky;top:0;background:#fff;padding:14px 18px;display:flex;justify-content:space-between;box-shadow:0 2px 8px #0002}
-#gallery{column-count:5;column-gap:16px;padding:16px} @media(max-width:900px){#gallery{column-count:3}} @media(max-width:600px){#gallery{column-count:2}}
-.card{display:inline-block;width:100%;margin:0 0 16px;break-inside:avoid;border-radius:14px;overflow:hidden;box-shadow:0 3px 10px #0002;cursor:pointer}.card img{width:100%;display:block}
-#loading{text-align:center;padding:20px;color:#666}.spin{width:34px;height:34px;border:4px solid #ddd;border-top-color:#1976d2;border-radius:50%;margin:0 auto 10px;animation:s 1s linear infinite}@keyframes s{to{transform:rotate(360deg)}}
-.modal{display:none;position:fixed;inset:0;background:#000d;justify-content:center;align-items:center}.show{display:flex}.modal img{max-width:95vw;max-height:90vh}.btn{position:absolute;color:#fff;font-size:42px;cursor:pointer}.close{top:10px;right:20px}.prev{left:20px;top:50%}.next{right:20px;top:50%}
-</style><header><b>🖼️ Gallery</b><span id=count>0 ảnh</span></header><div id=loading><div class=spin></div>Đang tải...</div><div id=gallery></div><div id=modal class=modal><div id=closeBtn class="btn close">&times;</div><div id=prevBtn class="btn prev">&#10094;</div><img id=full><div id=nextBtn class="btn next">&#10095;</div></div>
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>
+<style>
+body{margin:0;font-family:Arial;background:#f5f5f5}header{padding:12px;background:#fff;position:sticky;top:0;box-shadow:0 2px 8px #0002}
+#gallery{display:flex;gap:16px;padding:16px;align-items:flex-start}.col{flex:1;display:flex;flex-direction:column;gap:16px}
+.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px #0002;cursor:pointer}.card img{width:100%;display:block}
+#loading{text-align:center;padding:20px}.spin{width:30px;height:30px;border:4px solid #ddd;border-top-color:#09f;border-radius:50%;animation:s 1s linear infinite;margin:auto}@keyframes s{to{transform:rotate(360deg)}}
+.modal{display:none;position:fixed;inset:0;background:#000d;justify-content:center;align-items:center}.modal.show{display:flex}.modal img{max-width:95vw;max-height:90vh}.btn{position:absolute;color:#fff;font-size:40px;cursor:pointer}.x{top:10px;right:20px}.l{left:20px;top:50%}.r{right:20px;top:50%}
+</style></head><body><header><b>Gallery</b></header><div id=loading><div class=spin></div></div><div id=gallery></div><div id=modal class=modal><div id=closeBtn class="btn x">&times;</div><div id=prev class="btn l">&#10094;</div><img id=full><div id=next class="btn r">&#10095;</div></div>
 <script>
 const API="https://script.google.com/macros/s/AKfycbzwrexZCJR85WDJKaW0R6H1-juIWdzYBWrLeIa3whLIHxWBdwoqLXzCJF2qhfWKDEm_/exec";
-const PAGE=40;let imgs=[],loaded=0,busy=false,cur=0;
-const g=gallery,m=modal,f=full;
-fetch(API).then(r=>r.json()).then(d=>{imgs=d;count.textContent=d.length+" ảnh";loading.style.display="none";renderMore();});
-function renderMore(){if(busy||loaded>=imgs.length)return;busy=true;let end=Math.min(loaded+PAGE,imgs.length);for(let i=loaded;i<end;i++){let c=document.createElement('div');c.className='card';c.innerHTML=`<img loading="lazy" src="${imgs[i].url}">`;c.onclick=()=>openImg(i);g.appendChild(c);}loaded=end;busy=false;}
-addEventListener('scroll',()=>{if(innerHeight+scrollY>document.body.offsetHeight-600)renderMore();});
-function openImg(i){cur=i;f.src=imgs[i].url;m.classList.add('show');}
-function move(n){cur=(cur+n+imgs.length)%imgs.length;f.src=imgs[cur].url;}
-closeBtn.onclick=()=>m.classList.remove('show');prevBtn.onclick=e=>{e.stopPropagation();move(-1)};nextBtn.onclick=e=>{e.stopPropagation();move(1)};m.onclick=e=>{if(e.target===m)m.classList.remove('show')};
-</script>
+let cols=[],imgs=[],idx=0,cur=0,PAGE=40;
+function makeCols(){gallery.innerHTML="";let n=innerWidth<600?2:innerWidth<1000?3:4;for(let i=0;i<n;i++){let d=document.createElement('div');d.className='col';gallery.appendChild(d);}cols=[...document.querySelectorAll('.col')]}
+makeCols();addEventListener('resize',()=>location.reload());
+fetch(API).then(r=>r.json()).then(d=>{imgs=d;loading.remove();more();});
+function shortest(){return cols.reduce((a,b)=>a.scrollHeight<=b.scrollHeight?a:b)}
+function more(){let end=Math.min(idx+PAGE,imgs.length);for(;idx<end;idx++){let c=document.createElement('div');c.className='card';c.innerHTML=`<img loading="lazy" src="${imgs[idx].url}">`;let i=idx;c.onclick=()=>{cur=i;full.src=imgs[i].url;modal.classList.add('show')};shortest().appendChild(c);}}
+addEventListener('scroll',()=>{if(innerHeight+scrollY>document.body.offsetHeight-500)more()});
+closeBtn.onclick=()=>modal.classList.remove('show');modal.onclick=e=>{if(e.target===modal)modal.classList.remove('show')}
+prev.onclick=()=>{cur=(cur-1+imgs.length)%imgs.length;full.src=imgs[cur].url}
+next.onclick=()=>{cur=(cur+1)%imgs.length;full.src=imgs[cur].url}
+</script></body></html>
