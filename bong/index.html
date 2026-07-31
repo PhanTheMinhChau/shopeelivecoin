@@ -526,6 +526,9 @@ label{
         ⚠️ Sau khi gửi link thành công, vui lòng đợi trong vòng <b>10 phút</b> để hệ thống xử lý hoàn tất.
         <br>
         ‼️ giai đoạn 0h đến 0h45 hằng ngày ShopeePay rất lag nên sẽ hiển thị chậm hơn bình thường.
+        <br>
+        🗓️ Vì mỗi ngày chỉ có 100 lượt vote nên web chỉ mở giới hạn vào các khung giờ cao điểm
+<a href="javascript:void(0)" id="scheduleBtn" style="color:#ee4d2d;font-weight:600;">xem lịch</a>
     </div>
     
     <div class="button-row">
@@ -612,6 +615,23 @@ label{
     </div>
 </div>
 
+<div id="schedulePopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <span>Lịch mở cửa</span>
+            <button id="closeSchedulePopup" type="button">✕</button>
+        </div>
+
+        <div style="padding:18px;">
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕛 00:00 → 01:00</div>
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕗 08:00 → 10:00</div>
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕚 11:00 → 13:00</div>
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕒 15:00 → 17:00</div>
+            <div style="padding:12px 16px;">🕖 19:00 → 22:00</div>
+        </div>
+    </div>
+</div>
+
 <div class="footer">
     © ShopeeLiveCoin
 </div>
@@ -632,6 +652,11 @@ const statusPopup=document.getElementById("statusPopup");
 const statusBox=document.getElementById("statusBox");
 const statusText=document.getElementById("statusText");
 const statusOk=document.getElementById("statusOk");
+
+const scheduleBtn = document.getElementById("scheduleBtn");
+const schedulePopup = document.getElementById("schedulePopup");
+const closeSchedulePopup = document.getElementById("closeSchedulePopup");
+
 const links = [
   "https://s.shopee.vn/4qDxS3OMNU",
   "https://s.shopee.vn/4fuXFkOziT",
@@ -886,6 +911,20 @@ dots.forEach((dot, index) => {
     };
 
 });
+
+scheduleBtn.onclick = () => {
+    schedulePopup.style.display = "flex";
+};
+
+closeSchedulePopup.onclick = () => {
+    schedulePopup.style.display = "none";
+};
+
+schedulePopup.onclick = (e) => {
+    if (e.target === schedulePopup) {
+        schedulePopup.style.display = "none";
+    }
+};
 
 </script>
 
