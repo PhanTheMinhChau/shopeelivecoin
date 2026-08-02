@@ -927,6 +927,16 @@ schedulePopup.onclick = (e) => {
     }
 };
 
+window.addEventListener("load", () => {
+    requestAnimationFrame(() => {
+        bannerList.scrollLeft = 0;
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle("active", i === 0);
+        });
+    });
+});
+
 </script>
 
 </body>
