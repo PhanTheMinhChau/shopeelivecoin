@@ -1,12 +1,83 @@
-<button id="openTabs">Mở 5 tab</button>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Deep Link</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background: #f5f5f5;
+        }
+
+        #openApp {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #1677ff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<a href="myapp://open" id="openApp">Mở App</a>
+
+<div id="status">Sẵn sàng</div>
 
 <script>
-const urls = [
-    "https://app.shopeepay.vn/u/9WTbdzn",
-    "https://app.shopeepay.vn/u/orNHu9z",
-];
+const btn = document.getElementById("openApp");
+const status = document.getElementById("status");
 
-document.getElementById("openTabs").onclick = () => {
-    urls.forEach(url => window.open(url, "_blank"));
-};
+btn.addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    status.textContent = "Đang gửi dữ liệu...";
+
+    try {
+        const res = await fetch("https://shopeelivecoin-shopeepay.vercel.app/test", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({})
+        });
+
+        if (!res.ok) {
+            throw new Error("HTTP " + res.status);
+        }
+
+        const data = await res.json();
+        console.log(data);
+
+        if (data.message === "Gửi thành công") {
+            status.textContent = "Đã gửi thành công. Đang mở app...";
+
+            // Đổi thành deep link của bạn
+            window.location.href = btn.href;
+        } else {
+            status.textContent = "Server trả về: " + (data.message || "Không xác định");
+        }
+
+    } catch (err) {
+        console.error(err);
+        status.textContent = "Lỗi: " + err.message;
+    }
+});
 </script>
+
+</body>
+</html>
