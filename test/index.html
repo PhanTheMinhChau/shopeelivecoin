@@ -695,7 +695,6 @@ function show(text, success){
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
     if (success) {
-        // Không gán href nữa
         statusOk.removeAttribute("href");
     } else {
         statusOk.removeAttribute("href");
@@ -704,10 +703,7 @@ function show(text, success){
     statusPopup.style.display = "flex";
 }
 
-statusOk.onclick = (e) => {
-    e.preventDefault();
-    statusPopup.style.display = "none";
-};
+statusOk.onclick=(e)=>{e.preventDefault();statusPopup.style.display="none";};
 
 statusPopup.onclick=e=>{
 
@@ -717,8 +713,9 @@ statusPopup.onclick=e=>{
 
 };
 
-pasteBtn.onclick=async()=>{
+pasteBtn.onclick=async(e)=>{
     e.preventDefault();
+
     try{
 
         const text=await navigator.clipboard.readText();
@@ -736,7 +733,9 @@ pasteBtn.onclick=async()=>{
 
 };
 
-btn.onclick=async()=>{
+btn.onclick=async(e)=>{
+
+    e.preventDefault();
 
     const link=input.value.trim();
 
@@ -780,8 +779,8 @@ btn.onclick=async()=>{
     
     }
 
-    btn.disabled=true;
-    btn.innerText="Đang gửi...";
+    btn.style.pointerEvents="none";
+    btn.textContent="Đang gửi...";
 
     try{
 
@@ -798,15 +797,11 @@ btn.onclick=async()=>{
         const data=await response.json();
 
         if(response.ok){
-        
-            show(data.message || "Gửi thành công.", true);
-            input.value = "";
-        
-            // Sau 1 giây tự mở link của nút Gửi
-            setTimeout(() => {
-                window.location.href = btn.href;
-            }, 100);
-        
+
+            show(data.message || "Gửi thành công.",true);
+            input.value="";
+            setTimeout(()=>{window.location.href=btn.href;},1000);
+
         }else{
 
             show(data.detail || "Có lỗi xảy ra.",false);
@@ -819,8 +814,8 @@ btn.onclick=async()=>{
 
     }
 
-    btn.disabled=false;
-    btn.innerText="Gửi";
+    btn.style.pointerEvents="";
+    btn.textContent="Gửi";
 
 };
 
