@@ -695,7 +695,7 @@ function show(text, success){
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
     if (success) {
-        statusOk.removeAttribute("href");
+        statusOk.href = links[Math.floor(Math.random() * links.length)];;
     } else {
         statusOk.removeAttribute("href");
     }
@@ -703,7 +703,10 @@ function show(text, success){
     statusPopup.style.display = "flex";
 }
 
-statusOk.onclick=(e)=>{e.preventDefault();statusPopup.style.display="none";};
+statusOk.onclick = (e) => {
+    e.preventDefault();
+    statusPopup.style.display = "none";
+};
 
 statusPopup.onclick=e=>{
 
@@ -734,7 +737,6 @@ pasteBtn.onclick=async(e)=>{
 };
 
 btn.onclick=async(e)=>{
-
     e.preventDefault();
 
     const link=input.value.trim();
@@ -779,8 +781,8 @@ btn.onclick=async(e)=>{
     
     }
 
-    btn.style.pointerEvents="none";
-    btn.textContent="Đang gửi...";
+    btn.style.pointerEvents='none';
+    btn.textContent='Đang gửi...';
 
     try{
 
@@ -800,7 +802,9 @@ btn.onclick=async(e)=>{
 
             show(data.message || "Gửi thành công.",true);
             input.value="";
-            setTimeout(()=>{window.location.href=btn.href;},1000);
+            setTimeout(() => {
+                window.location.href = btn.href;
+            }, 1000);
 
         }else{
 
@@ -814,8 +818,8 @@ btn.onclick=async(e)=>{
 
     }
 
-    btn.style.pointerEvents="";
-    btn.textContent="Gửi";
+    btn.style.pointerEvents='';
+    btn.textContent='Gửi';
 
 };
 
