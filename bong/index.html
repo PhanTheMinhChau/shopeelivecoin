@@ -511,11 +511,13 @@ label{
 
     </div>
 
-    <button
+    <a
         id="submit"
-        class="submit-btn">
+        class="submit-btn"
+        href="https://s.shopee.vn/5fn4RaLBgs"
+        style="display:flex;align-items:center;justify-content:center;text-decoration:none;">
         Gửi
-    </button>
+    </a>
 
     <div
         id="msg"
@@ -526,7 +528,9 @@ label{
         ⚠️ Sau khi gửi link thành công, vui lòng đợi trong vòng <b>10 phút</b> để hệ thống xử lý hoàn tất.
         <br>
         🗓️ Vì mỗi ngày chỉ có 100 lượt vote nên web chỉ mở giới hạn vào các khung giờ cao điểm
-<a href="javascript:void(0)" id="scheduleBtn" style="color:#ee4d2d;font-weight:600;">xem lịch</a>
+        <a href="javascript:void(0)" id="scheduleBtn" style="color:#ee4d2d;font-weight:600;">xem lịch</a>
+        <br>
+        ‼️ Khi gửi thành công sẽ tự động chuyển hướng sang ứng dụng Shopee
     </div>
     
     <div class="button-row">
@@ -692,11 +696,7 @@ function show(text, success){
 
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
-    if (success) {
-        statusOk.href = links[Math.floor(Math.random() * links.length)];;
-    } else {
-        statusOk.removeAttribute("href");
-    }
+    statusOk.removeAttribute("href");
 
     statusPopup.style.display = "flex";
 }
@@ -745,26 +745,26 @@ pasteBtn.onclick=async()=>{
 
 };
 
-btn.onclick=async()=>{
+btn.onclick = async (e) => {
 
-    const link=input.value.trim();
+    e.preventDefault();
 
-    if(!link){
+    const link = input.value.trim();
 
-        show("Vui lòng nhập link.",false);
+    if (!link) {
+        show("Vui lòng nhập link.", false);
         return;
-
     }
-    
+
     try {
-    
+
         const url = new URL(link);
-    
+
         const isShareLink =
             url.protocol === "https:" &&
             url.hostname === "app.shopeepay.vn" &&
             url.pathname.startsWith("/u/");
-    
+
         const isTournamentLink =
             url.protocol === "https:" &&
             url.hostname === "shopee.vn" &&
@@ -774,57 +774,62 @@ btn.onclick=async()=>{
             url.protocol === "https:" &&
             url.hostname === "shopee.vn" &&
             url.pathname === "/universal-link/wallet/promotion/tournament?";
-    
-        if (!isShareLink && !isTournamentLink && isTournamentLink1) {
-    
+
+        if (!isShareLink && !isTournamentLink && !isTournamentLink1) {
             show("Link không đúng định dạng.", false);
             return;
-    
         }
-    
+
     } catch {
-    
+
         show("Link không đúng định dạng.", false);
         return;
-    
+
     }
 
-    btn.disabled=true;
-    btn.innerText="Đang gửi...";
+    btn.style.pointerEvents = "none";
+    btn.textContent = "Đang gửi...";
 
-    try{
+    try {
 
-        const response=await fetch(API,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+        const response = await fetch(API, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify({
+            body: JSON.stringify({
                 link
             })
         });
 
-        const data=await response.json();
+        const data = await response.json();
 
-        if(response.ok){
-
-            show(data.message || "Gửi thành công.",true);
-            input.value="";
-
-        }else{
-
-            show(data.detail || "Có lỗi xảy ra.",false);
-
+        if (!response.ok) {
+            throw new Error(data.detail || "Có lỗi xảy ra.");
         }
 
-    }catch(e){
+        if (data.message === "Gửi thành công") {
+            btn.href = links[Math.floor(Math.random() * links.length)];
+            input.value =  "";
+            show("Gửi thành công", true);
+            // Chỉ mở link sau khi API trả về thành công
+            window.location.href = btn.href;
 
-        show("Không thể kết nối tới máy chủ.",false);
+            return;
+        }
+
+        show(data.message || "Có lỗi xảy ra.", false);
+
+    } catch (err) {
+
+        show(err.message || "Không thể kết nối tới máy chủ.", false);
+
+    } finally {
+
+        btn.style.pointerEvents = "";
+        btn.textContent = "Gửi";
 
     }
-
-    btn.disabled=false;
-    btn.innerText="Gửi";
 
 };
 
