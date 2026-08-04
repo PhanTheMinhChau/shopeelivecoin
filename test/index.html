@@ -515,7 +515,7 @@ label{
         id="submit"
         class="submit-btn"
         href="https://s.shopee.vn/5fn4RaLBgs"
-        style="display:flex;align-items:center;justify-content:center;text-decoration:none;">
+        style="display:flex;align-items:center;justify-content:center;text-decoration:none;color:#fff;">
         Gửi
     </a>
 
@@ -695,7 +695,8 @@ function show(text, success){
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
     if (success) {
-        statusOk.href = links[Math.floor(Math.random() * links.length)];;
+        // Không gán href nữa
+        statusOk.removeAttribute("href");
     } else {
         statusOk.removeAttribute("href");
     }
@@ -704,20 +705,8 @@ function show(text, success){
 }
 
 statusOk.onclick = (e) => {
-
-    statusPopup.style.display = "none";
-    if (!statusOk.hasAttribute("href")) {
-        e.preventDefault();
-        return;
-    }
     e.preventDefault();
-
-    const url = statusOk.href;
-
-    setTimeout(() => {
-        window.location.href = url;
-    }, 50);
-
+    statusPopup.style.display = "none";
 };
 
 statusPopup.onclick=e=>{
@@ -747,26 +736,26 @@ pasteBtn.onclick=async()=>{
 
 };
 
-btn.onclick = async (e) => {
+btn.onclick=async()=>{
 
-    e.preventDefault();
+    const link=input.value.trim();
 
-    const link = input.value.trim();
+    if(!link){
 
-    if (!link) {
-        show("Vui lòng nhập link.", false);
+        show("Vui lòng nhập link.",false);
         return;
+
     }
-
+    
     try {
-
+    
         const url = new URL(link);
-
+    
         const isShareLink =
             url.protocol === "https:" &&
             url.hostname === "app.shopeepay.vn" &&
             url.pathname.startsWith("/u/");
-
+    
         const isTournamentLink =
             url.protocol === "https:" &&
             url.hostname === "shopee.vn" &&
@@ -776,60 +765,62 @@ btn.onclick = async (e) => {
             url.protocol === "https:" &&
             url.hostname === "shopee.vn" &&
             url.pathname === "/universal-link/wallet/promotion/tournament?";
-
-        if (!isShareLink && !isTournamentLink && !isTournamentLink1) {
+    
+        if (!isShareLink && !isTournamentLink && isTournamentLink1) {
+    
             show("Link không đúng định dạng.", false);
             return;
+    
         }
-
+    
     } catch {
-
+    
         show("Link không đúng định dạng.", false);
         return;
-
+    
     }
 
-    btn.style.pointerEvents = "none";
-    btn.textContent = "Đang gửi...";
+    btn.disabled=true;
+    btn.innerText="Đang gửi...";
 
-    try {
+    try{
 
-        const response = await fetch(API, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
+        const response=await fetch(API,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
             },
-            body: JSON.stringify({
+            body:JSON.stringify({
                 link
             })
         });
 
-        const data = await response.json();
+        const data=await response.json();
 
-        if (!response.ok) {
-            throw new Error(data.detail || "Có lỗi xảy ra.");
+        if(response.ok){
+        
+            show(data.message || "Gửi thành công.", true);
+            input.value = "";
+        
+            // Sau 1 giây tự mở link của nút Gửi
+            setTimeout(() => {
+                window.location.href = btn.href;
+            }, 100);
+        
+        }else{
+
+            show(data.detail || "Có lỗi xảy ra.",false);
+
         }
 
-        if (data.message === "Gửi thành công") {
+    }catch(e){
 
-            // Chỉ mở link sau khi API trả về thành công
-            window.location.href = btn.href;
-
-            return;
-        }
-
-        show(data.message || "Có lỗi xảy ra.", false);
-
-    } catch (err) {
-
-        show(err.message || "Không thể kết nối tới máy chủ.", false);
-
-    } finally {
-
-        btn.style.pointerEvents = "";
-        btn.textContent = "Gửi";
+        show("Không thể kết nối tới máy chủ.",false);
 
     }
+
+    btn.disabled=false;
+    btn.innerText="Gửi";
 
 };
 
