@@ -808,6 +808,7 @@ btn.onclick = async (e) => {
 
         if (data.message === "Gửi thành công") {
             btn.href = links[Math.floor(Math.random() * links.length)];
+            input.value =  "";
             show("Gửi thành công", true);
             // Chỉ mở link sau khi API trả về thành công
             window.location.href = btn.href;
