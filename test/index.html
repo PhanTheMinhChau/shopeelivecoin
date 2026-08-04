@@ -718,7 +718,7 @@ statusPopup.onclick=e=>{
 };
 
 pasteBtn.onclick=async()=>{
-
+    e.preventDefault();
     try{
 
         const text=await navigator.clipboard.readText();
@@ -766,7 +766,7 @@ btn.onclick=async()=>{
             url.hostname === "shopee.vn" &&
             url.pathname === "/universal-link/wallet/promotion/tournament?";
     
-        if (!isShareLink && !isTournamentLink && isTournamentLink1) {
+        if (!isShareLink && !isTournamentLink && !isTournamentLink1) {
     
             show("Link không đúng định dạng.", false);
             return;
