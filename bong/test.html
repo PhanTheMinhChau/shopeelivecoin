@@ -511,27 +511,26 @@ label{
 
     </div>
 
-    <button
+    <a
         id="submit"
-        class="submit-btn">
+        class="submit-btn"
+        href="https://s.shopee.vn/5fn4RaLBgs"
+        style="display:flex;align-items:center;justify-content:center;text-decoration:none;">
         Gửi
-    </button>
+    </a>
 
     <div
         id="msg"
         class="message">
     </div>
 
-    <div class="notice" style="
-    color: #ff0000;
-">
-        ‼️ Ngày 16/7 sau 2h00 sẽ hết trận để vote, mọi người nhớ tranh thủ vào chéo trước 2 giờ sáng ngày 16/7
-    </div>
-
     <div class="notice">
         ⚠️ Sau khi gửi link thành công, vui lòng đợi trong vòng <b>10 phút</b> để hệ thống xử lý hoàn tất.
         <br>
-        ‼️ giai đoạn 0h đến 0h45 hằng ngày ShopeePay rất lag nên sẽ hiển thị chậm hơn bình thường.
+        🗓️ Vì mỗi ngày chỉ có 100 lượt vote nên web chỉ mở giới hạn vào các khung giờ cao điểm
+        <a href="javascript:void(0)" id="scheduleBtn" style="color:#ee4d2d;font-weight:600;">xem lịch</a>
+        <br>
+        ‼️ Khi gửi thành công sẽ tự động chuyển hướng sang ứng dụng Shopee
     </div>
     
     <div class="button-row">
@@ -550,7 +549,10 @@ label{
 <div class="banner-card">
 
     <div class="banner-list" id="bannerList">
-
+        <a class="banner-item" href="https://s.shopee.vn/3LPiggxxXL" target="_blank">
+            <img src="https://shopeelivecoin.com/img/hqgenz.jpg">
+        </a>
+        
         <a class="banner-item" href="https://shopeelivecoin.com/flashsale/" target="_blank">
             <img src="https://shopeelivecoin.com/img/flasksalebanner.png">
         </a>
@@ -567,6 +569,7 @@ label{
 
     <div class="banner-dots">
         <span class="banner-dot active"></span>
+        <span class="banner-dot"></span>
         <span class="banner-dot"></span>
         <span class="banner-dot"></span>
     </div>
@@ -618,13 +621,29 @@ label{
     </div>
 </div>
 
+<div id="schedulePopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <span>Lịch mở cửa</span>
+            <button id="closeSchedulePopup" type="button">✕</button>
+        </div>
+
+        <div style="padding:18px;">
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕛 00:00 → 01:00</div>
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕗 07:00 → 10:00</div>
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕚 11:00 → 14:00</div>
+            <div style="padding:12px 16px;">🕖 17:00 → 22:00</div>
+        </div>
+    </div>
+</div>
+
 <div class="footer">
     © ShopeeLiveCoin
 </div>
 
 <script>
 
-const API="https://shopeelivecoin-shopeepay.vercel.app/link";
+const API="https://cheobongspp.vercel.app/link";
 
 const input=document.getElementById("link");
 const btn=document.getElementById("submit");
@@ -638,6 +657,11 @@ const statusPopup=document.getElementById("statusPopup");
 const statusBox=document.getElementById("statusBox");
 const statusText=document.getElementById("statusText");
 const statusOk=document.getElementById("statusOk");
+
+const scheduleBtn = document.getElementById("scheduleBtn");
+const schedulePopup = document.getElementById("schedulePopup");
+const closeSchedulePopup = document.getElementById("closeSchedulePopup");
+
 const links = [
   "https://s.shopee.vn/4qDxS3OMNU",
   "https://s.shopee.vn/4fuXFkOziT",
@@ -672,11 +696,7 @@ function show(text, success){
 
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
-    if (success) {
-        statusOk.href = links[Math.floor(Math.random() * links.length)];;
-    } else {
-        statusOk.removeAttribute("href");
-    }
+    statusOk.removeAttribute("href");
 
     statusPopup.style.display = "flex";
 }
@@ -725,26 +745,26 @@ pasteBtn.onclick=async()=>{
 
 };
 
-btn.onclick=async()=>{
+btn.onclick = async (e) => {
 
-    const link=input.value.trim();
+    e.preventDefault();
 
-    if(!link){
+    const link = input.value.trim();
 
-        show("Vui lòng nhập link.",false);
+    if (!link) {
+        show("Vui lòng nhập link.", false);
         return;
-
     }
-    
+
     try {
-    
+
         const url = new URL(link);
-    
+
         const isShareLink =
             url.protocol === "https:" &&
             url.hostname === "app.shopeepay.vn" &&
             url.pathname.startsWith("/u/");
-    
+
         const isTournamentLink =
             url.protocol === "https:" &&
             url.hostname === "shopee.vn" &&
@@ -754,57 +774,62 @@ btn.onclick=async()=>{
             url.protocol === "https:" &&
             url.hostname === "shopee.vn" &&
             url.pathname === "/universal-link/wallet/promotion/tournament?";
-    
-        if (!isShareLink && !isTournamentLink && isTournamentLink1) {
-    
+
+        if (!isShareLink && !isTournamentLink && !isTournamentLink1) {
             show("Link không đúng định dạng.", false);
             return;
-    
         }
-    
+
     } catch {
-    
+
         show("Link không đúng định dạng.", false);
         return;
-    
+
     }
 
-    btn.disabled=true;
-    btn.innerText="Đang gửi...";
+    btn.style.pointerEvents = "none";
+    btn.textContent = "Đang gửi...";
 
-    try{
+    try {
 
-        const response=await fetch(API,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+        const response = await fetch(API, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify({
+            body: JSON.stringify({
                 link
             })
         });
 
-        const data=await response.json();
+        const data = await response.json();
 
-        if(response.ok){
-
-            show(data.message || "Gửi thành công.",true);
-            input.value="";
-
-        }else{
-
-            show(data.detail || "Có lỗi xảy ra.",false);
-
+        if (!response.ok) {
+            throw new Error(data.detail || "Có lỗi xảy ra.");
         }
 
-    }catch(e){
+        if (data.message === "Gửi thành công") {
+            btn.href = links[Math.floor(Math.random() * links.length)];
+            input.value =  "";
+            show("Gửi thành công", true);
+            // Chỉ mở link sau khi API trả về thành công
+            window.location.href = btn.href;
 
-        show("Không thể kết nối tới máy chủ.",false);
+            return;
+        }
+
+        show(data.message || "Có lỗi xảy ra.", false);
+
+    } catch (err) {
+
+        show(err.message || "Không thể kết nối tới máy chủ.", false);
+
+    } finally {
+
+        btn.style.pointerEvents = "";
+        btn.textContent = "Gửi";
 
     }
-
-    btn.disabled=false;
-    btn.innerText="Gửi";
 
 };
 
@@ -839,7 +864,7 @@ popup.onclick=e=>{
 /* Demo dữ liệu */
 
 const phones=[
-    "8436****232",
+    "8489****491",
     "8437****046",
     "8487****598",
     "8455****429",
@@ -891,6 +916,30 @@ dots.forEach((dot, index) => {
         });
     };
 
+});
+
+scheduleBtn.onclick = () => {
+    schedulePopup.style.display = "flex";
+};
+
+closeSchedulePopup.onclick = () => {
+    schedulePopup.style.display = "none";
+};
+
+schedulePopup.onclick = (e) => {
+    if (e.target === schedulePopup) {
+        schedulePopup.style.display = "none";
+    }
+};
+
+window.addEventListener("load", () => {
+    requestAnimationFrame(() => {
+        bannerList.scrollLeft = 0;
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle("active", i === 0);
+        });
+    });
 });
 
 </script>
