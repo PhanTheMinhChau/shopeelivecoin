@@ -768,6 +768,27 @@ label{
                     margin-bottom: 22px;
                 }
 
+                .zalo-arrow {
+                    position: fixed;
+                    top: 8px;
+                    right: 18px;
+                    font-size: 70px;
+                    line-height: 1;
+                    transform: rotate(-25deg);
+                    animation: arrowBounce 1s infinite;
+                    z-index: 9999;
+                }
+                
+                @keyframes arrowBounce {
+                    0%, 100% {
+                        transform: rotate(-25deg) translateY(0);
+                    }
+                
+                    50% {
+                        transform: rotate(-25deg) translateY(8px);
+                    }
+                }
+
                 .zalo-instruction {
                     text-align: left;
                     background: #fff8e6;
@@ -797,6 +818,8 @@ label{
         </head>
 
         <body>
+            <div class="zalo-arrow">↗</div>
+            
             <div class="zalo-box">
 
                 <div class="zalo-icon">
