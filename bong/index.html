@@ -631,7 +631,7 @@ label{
         </div>
 
         <div style="padding:18px;">
-            <!-- <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕛 00:45 → 02:00</div> -->
+            <!-- <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕛 00:30 → 01:30</div> -->
             <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕗 07:00 → 10:00</div>
             <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕚 11:00 → 15:00</div>
             <div style="padding:12px 16px;">🕖 17:00 → 22:00</div>
@@ -644,6 +644,209 @@ label{
 </div>
 
 <script>
+
+// =============================
+// CHẶN TRÌNH DUYỆT ZALO
+// =============================
+
+(function () {
+    const ua = navigator.userAgent || "";
+    
+    // Kiểm tra User-Agent có chứa Zalo hay không
+    if (!/zalo/i.test(ua)) {
+        return;
+    }
+
+    // Xác định thiết bị
+    const isIPhone = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+
+    let instruction = "";
+
+    if (isIPhone) {
+        instruction = `
+            <div class="zalo-step">
+                1. Nhấn dấu <b>...</b> ở góc trên cùng bên phải
+            </div>
+
+            <div class="zalo-step">
+                2. Chọn <b>"Mở bằng Safari"</b>
+            </div>
+        `;
+    } else if (isAndroid) {
+        instruction = `
+            <div class="zalo-step">
+                1. Nhấn dấu <b>...</b> ở góc trên cùng bên phải
+            </div>
+
+            <div class="zalo-step">
+                2. Chọn <b>"Mở bằng trình duyệt"</b>
+            </div>
+        `;
+    } else {
+        instruction = `
+            <div class="zalo-step">
+                Nhấn dấu <b>...</b> ở góc trên cùng bên phải
+            </div>
+
+            <div class="zalo-step">
+                Chọn mở trang bằng trình duyệt bên ngoài.
+            </div>
+        `;
+    }
+
+    // Thay toàn bộ nội dung trang
+    document.documentElement.innerHTML = `
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport"
+                  content="width=device-width, initial-scale=1.0">
+            <title>Mở bằng trình duyệt</title>
+
+            <style>
+                * {
+                    box-sizing: border-box;
+                }
+
+                html,
+                body {
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                    min-height: 100%;
+                    font-family:
+                        system-ui,
+                        -apple-system,
+                        BlinkMacSystemFont,
+                        "Segoe UI",
+                        Roboto,
+                        sans-serif;
+                    background: #f4e8e7;
+                }
+
+                body {
+                    min-height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 20px;
+                }
+
+                .zalo-box {
+                    width: 100%;
+                    max-width: 420px;
+                    background: #fff;
+                    border-radius: 20px;
+                    padding: 30px 24px;
+                    text-align: center;
+                    box-shadow: 0 15px 35px rgba(0,0,0,.15);
+                }
+
+                .zalo-icon {
+                    width: 64px;
+                    height: 64px;
+                    margin: 0 auto 18px;
+                    border-radius: 50%;
+                    background: #fff1ed;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 32px;
+                }
+
+                .zalo-title {
+                    font-size: 22px;
+                    font-weight: 700;
+                    color: #222;
+                    margin-bottom: 12px;
+                }
+
+                .zalo-desc {
+                    color: #666;
+                    font-size: 15px;
+                    line-height: 1.6;
+                    margin-bottom: 22px;
+                }
+
+                .zalo-arrow {
+                    position: fixed;
+                    top: 8px;
+                    right: 18px;
+                    font-size: 70px;
+                    line-height: 1;
+                    transform: rotate(-25deg);
+                    animation: arrowBounce 1s infinite;
+                    z-index: 9999;
+                }
+                
+                @keyframes arrowBounce {
+                    0%, 100% {
+                        transform: rotate(-25deg) translateY(0);
+                    }
+                
+                    50% {
+                        transform: rotate(-25deg) translateY(8px);
+                    }
+                }
+
+                .zalo-instruction {
+                    text-align: left;
+                    background: #fff8e6;
+                    border: 1px solid #ffd86b;
+                    border-radius: 14px;
+                    padding: 16px;
+                    color: #6d5200;
+                    font-size: 15px;
+                    line-height: 1.7;
+                }
+
+                .zalo-step {
+                    margin-bottom: 10px;
+                }
+
+                .zalo-step:last-child {
+                    margin-bottom: 0;
+                }
+
+                .zalo-note {
+                    margin-top: 18px;
+                    color: #999;
+                    font-size: 13px;
+                    line-height: 1.5;
+                }
+            </style>
+        </head>
+
+        <body>
+            <div class="zalo-arrow">↗</div>
+            
+            <div class="zalo-box">
+
+                <div class="zalo-icon">
+                    ⚠️
+                </div>
+
+                <div class="zalo-title">
+                    Trang không hoạt động trong Zalo
+                </div>
+
+                <div class="zalo-desc">
+                    Vui lòng mở trang này bằng trình duyệt bên ngoài
+                    để tiếp tục sử dụng.
+                </div>
+
+                <div class="zalo-instruction">
+                    ${instruction}
+                </div>
+
+                <div class="zalo-note">
+                    © ShopeeLiveCoin
+                </div>
+
+            </div>
+        </body>
+    `;
+})();
 
 const API="https://cheobongclient.vercel.app/link";
 
