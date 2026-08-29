@@ -634,232 +634,201 @@ label{
 
 (function () {
     const ua = navigator.userAgent || "";
-
-    // Không phải Zalo → không làm gì
+    
+    // Kiểm tra User-Agent có chứa Zalo hay không
     if (!/zalo/i.test(ua)) {
         return;
     }
 
-    // Tải thư viện
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/detectincognitojs/dist/detectIncognito.min.js";
+    // Xác định thiết bị
+    const isIPhone = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
 
-    script.onload = async () => {
-        try {
-            const result = await detectIncognito();
+    let instruction = "";
 
-            console.log("Incognito:", result.isPrivate);
-            console.log("Browser:", result.browserName);
+    if (isIPhone) {
+        instruction = `
+            <div class="zalo-step">
+                1. Nhấn dấu <b>...</b> ở góc trên cùng bên phải
+            </div>
 
-            // KHÔNG ẩn danh → không làm gì
-            if (!result.isPrivate) {
-                return;
-            }
+            <div class="zalo-step">
+                2. Chọn <b>"Mở bằng Safari"</b>
+            </div>
+        `;
+    } else if (isAndroid) {
+        instruction = `
+            <div class="zalo-step">
+                1. Nhấn dấu <b>...</b> ở góc trên cùng bên phải
+            </div>
 
-            // =========================
-            // TỪ ĐÂY TRỞ XUỐNG: ẨN DANH
-            // =========================
+            <div class="zalo-step">
+                2. Chọn <b>"Mở bằng trình duyệt"</b>
+            </div>
+        `;
+    } else {
+        instruction = `
+            <div class="zalo-step">
+                Nhấn dấu <b>...</b> ở góc trên cùng bên phải
+            </div>
 
-            const isIPhone = /iPhone|iPad|iPod/i.test(ua);
-            const isAndroid = /Android/i.test(ua);
+            <div class="zalo-step">
+                Chọn mở trang bằng trình duyệt bên ngoài.
+            </div>
+        `;
+    }
 
-            let instruction = "";
+    // Thay toàn bộ nội dung trang
+    document.documentElement.innerHTML = `
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport"
+                  content="width=device-width, initial-scale=1.0">
+            <title>Mở bằng trình duyệt</title>
 
-            if (isIPhone) {
-                instruction = `
-                    <div class="zalo-step">
-                        1. Nhấn dấu <b>...</b> ở góc trên cùng bên phải
-                    </div>
+            <style>
+                * {
+                    box-sizing: border-box;
+                }
 
-                    <div class="zalo-step">
-                        2. Chọn <b>"Mở bằng Safari"</b>
-                    </div>
-                `;
-            } else if (isAndroid) {
-                instruction = `
-                    <div class="zalo-step">
-                        1. Nhấn dấu <b>...</b> ở góc trên cùng bên phải
-                    </div>
+                html,
+                body {
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                    min-height: 100%;
+                    font-family:
+                        system-ui,
+                        -apple-system,
+                        BlinkMacSystemFont,
+                        "Segoe UI",
+                        Roboto,
+                        sans-serif;
+                    background: #f4e8e7;
+                }
 
-                    <div class="zalo-step">
-                        2. Chọn <b>"Mở bằng trình duyệt"</b>
-                    </div>
-                `;
-            } else {
-                instruction = `
-                    <div class="zalo-step">
-                        Nhấn dấu <b>...</b> ở góc trên cùng bên phải
-                    </div>
+                body {
+                    min-height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 20px;
+                }
 
-                    <div class="zalo-step">
-                        Chọn mở trang bằng trình duyệt bên ngoài.
-                    </div>
-                `;
-            }
+                .zalo-box {
+                    width: 100%;
+                    max-width: 420px;
+                    background: #fff;
+                    border-radius: 20px;
+                    padding: 30px 24px;
+                    text-align: center;
+                    box-shadow: 0 15px 35px rgba(0,0,0,.15);
+                }
 
-            document.documentElement.innerHTML = `
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport"
-                          content="width=device-width, initial-scale=1.0">
-                    <title>Mở bằng trình duyệt</title>
+                .zalo-icon {
+                    width: 64px;
+                    height: 64px;
+                    margin: 0 auto 18px;
+                    border-radius: 50%;
+                    background: #fff1ed;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 32px;
+                }
 
-                    <style>
-                        * {
-                            box-sizing: border-box;
-                        }
+                .zalo-title {
+                    font-size: 22px;
+                    font-weight: 700;
+                    color: #222;
+                    margin-bottom: 12px;
+                }
 
-                        html,
-                        body {
-                            margin: 0;
-                            padding: 0;
-                            width: 100%;
-                            min-height: 100%;
-                            font-family:
-                                system-ui,
-                                -apple-system,
-                                BlinkMacSystemFont,
-                                "Segoe UI",
-                                Roboto,
-                                sans-serif;
-                            background: #ecdadd;
-                        }
+                .zalo-desc {
+                    color: #666;
+                    font-size: 15px;
+                    line-height: 1.6;
+                    margin-bottom: 22px;
+                }
 
-                        body {
-                            min-height: 100vh;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            padding: 20px;
-                        }
+                .zalo-arrow {
+                    position: fixed;
+                    top: 8px;
+                    right: 18px;
+                    font-size: 70px;
+                    line-height: 1;
+                    transform: rotate(-25deg);
+                    animation: arrowBounce 1s infinite;
+                    z-index: 9999;
+                }
+                
+                @keyframes arrowBounce {
+                    0%, 100% {
+                        transform: rotate(-25deg) translateY(0);
+                    }
+                
+                    50% {
+                        transform: rotate(-25deg) translateY(8px);
+                    }
+                }
 
-                        .zalo-box {
-                            width: 100%;
-                            max-width: 420px;
-                            background: #fff;
-                            border-radius: 20px;
-                            padding: 30px 24px;
-                            text-align: center;
-                            box-shadow: 0 15px 35px rgba(0,0,0,.15);
-                        }
+                .zalo-instruction {
+                    text-align: left;
+                    background: #fff8e6;
+                    border: 1px solid #ffd86b;
+                    border-radius: 14px;
+                    padding: 16px;
+                    color: #6d5200;
+                    font-size: 15px;
+                    line-height: 1.7;
+                }
 
-                        .zalo-icon {
-                            width: 64px;
-                            height: 64px;
-                            margin: 0 auto 18px;
-                            border-radius: 50%;
-                            background: #fff1ed;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: 32px;
-                        }
+                .zalo-step {
+                    margin-bottom: 10px;
+                }
 
-                        .zalo-title {
-                            font-size: 22px;
-                            font-weight: 700;
-                            color: #222;
-                            margin-bottom: 12px;
-                        }
+                .zalo-step:last-child {
+                    margin-bottom: 0;
+                }
 
-                        .zalo-desc {
-                            color: #666;
-                            font-size: 15px;
-                            line-height: 1.6;
-                            margin-bottom: 22px;
-                        }
+                .zalo-note {
+                    margin-top: 18px;
+                    color: #999;
+                    font-size: 13px;
+                    line-height: 1.5;
+                }
+            </style>
+        </head>
 
-                        .zalo-arrow {
-                            position: fixed;
-                            top: 8px;
-                            right: 18px;
-                            font-size: 70px;
-                            line-height: 1;
-                            transform: rotate(-25deg);
-                            animation: arrowBounce 1s infinite;
-                            z-index: 9999;
-                        }
+        <body>
+            <div class="zalo-arrow">↗</div>
+            
+            <div class="zalo-box">
 
-                        @keyframes arrowBounce {
-                            0%, 100% {
-                                transform: rotate(-25deg) translateY(0);
-                            }
+                <div class="zalo-icon">
+                    ⚠️
+                </div>
 
-                            50% {
-                                transform: rotate(-25deg) translateY(8px);
-                            }
-                        }
+                <div class="zalo-title">
+                    Trang không hoạt động trong Zalo
+                </div>
 
-                        .zalo-instruction {
-                            text-align: left;
-                            background: #fff8e6;
-                            border: 1px solid #ffd86b;
-                            border-radius: 14px;
-                            padding: 16px;
-                            color: #6d5200;
-                            font-size: 15px;
-                            line-height: 1.7;
-                        }
+                <div class="zalo-desc">
+                    Vui lòng mở trang này bằng trình duyệt bên ngoài
+                    để tiếp tục sử dụng.
+                </div>
 
-                        .zalo-step {
-                            margin-bottom: 10px;
-                        }
+                <div class="zalo-instruction">
+                    ${instruction}
+                </div>
 
-                        .zalo-step:last-child {
-                            margin-bottom: 0;
-                        }
+                <div class="zalo-note">
+                    © ShopeeLiveCoin
+                </div>
 
-                        .zalo-note {
-                            margin-top: 18px;
-                            color: #999;
-                            font-size: 13px;
-                            line-height: 1.5;
-                        }
-                    </style>
-                </head>
-
-                <body>
-                    <div class="zalo-arrow">↗</div>
-
-                    <div class="zalo-box">
-
-                        <div class="zalo-icon">
-                            ⚠️
-                        </div>
-
-                        <div class="zalo-title">
-                            Trang không hoạt động trong Zalo
-                        </div>
-
-                        <div class="zalo-desc">
-                            Vui lòng mở trang này bằng trình duyệt bên ngoài
-                            để tiếp tục sử dụng.
-                        </div>
-
-                        <div class="zalo-instruction">
-                            ${instruction}
-                        </div>
-
-                        <div class="zalo-note">
-                            © ShopeeLiveCoin
-                        </div>
-
-                    </div>
-                </body>
-            `;
-
-        } catch (error) {
-            console.error("Không thể kiểm tra Incognito:", error);
-        }
-    };
-
-    script.onerror = () => {
-        console.error("Không tải được detectIncognitoJS");
-    };
-
-    // Quan trọng: phải thêm script vào trang
-    document.head.appendChild(script);
-
+            </div>
+        </body>
+    `;
 })();
 
 const API="https://cheobongclient.vercel.app/linkfarm";
