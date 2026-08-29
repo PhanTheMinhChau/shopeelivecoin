@@ -627,7 +627,112 @@ label{
 </div>
 
 <script>
+(async () => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/detectincognitojs/dist/detectIncognito.min.js";
 
+    script.onload = async () => {
+        try {
+            const result = await detectIncognito();
+
+            console.log("Kết quả:", result);
+
+            if (result.isPrivate) {
+                document.documentElement.innerHTML = `
+                    <!DOCTYPE html>
+                    <html lang="vi">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport"
+                              content="width=device-width, initial-scale=1.0">
+                        <title>Cảnh báo</title>
+                        <style>
+                            * {
+                                box-sizing: border-box;
+                            }
+
+                            body {
+                                margin: 0;
+                                min-height: 100vh;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                background: #f5f5f5;
+                                font-family: Arial, sans-serif;
+                            }
+
+                            .warning {
+                                width: min(90%, 500px);
+                                padding: 35px;
+                                background: white;
+                                border-radius: 16px;
+                                text-align: center;
+                                box-shadow: 0 10px 40px rgba(0,0,0,.12);
+                            }
+
+                            .icon {
+                                font-size: 60px;
+                                margin-bottom: 15px;
+                            }
+
+                            h1 {
+                                margin: 0 0 15px;
+                                color: #d93025;
+                            }
+
+                            p {
+                                color: #555;
+                                line-height: 1.6;
+                            }
+
+                            .browser {
+                                margin-top: 20px;
+                                padding: 12px;
+                                background: #f1f3f4;
+                                border-radius: 8px;
+                                color: #444;
+                            }
+                        </style>
+                    </head>
+
+                    <body>
+                        <div class="warning">
+                            <div class="icon">⚠️</div>
+
+                            <h1>Không hỗ trợ chế độ ẩn danh</h1>
+
+                            <p>
+                                Vui lòng đóng tab ẩn danh và mở lại trang
+                                bằng cửa sổ trình duyệt bình thường.
+                            </p>
+
+                            <div class="browser">
+                                Trình duyệt: ${result.browserName || "Không xác định"}
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                document.body.style.display = "none";
+                document.documentElement.style.display = "block";
+
+                console.log("🕵️ Đã phát hiện chế độ ẩn danh.");
+            } else {
+                console.log("✅ Không phải chế độ ẩn danh.");
+            }
+
+        } catch (error) {
+            console.error("Không thể kiểm tra:", error);
+        }
+    };
+
+    script.onerror = () => {
+        console.error("❌ Không tải được detectIncognitoJS");
+    };
+
+    document.head.appendChild(script);
+})();
 // =============================
 // CHẶN TRÌNH DUYỆT ZALO
 // =============================
