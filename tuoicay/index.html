@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
 
-<title>Tưới cây nông trại</title>
+<title>Chéo bóng ShopeePay</title>
 
 <style>
 
@@ -219,7 +219,7 @@ label{
 .popup-content{
 
     width:92%;
-    max-width:350px;
+    max-width:300px;
     max-height:80vh;
     background:#fff;
     border-radius:18px;
@@ -324,7 +324,7 @@ label{
 
 .status-box{
     width:90%;
-    max-width:300px;
+    max-width:360px;
     background:#fff;
     border-radius:18px;
     padding:24px;
@@ -355,6 +355,7 @@ label{
     height:46px;
     border:none;
     border-radius:12px;
+    background:#ee4d2d;
     color:#fff;
     font-size:15px;
     font-weight:600;
@@ -363,22 +364,12 @@ label{
     transition:.2s;
 }
 
-/* Thành công */
-.status-box.success .status-ok{
-    background:#2bb364;
+.status-ok:hover{
+    background:#d84326;
 }
 
-.status-box.success .status-ok:hover{
-    background:#109547;
-}
-
-/* Lỗi */
-.status-box.error .status-ok{
-    background:#ee4d2d;
-}
-
-.status-box.error .status-ok:hover{
-    background:#d63b1b;
+.status-ok:active{
+    transform:scale(.98);
 }
 
 @keyframes popupShow{
@@ -397,7 +388,6 @@ label{
     width:min(100%, 480px);
     aspect-ratio:16/7;
     object-fit:cover;
-    margin-bottom: 12px;
 }
 
 .banner-card{
@@ -482,22 +472,6 @@ label{
     background:#ee4d2d;
 }
 
-.captcha-item{
-    border:4px solid transparent;
-    border-radius:12px;
-    overflow:hidden;
-    cursor:pointer;
-}
-
-.captcha-item img{
-    width:100%;
-    display:block;
-}
-
-.captcha-item.selected{
-    border-color:#ee4d2d;
-}
-
 </style>
 
 </head>
@@ -506,13 +480,12 @@ label{
 <img class="cover" src="https://shopeelivecoin.com/img/farm.png" alt="Banner">
 <div class="card">
 
-    <div class="logo">
+    <div class="logo" bis_skin_checked="1">
         Tưới cây
     </div>
-    <div style="color: #f90000; text-align: center;">(Bản thử nghiệm)</div>
-
+    <div style="color: #f90000; text-align: center;" bis_skin_checked="1">(Bản thử nghiệm)</div>
     <div class="desc">
-        Nhập link tưới để gửi lên hệ thống.
+        Nhập link mời để gửi lên hệ thống.
     </div>
     <!-- <div style="
         text-align: center;
@@ -520,7 +493,7 @@ label{
         color: #ff0000;
     ">(đang thử nghiệm chỉ vote 8 số)</div> -->
 
-    <label>Link tưới</label>
+    <label>Link mời</label>
 
     <div class="input-group">
 
@@ -537,69 +510,23 @@ label{
         </button>
 
     </div>
-    
-    <button
+
+    <a
         id="submit"
-        class="submit-btn">
+        class="submit-btn"
+        href="https://s.shopee.vn/5fn4RaLBgs"
+        style="display:flex;align-items:center;justify-content:center;text-decoration:none;">
         Gửi
-    </button>
-    
-    <div id="captchaPopup" class="popup">
-        <div class="popup-content" style="padding:18px">
-            <div style="font-size:18px;font-weight:bold;">
-                Xác minh Captcha
-            </div>
-            <div style="font-size: 8px;margin-bottom:12px;color: #ff0000;">(Vào xem sản phẩm, sau đó quay lại web này chọn đúng hình sản phẩm đó)</div>
-            <div id="captchaMessage"
-                 style="
-                    display:none;
-                    margin-bottom:12px;
-                    padding:10px;
-                    border-radius:8px;
-                    background:#fdecec;
-                    color:#d93025;
-                    font-size:14px;
-                    text-align:center;
-                 ">
-            </div>
-    
-            <div id="captchaProduct"
-                 style="margin-bottom:10px;font-weight:bold;color:#ee4d2d">
-            </div>
-    
-            <div id="captchaOptions"
-                 style="
-                    display:grid;
-                    grid-template-columns:repeat(2,1fr);
-                    gap:10px;
-                    margin-bottom:15px;
-                 ">
-            </div>
-    
-            <button id="captchaConfirm" class="submit-btn" style="margin-top:0">
-                Xác nhận
-            </button>
-        </div>
-    </div>
+    </a>
 
     <div
         id="msg"
         class="message">
     </div>
-
-    <div class="notice">
+    
+    <div class="notice" bis_skin_checked="1">
         ⚠️ Sau khi gửi link thành công, vui lòng đợi trong vòng <b>5 phút</b> để hệ thống xử lý hoàn tất.
     </div>
-    
-    <!-- <div class="button-row">
-        <button id="historyBtn" class="history-btn">
-            Xem danh sách SĐT
-        </button>
-    
-        <button class="history-btn" onclick="window.open('https://m.me/fchffyftv556', '_blank')">
-            Báo lỗi
-        </button>
-    </div> -->
 
 </div>
 
@@ -607,7 +534,10 @@ label{
 <div class="banner-card">
 
     <div class="banner-list" id="bannerList">
-
+        <a class="banner-item" href="https://s.shopee.vn/3LPiggxxXL" target="_blank">
+            <img src="https://shopeelivecoin.com/img/hqgenz.jpg">
+        </a>
+        
         <a class="banner-item" href="https://shopeelivecoin.com/flashsale/" target="_blank">
             <img src="https://shopeelivecoin.com/img/flasksalebanner.png">
         </a>
@@ -624,6 +554,7 @@ label{
 
     <div class="banner-dots">
         <span class="banner-dot active"></span>
+        <span class="banner-dot"></span>
         <span class="banner-dot"></span>
         <span class="banner-dot"></span>
     </div>
@@ -675,17 +606,335 @@ label{
     </div>
 </div>
 
+<div id="schedulePopup" class="popup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <span>Lịch mở cửa</span>
+            <button id="closeSchedulePopup" type="button">✕</button>
+        </div>
+
+        <div style="padding:18px;">
+            <!-- <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕛 00:30 → 01:30</div> -->
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕗 07:00 → 10:00</div>
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕚 11:00 → 15:00</div>
+            <div style="padding:12px 16px;">🕖 17:00 → 22:00</div>
+        </div>
+    </div>
+</div>
+
 <div class="footer">
     © ShopeeLiveCoin
 </div>
 
 <script>
-let id = localStorage.getItem("id");
-if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem("id", id);
-}
-const API="https://shopeelivecoin-shopeepay.vercel.app/linkfarmtest";
+(async () => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/detectincognitojs/dist/detectIncognito.min.js";
+
+    script.onload = async () => {
+        try {
+            const result = await detectIncognito();
+
+            console.log("Kết quả:", result);
+
+            if (result.isPrivate) {
+                document.documentElement.innerHTML = `
+                    <!DOCTYPE html>
+                    <html lang="vi">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport"
+                              content="width=device-width, initial-scale=1.0">
+                        <title>Cảnh báo</title>
+                        <style>
+                            * {
+                                box-sizing: border-box;
+                            }
+
+                            body {
+                                margin: 0;
+                                min-height: 100vh;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                background: #f5f5f5;
+                                font-family: Arial, sans-serif;
+                            }
+
+                            .warning {
+                                width: min(90%, 500px);
+                                padding: 35px;
+                                background: white;
+                                border-radius: 16px;
+                                text-align: center;
+                                box-shadow: 0 10px 40px rgba(0,0,0,.12);
+                            }
+
+                            .icon {
+                                font-size: 60px;
+                                margin-bottom: 15px;
+                            }
+
+                            h1 {
+                                margin: 0 0 15px;
+                                color: #d93025;
+                            }
+
+                            p {
+                                color: #555;
+                                line-height: 1.6;
+                            }
+
+                            .browser {
+                                margin-top: 20px;
+                                padding: 12px;
+                                background: #f1f3f4;
+                                border-radius: 8px;
+                                color: #444;
+                            }
+                        </style>
+                    </head>
+
+                    <body>
+                        <div class="warning">
+                            <div class="icon">⚠️</div>
+
+                            <h1>Không hỗ trợ chế độ ẩn danh</h1>
+
+                            <p>
+                                Vui lòng đóng tab ẩn danh và mở lại trang
+                                bằng cửa sổ trình duyệt bình thường.
+                            </p>
+
+                            <div class="browser">
+                                Trình duyệt: ${result.browserName || "Không xác định"}
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `;
+                document.documentElement.style.display = "block";
+
+                console.log("🕵️ Đã phát hiện chế độ ẩn danh.");
+            } else {
+                console.log("✅ Không phải chế độ ẩn danh.");
+            }
+
+        } catch (error) {
+            console.error("Không thể kiểm tra:", error);
+        }
+    };
+
+    script.onerror = () => {
+        console.error("❌ Không tải được detectIncognitoJS");
+    };
+
+    document.head.appendChild(script);
+})();
+// =============================
+// CHẶN TRÌNH DUYỆT ZALO
+// =============================
+
+(function () {
+    const ua = navigator.userAgent || "";
+    
+    // Kiểm tra User-Agent có chứa Zalo hay không
+    if (!/zalo/i.test(ua)) {
+        return;
+    }
+
+    // Xác định thiết bị
+    const isIPhone = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+
+    let instruction = "";
+
+    if (isIPhone) {
+        instruction = `
+            <div class="zalo-step">
+                1. Nhấn dấu <b>...</b> ở góc trên cùng bên phải
+            </div>
+
+            <div class="zalo-step">
+                2. Chọn <b>"Mở bằng Safari"</b>
+            </div>
+        `;
+    } else if (isAndroid) {
+        instruction = `
+            <div class="zalo-step">
+                1. Nhấn dấu <b>...</b> ở góc trên cùng bên phải
+            </div>
+
+            <div class="zalo-step">
+                2. Chọn <b>"Mở bằng trình duyệt"</b>
+            </div>
+        `;
+    } else {
+        instruction = `
+            <div class="zalo-step">
+                Nhấn dấu <b>...</b> ở góc trên cùng bên phải
+            </div>
+
+            <div class="zalo-step">
+                Chọn mở trang bằng trình duyệt bên ngoài.
+            </div>
+        `;
+    }
+
+    // Thay toàn bộ nội dung trang
+    document.documentElement.innerHTML = `
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport"
+                  content="width=device-width, initial-scale=1.0">
+            <title>Mở bằng trình duyệt</title>
+
+            <style>
+                * {
+                    box-sizing: border-box;
+                }
+
+                html,
+                body {
+                    margin: 0;
+                    padding: 0;
+                    width: 100%;
+                    min-height: 100%;
+                    font-family:
+                        system-ui,
+                        -apple-system,
+                        BlinkMacSystemFont,
+                        "Segoe UI",
+                        Roboto,
+                        sans-serif;
+                    background: #f4e8e7;
+                }
+
+                body {
+                    min-height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 20px;
+                }
+
+                .zalo-box {
+                    width: 100%;
+                    max-width: 420px;
+                    background: #fff;
+                    border-radius: 20px;
+                    padding: 30px 24px;
+                    text-align: center;
+                    box-shadow: 0 15px 35px rgba(0,0,0,.15);
+                }
+
+                .zalo-icon {
+                    width: 64px;
+                    height: 64px;
+                    margin: 0 auto 18px;
+                    border-radius: 50%;
+                    background: #fff1ed;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 32px;
+                }
+
+                .zalo-title {
+                    font-size: 22px;
+                    font-weight: 700;
+                    color: #222;
+                    margin-bottom: 12px;
+                }
+
+                .zalo-desc {
+                    color: #666;
+                    font-size: 15px;
+                    line-height: 1.6;
+                    margin-bottom: 22px;
+                }
+
+                .zalo-arrow {
+                    position: fixed;
+                    top: 8px;
+                    right: 18px;
+                    font-size: 70px;
+                    line-height: 1;
+                    transform: rotate(-25deg);
+                    animation: arrowBounce 1s infinite;
+                    z-index: 9999;
+                }
+                
+                @keyframes arrowBounce {
+                    0%, 100% {
+                        transform: rotate(-25deg) translateY(0);
+                    }
+                
+                    50% {
+                        transform: rotate(-25deg) translateY(8px);
+                    }
+                }
+
+                .zalo-instruction {
+                    text-align: left;
+                    background: #fff8e6;
+                    border: 1px solid #ffd86b;
+                    border-radius: 14px;
+                    padding: 16px;
+                    color: #6d5200;
+                    font-size: 15px;
+                    line-height: 1.7;
+                }
+
+                .zalo-step {
+                    margin-bottom: 10px;
+                }
+
+                .zalo-step:last-child {
+                    margin-bottom: 0;
+                }
+
+                .zalo-note {
+                    margin-top: 18px;
+                    color: #999;
+                    font-size: 13px;
+                    line-height: 1.5;
+                }
+            </style>
+        </head>
+
+        <body>
+            <div class="zalo-arrow">↗</div>
+            
+            <div class="zalo-box">
+
+                <div class="zalo-icon">
+                    ⚠️
+                </div>
+
+                <div class="zalo-title">
+                    Trang không hoạt động trong Zalo
+                </div>
+
+                <div class="zalo-desc">
+                    Vui lòng mở trang này bằng trình duyệt bên ngoài
+                    để tiếp tục sử dụng.
+                </div>
+
+                <div class="zalo-instruction">
+                    ${instruction}
+                </div>
+
+                <div class="zalo-note">
+                    © ShopeeLiveCoin
+                </div>
+
+            </div>
+        </body>
+    `;
+})();
+
+const API="https://cheobongclient.vercel.app/linkfarm";
 
 const input=document.getElementById("link");
 const btn=document.getElementById("submit");
@@ -699,10 +948,11 @@ const statusPopup=document.getElementById("statusPopup");
 const statusBox=document.getElementById("statusBox");
 const statusText=document.getElementById("statusText");
 const statusOk=document.getElementById("statusOk");
-let captchaId = "";
-let captchaAns = "";
-let productViewed = false;
-document.getElementById("captchaPopup").style.display = "none";
+
+const scheduleBtn = document.getElementById("scheduleBtn");
+const schedulePopup = document.getElementById("schedulePopup");
+const closeSchedulePopup = document.getElementById("closeSchedulePopup");
+
 const links = [
   "https://s.shopee.vn/4qDxS3OMNU",
   "https://s.shopee.vn/4fuXFkOziT",
@@ -732,24 +982,12 @@ const links = [
 ];
 
 const randomLink = links[Math.floor(Math.random() * links.length)];
-function showCaptchaMessage(text){
-    const box = document.getElementById("captchaMessage");
-    box.innerText = text;
-    box.style.display = "block";
-}
 
-function hideCaptchaMessage(){
-    document.getElementById("captchaMessage").style.display = "none";
-}
 function show(text, success){
 
     statusBox.className = "status-box " + (success ? "success" : "error");
     statusText.innerText = text;
-    if (success) {
-        statusOk.removeAttribute("href");
-    } else {
-        statusOk.removeAttribute("href");
-    }
+    statusOk.removeAttribute("href");
 
     statusPopup.style.display = "flex";
 }
@@ -795,207 +1033,81 @@ pasteBtn.onclick = async () => {
     }
 };
 
-function renderCaptcha(data){
-    if (data.close) {
-        show(data.message, false);
-    } else {
-        captchaId = data.id;
-        captchaAns = "";
-        productViewed = false;
-        hideCaptchaMessage();
-    
-        document.getElementById("captchaPopup").style.display = "flex";
-    
-        document.getElementById("captchaProduct").innerHTML = `
-            <div style="margin-bottom:10px">
-                Hãy chọn ảnh của sản phẩm:
-            </div>
-        
-            <div style="text-align:center;">
-            <a href="${data.product}"
-               target="_blank"
-               onclick="productViewed = true"
-               style="
-                    display:block;
-                    width:100%;
-                    padding:8px 14px;
-                    background:#ee4d2d;
-                    color:#fff;
-                    text-decoration:none;
-                    border-radius:8px;
-                    font-size:14px;
-                    font-weight:600;
-                    margin-bottom:12px;
-                    text-align:center;
-               ">
-                Xem sản phẩm
-            </a>
-            </div>
-        `;
-    
-        const box=document.getElementById("captchaOptions");
-        box.innerHTML="";
-    
-        data.options.forEach(url=>{
-    
-            const div=document.createElement("div");
-            div.className="captcha-item";
-    
-            div.innerHTML=`<img src="https://cf.shopee.ph/file/${url}_tn">`;
-    
-            div.onclick=()=>{
-    
-                document.querySelectorAll(".captcha-item")
-                    .forEach(e=>e.classList.remove("selected"));
-    
-                div.classList.add("selected");
-    
-                captchaAns=url;
-    
-            };
-    
-            box.appendChild(div);
-    
-        });
-    }
-}
+btn.onclick = async (e) => {
 
-async function loadCaptcha(){
+    e.preventDefault();
 
-    const res=await fetch("https://shopeelivecoin-shopeepay.vercel.app/generate_captcha",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:"{}"
-    });
+    const link = input.value.trim();
 
-    renderCaptcha(await res.json());
-
-}
-
-document.getElementById("captchaConfirm").onclick = () => {
-    if (!captchaAns) {
-        show("Vui lòng chọn một ảnh.", false);
+    if (!link) {
+        show("Vui lòng nhập link.", false);
         return;
     }
 
-    if (!productViewed) {
-        show("Vui lòng xem sản phẩm rồi quay lại chọn đúng hình ảnh của nó", false);
-        return;
-    }
-
-    document.getElementById("captchaPopup").style.display = "none";
-
-    btn.click();
-};
-
-btn.onclick=async()=>{
-
-    const link=input.value.trim();
-
-    if(!link){
-
-        show("Vui lòng nhập link.",false);
-        return;
-
-    }
-    
     try {
-    
+
         const url = new URL(link);
-    
+
         const isShareLink =
             url.protocol === "https:" &&
             url.hostname === "shp.ee" &&
             url.pathname.startsWith("/");
-    
+
         if (!isShareLink) {
-    
             show("Link không đúng định dạng.", false);
             return;
-    
         }
-    
+
     } catch {
-    
+
         show("Link không đúng định dạng.", false);
         return;
-    
+
     }
 
-    btn.disabled = true;
-    btn.innerText = "Đang gửi...";
-    
-    if (!captchaId) {
-        await loadCaptcha();
-        btn.disabled = false;
-        btn.innerText = "Gửi";
-        return;
-    }
-    
-    if (!captchaAns) {
-        document.getElementById("captchaPopup").style.display = "flex";
-        btn.disabled = false;
-        btn.innerText = "Gửi";
-        return;
-    }
+    btn.style.pointerEvents = "none";
+    btn.textContent = "Đang gửi...";
 
-    try{
+    try {
 
-        const response=await fetch(API,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+        const response = await fetch(API, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify({
-                id:captchaId,
-                ans:captchaAns,
+            body: JSON.stringify({
                 link
             })
         });
 
-        const data=await response.json();
-        
-        if(response.ok){
-            if (data.new_captcha) {
-            
-                renderCaptcha(data.new_captcha);
-            
-                if (!response.ok) {
-                    showCaptchaMessage(data.detail || data.message || "Bạn chọn sai captcha.");
-                }
-                show(data.message, false);
-            } else {
-                show(data.message || "Gửi thành công.",true);
-            };
-            
-        
-            if(!data.new_captcha){
-        
-            input.value = "";
-            
-            captchaId = "";
-            captchaAns = "";
-        
-            }
-        
-    }else{
-    
-        if (!data.new_captcha) {
-            show(data.detail || data.message || "Có lỗi xảy ra.", false);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.detail || "Có lỗi xảy ra.");
         }
-    
+
+        if (data.message === "Gửi thành công") {
+            btn.href = links[Math.floor(Math.random() * links.length)];
+            input.value =  "";
+            show("Gửi thành công", true);
+            // Chỉ mở link sau khi API trả về thành công
+            window.location.href = btn.href;
+
+            return;
+        }
+
+        show(data.message || "Có lỗi xảy ra.", false);
+
+    } catch (err) {
+
+        show(err.message || "Không thể kết nối tới máy chủ.", false);
+
+    } finally {
+
+        btn.style.pointerEvents = "";
+        btn.textContent = "Gửi";
+
     }
-
-    }catch(e){
-
-        show("Không thể kết nối tới máy chủ.",false);
-
-    }
-
-    btn.disabled=false;
-    btn.innerText="Gửi";
 
 };
 
@@ -1004,6 +1116,51 @@ input.addEventListener("keydown",e=>{
     if(e.key==="Enter"){
         btn.click();
     }
+
+});
+
+closePopup.onclick=()=>{
+
+    popup.style.display="none";
+
+};
+
+popup.onclick=e=>{
+
+    if(e.target===popup){
+        popup.style.display="none";
+    }
+
+};
+
+/* Demo dữ liệu */
+
+const phones=[
+    "8489****491",
+    "8437****046",
+    "8487****598",
+    "8455****429",
+    "8433****631",
+    "8484****589",
+    "8485****939",
+    "8489****451",
+    "8489****018",
+    "8481****464"
+];
+
+phones.forEach(phone=>{
+
+    phoneList.insertAdjacentHTML("beforeend",`
+        <div class="phone-item">
+
+            <div class="avatar"></div>
+
+            <div class="phone-number">
+                ${phone}
+            </div>
+
+        </div>
+    `);
 
 });
 
@@ -1031,6 +1188,30 @@ dots.forEach((dot, index) => {
         });
     };
 
+});
+
+scheduleBtn.onclick = () => {
+    schedulePopup.style.display = "flex";
+};
+
+closeSchedulePopup.onclick = () => {
+    schedulePopup.style.display = "none";
+};
+
+schedulePopup.onclick = (e) => {
+    if (e.target === schedulePopup) {
+        schedulePopup.style.display = "none";
+    }
+};
+
+window.addEventListener("load", () => {
+    requestAnimationFrame(() => {
+        bannerList.scrollLeft = 0;
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle("active", i === 0);
+        });
+    });
 });
 
 </script>
