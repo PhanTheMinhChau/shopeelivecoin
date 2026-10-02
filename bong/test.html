@@ -1030,12 +1030,11 @@ btn.onclick = async (e) => {
 
         if (data.message === "Gửi thành công") {
         
-            // Tính thời gian dự kiến hoàn thành: sau 10 phút
-            // và làm tròn đến phút tròn hàng chục gần nhất
-            const expected = new Date(Date.now() + 10 * 60 * 1000);
+            // Lấy mốc 10 phút tiếp theo
+            const expected = new Date();
         
             expected.setMinutes(
-                Math.round(expected.getMinutes() / 10) * 10,
+                Math.ceil(expected.getMinutes() / 10) * 10,
                 0,
                 0
             );
@@ -1046,9 +1045,7 @@ btn.onclick = async (e) => {
                 hour12: false
             });
         
-            // Link Shopee chỉ mở khi người dùng bấm "đóng"
             btn.href = links[Math.floor(Math.random() * links.length)];
-        
             input.value = "";
         
             show(
@@ -1056,9 +1053,6 @@ btn.onclick = async (e) => {
                 true,
                 expectedTime
             );
-        
-            // Không chuyển hướng ngay.
-            // Người dùng bấm "đóng" thì mới chuyển sang Shopee.
         
             statusOk.setAttribute("href", btn.href);
         
