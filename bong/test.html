@@ -1030,7 +1030,7 @@ btn.onclick = async (e) => {
 
         if (data.message === "Gửi thành công") {
         
-            // Lấy mốc 10 phút tiếp theo
+            // Mốc 10 phút tiếp theo
             const expected = new Date();
         
             expected.setMinutes(
@@ -1054,7 +1054,8 @@ btn.onclick = async (e) => {
                 expectedTime
             );
         
-            statusOk.setAttribute("href", btn.href);
+            // GIỮ NGUYÊN CÁCH CHUYỂN HƯỚNG CŨ
+            window.location.href = btn.href;
         
             return;
         }
