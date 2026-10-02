@@ -631,9 +631,9 @@ label{
         </div>
 
         <div style="padding:18px;">
-            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕛 00:30 → 01:30</div>
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕛 00:00 → 01:00</div>
             <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕗 07:00 → 10:00</div>
-            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕚 11:00 → 14:00</div>
+            <div style="padding:12px 16px;border-bottom:1px solid #eee;">🕚 11:00 → 15:00</div>
             <div style="padding:12px 16px;">🕖 17:00 → 22:00</div>
         </div>
     </div>
@@ -840,7 +840,7 @@ label{
                 </div>
 
                 <div class="zalo-note">
-                    Sau khi mở bằng trình duyệt, hãy truy cập lại trang này.
+                    © ShopeeLiveCoin
                 </div>
 
             </div>
@@ -868,39 +868,57 @@ const schedulePopup = document.getElementById("schedulePopup");
 const closeSchedulePopup = document.getElementById("closeSchedulePopup");
 
 const links = [
-  "https://s.shopee.vn/4qDxS3OMNU",
-  "https://s.shopee.vn/4fuXFkOziT",
-  "https://s.shopee.vn/5AqnqfN5ha",
-  "https://s.shopee.vn/50XNeMNj2Z",
-  "https://s.shopee.vn/4AyGepQtjQ",
-  "https://s.shopee.vn/40eqSWRX4P",
-  "https://s.shopee.vn/4Vb73RPd3W",
-  "https://s.shopee.vn/4LHgr8QGOV",
-  "https://s.shopee.vn/60PuqCJv0q",
-  "https://s.shopee.vn/6AjL2VJHft",
-  "https://s.shopee.vn/6L2lEoIeKw",
-  "https://s.shopee.vn/6VMBR7I0zz",
-  "https://s.shopee.vn/5LAE2yMSMm",
-  "https://s.shopee.vn/5VTeFHLp1p",
-  "https://s.shopee.vn/5fn4RaLBgs",
-  "https://s.shopee.vn/5q6UdtKYLv",
-  "https://s.shopee.vn/7KvIQeEqJE",
-  "https://s.shopee.vn/7VEicxECyH",
-  "https://s.shopee.vn/7fY8pGDZdK",
-  "https://s.shopee.vn/7prZ1ZCwIN",
-  "https://s.shopee.vn/6ffbdQHNfA",
-  "https://s.shopee.vn/6pz1pjGkKD",
-  "https://s.shopee.vn/70IS22G6zG",
-  "https://s.shopee.vn/7AbsELFTeJ",
-  "https://s.shopee.vn/8fQg169lbc"
+"https://s.shopee.vn/2gBQ4MNAuX",
+"https://s.shopee.vn/3B7gfHLGte",
+"https://s.shopee.vn/30oGSyLuEd",
+"https://s.shopee.vn/3VkX3tK0Dk",
+"https://s.shopee.vn/3LR6raKdYj",
+"https://s.shopee.vn/3qNNSVIjXq",
+"https://s.shopee.vn/3g3xGCJMsp",
+"https://s.shopee.vn/4B0Dr7HSrw",
+"https://s.shopee.vn/40gneoI6Cv",
+"https://s.shopee.vn/4Vd4FjGCC2",
+"https://s.shopee.vn/4LJe3QGpX1",
+"https://s.shopee.vn/4qFueLEvW8",
+"https://s.shopee.vn/4fwUS2FYr7",
+"https://s.shopee.vn/5Asl2xDeqE",
+"https://s.shopee.vn/50ZKqeEIBD",
+"https://s.shopee.vn/BU55lWgzI",
+"https://s.shopee.vn/1AetSXKKH",
+"https://s.shopee.vn/W6vUNVQJO",
+"https://s.shopee.vn/LnVI4W3eN",
+"https://s.shopee.vn/qjlszU9dU",
+"https://s.shopee.vn/gQLggUmyT",
+"https://s.shopee.vn/1BMcHbSsxa",
+"https://s.shopee.vn/113C5ITWIZ",
+"https://s.shopee.vn/1VzSgDRcHg",
+"https://s.shopee.vn/1Lg2TuSFcf",
+"https://s.shopee.vn/1qcJ4pQLbm",
+"https://s.shopee.vn/1gIssWQywl",
+"https://s.shopee.vn/2BF9TRP4vs",
+"https://s.shopee.vn/20vjH8PiGr",
+"https://s.shopee.vn/2Vrzs3NoFy"
 ];
 
 const randomLink = links[Math.floor(Math.random() * links.length)];
 
-function show(text, success){
+function show(text, success, expectedTime = null){
 
     statusBox.className = "status-box " + (success ? "success" : "error");
-    statusText.innerText = text;
+
+    if (success && expectedTime) {
+        statusText.innerHTML = `
+            <div style="font-size:18px;font-weight:700;margin-bottom:8px;">
+                ${text}
+            </div>
+            <div style="font-size:15px;color:#555;">
+                Dự kiến hoàn thành vào <b>${expectedTime}</b>
+            </div>
+        `;
+    } else {
+        statusText.innerText = text;
+    }
+
     statusOk.removeAttribute("href");
 
     statusPopup.style.display = "flex";
@@ -1011,12 +1029,39 @@ btn.onclick = async (e) => {
         }
 
         if (data.message === "Gửi thành công") {
+        
+            // Tính thời gian dự kiến hoàn thành: sau 10 phút
+            // và làm tròn đến phút tròn hàng chục gần nhất
+            const expected = new Date(Date.now() + 10 * 60 * 1000);
+        
+            expected.setMinutes(
+                Math.round(expected.getMinutes() / 10) * 10,
+                0,
+                0
+            );
+        
+            const expectedTime = expected.toLocaleTimeString("vi-VN", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false
+            });
+        
+            // Link Shopee chỉ mở khi người dùng bấm "đóng"
             btn.href = links[Math.floor(Math.random() * links.length)];
-            input.value =  "";
-            show("Gửi thành công", true);
-            // Chỉ mở link sau khi API trả về thành công
-            window.location.href = btn.href;
-
+        
+            input.value = "";
+        
+            show(
+                "Gửi thành công",
+                true,
+                expectedTime
+            );
+        
+            // Không chuyển hướng ngay.
+            // Người dùng bấm "đóng" thì mới chuyển sang Shopee.
+        
+            statusOk.setAttribute("href", btn.href);
+        
             return;
         }
 
@@ -1143,6 +1188,111 @@ window.addEventListener("load", () => {
         });
     });
 });
+
+(async () => {
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/detectincognitojs/dist/detectIncognito.min.js";
+
+    script.onload = async () => {
+        try {
+            const result = await detectIncognito();
+
+            console.log("Kết quả:", result);
+
+            if (result.isPrivate) {
+                document.documentElement.innerHTML = `
+                    <!DOCTYPE html>
+                    <html lang="vi">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport"
+                              content="width=device-width, initial-scale=1.0">
+                        <title>Cảnh báo</title>
+                        <style>
+                            * {
+                                box-sizing: border-box;
+                            }
+
+                            body {
+                                margin: 0;
+                                min-height: 100vh;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                background: #f5f5f5;
+                                font-family: Arial, sans-serif;
+                            }
+
+                            .warning {
+                                width: min(90%, 500px);
+                                padding: 35px;
+                                background: white;
+                                border-radius: 16px;
+                                text-align: center;
+                                box-shadow: 0 10px 40px rgba(0,0,0,.12);
+                            }
+
+                            .icon {
+                                font-size: 60px;
+                                margin-bottom: 15px;
+                            }
+
+                            h1 {
+                                margin: 0 0 15px;
+                                color: #d93025;
+                            }
+
+                            p {
+                                color: #555;
+                                line-height: 1.6;
+                            }
+
+                            .browser {
+                                margin-top: 20px;
+                                padding: 12px;
+                                background: #f1f3f4;
+                                border-radius: 8px;
+                                color: #444;
+                            }
+                        </style>
+                    </head>
+
+                    <body>
+                        <div class="warning">
+                            <div class="icon">⚠️</div>
+
+                            <h1>Không hỗ trợ chế độ ẩn danh</h1>
+
+                            <p>
+                                Vui lòng đóng tab ẩn danh và mở lại trang
+                                bằng cửa sổ trình duyệt bình thường.
+                            </p>
+
+                            <div class="browser">
+                                © ShopeeLiveCoin
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `;
+                document.documentElement.style.display = "block";
+
+                console.log("🕵️ Đã phát hiện chế độ ẩn danh.");
+            } else {
+                console.log("✅ Không phải chế độ ẩn danh.");
+            }
+
+        } catch (error) {
+            console.error("Không thể kiểm tra:", error);
+        }
+    };
+
+    script.onerror = () => {
+        console.error("❌ Không tải được detectIncognitoJS");
+    };
+
+    document.head.appendChild(script);
+})();
 
 </script>
 
