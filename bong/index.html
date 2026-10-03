@@ -902,10 +902,23 @@ const links = [
 
 const randomLink = links[Math.floor(Math.random() * links.length)];
 
-function show(text, success){
+function show(text, success, expectedTime = null){
 
     statusBox.className = "status-box " + (success ? "success" : "error");
-    statusText.innerText = text;
+
+    if (success && expectedTime) {
+        statusText.innerHTML = `
+            <div style="font-size:18px;font-weight:700;margin-bottom:8px;">
+                ${text}
+            </div>
+            <div style="font-size:15px;color:#555;">
+                Dự kiến hoàn thành vào <b>${expectedTime}</b>
+            </div>
+        `;
+    } else {
+        statusText.innerText = text;
+    }
+
     statusOk.removeAttribute("href");
 
     statusPopup.style.display = "flex";
@@ -1016,12 +1029,34 @@ btn.onclick = async (e) => {
         }
 
         if (data.message === "Gửi thành công") {
+        
+            // Mốc 10 phút tiếp theo
+            const expected = new Date();
+        
+            expected.setMinutes(
+                (Math.ceil(expected.getMinutes() / 10) * 10) + 1,
+                0,
+                0
+            );
+        
+            const expectedTime = expected.toLocaleTimeString("vi-VN", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false
+            });
+        
             btn.href = links[Math.floor(Math.random() * links.length)];
-            input.value =  "";
-            show("Gửi thành công", true);
-            // Chỉ mở link sau khi API trả về thành công
+            input.value = "";
+        
+            show(
+                "Gửi thành công",
+                true,
+                expectedTime
+            );
+        
+            // GIỮ NGUYÊN CÁCH CHUYỂN HƯỚNG CŨ
             window.location.href = btn.href;
-
+        
             return;
         }
 
