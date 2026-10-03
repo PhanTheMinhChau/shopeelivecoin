@@ -1034,7 +1034,7 @@ btn.onclick = async (e) => {
             const expected = new Date();
         
             expected.setMinutes(
-                Math.ceil(expected.getMinutes() / 10) * 10,
+                (Math.ceil(expected.getMinutes() / 10) * 10) + 1,
                 0,
                 0
             );
