@@ -56,8 +56,9 @@ const grid=document.getElementById('grid');
 const search=document.getElementById('search');
 function openEnvelope(item){
   // Đổi tên file bên dưới nếu trang ghép chữ của bạn có tên khác.
-  const target=new URL('ghep_chu_da_sua.html',window.location.href);
+  const target=new URL('lixi.html',window.location.href);
   target.searchParams.set('charset',String(item.pass||'').replace(/^`|`$/g,''));
+  target.searchParams.set('name',String(item.titleEnvelope||''));
   window.location.href=target.href;
 }
 function render(){
