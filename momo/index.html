@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#e91e73">
+<title>Danh sách bao lì xì</title>
+<style>
+:root{--pink:#ed2786;--deep:#8b174e;--ink:#76283a;--gold:#ffc66f}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:#fff1e2}
+.hero{height:230px;position:absolute;inset:0 0 auto;overflow:hidden;background:radial-gradient(ellipse at 50% 0,#ffb7a0 0 18%,transparent 48%),linear-gradient(155deg,#ff7890,#f20d70 55%,#ffb28c)}
+.hero:before{content:"";position:absolute;inset:-60px -30px auto;height:170px;background:radial-gradient(ellipse at 15% 40%,#ffd36f 0 10%,transparent 11%),radial-gradient(ellipse at 35% 10%,#ffd98c 0 12%,transparent 13%),radial-gradient(ellipse at 60% 25%,#ffd07a 0 12%,transparent 13%),radial-gradient(ellipse at 85% 8%,#ffdb91 0 12%,transparent 13%);filter:blur(8px);opacity:.9}
+header{position:relative;text-align:center;color:#fff;padding:32px 16px 0}
+h1{margin:0;font-size:clamp(28px,5vw,40px);font-weight:900;font-style:italic;text-shadow:0 2px 4px #9a174c}
+header p{margin:8px 0;font-size:15px}
+main{position:relative;width:min(94%,850px);margin:22px auto 40px}
+.panel{background:#fff;border:8px double #ffcf86;border-radius:24px;padding:20px;box-shadow:0 8px 24px #8b24381a}
+.toolbar{display:flex;gap:10px;margin-bottom:18px}
+.search{width:100%;padding:12px 15px;border:2px solid #ffd0d4;border-radius:13px;font:inherit;outline:none;background:#fffaf5}
+.search:focus{border-color:var(--pink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:15px}
+.envelope{position:relative;isolation:isolate;min-height:210px;border:2px solid #e7a64f;border-radius:15px 15px 18px 18px;overflow:hidden;cursor:pointer;background:linear-gradient(145deg,#ff739b,#e9166c 65%,#b90853);box-shadow:0 5px 0 #b86d4a,0 8px 14px #76283a20;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:0 12px 16px;transition:transform .15s,box-shadow .15s}
+.envelope:hover{transform:translateY(-3px);box-shadow:0 8px 0 #b86d4a,0 12px 18px #76283a25}
+.envelope:before{content:"";position:absolute;z-index:-1;top:-2px;left:-2px;right:-2px;height:68px;background:linear-gradient(135deg,#ffb1c5,#ff5b8d);clip-path:polygon(0 0,100% 0,50% 100%);border-bottom:1px solid #ffd98c}
+.envelope:after{content:"";position:absolute;z-index:-1;inset:55px 0 0;background:linear-gradient(135deg,transparent 49.5%,#ffffff22 50%,transparent 50.5%),linear-gradient(225deg,transparent 49.5%,#ffffff22 50%,transparent 50.5%);pointer-events:none}
+.logo-wrap{margin-top:86px;width:66px;height:66px;border-radius:15px;background:#fff8ed;border:2px solid #ffe3a4;display:grid;place-items:center;box-shadow:0 3px 8px #8b174e35;overflow:hidden}
+.logo{width:100%;height:100%;object-fit:contain;padding:5px}
+.name{margin-top:12px;text-align:center;font-size:15px;font-weight:850;line-height:1.25;text-shadow:0 1px 3px #8b174e88;overflow-wrap:anywhere}
+.empty{grid-column:1/-1;text-align:center;padding:30px 10px;color:#a66b70}
+@media(max-width:420px){.panel{padding:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.envelope{min-height:150px}.logo-wrap{width:58px;height:58px;margin-top:30px}.name{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="hero"></div>
+<header><h1>Danh sách bao lì xì</h1></header>
+<main><section class="panel">
+<div class="toolbar"><input id="search" class="search" type="search" placeholder="Tìm tên bao lì xì..." aria-label="Tìm tên bao"></div>
+<div id="grid" class="grid"></div>
+</section></main>
+<script>
+// Bộ ký tự chỉ được gắn vào URL khi bấm vào bao, không hiển thị trên giao diện.
+const ENVELOPES = [
+  {
+    "titleEnvelope": "Bao Chuyển Nhanh",
+    "logoIcon": "https://static.momocdn.net/app/img/my.vo1/game_glx/GLX_30.4/icon_chuyen_tien.png",
+    "pass": "QUANHENNAQIT"
+  },   {
+    "titleEnvelope": "Bao Chuyển Nhanh",
+    "logoIcon": "https://static.momocdn.net/app/img/my.vo1/game_glx/GLX_30.4/icon_chuyen_tien.png",
+    "pass": "QUANHENNAQIT"
+  }
+];
+
+const grid=document.getElementById('grid');
+const search=document.getElementById('search');
+function openEnvelope(item){
+  // Đổi tên file bên dưới nếu trang ghép chữ của bạn có tên khác.
+  const target=new URL('ghep_chu_da_sua.html',window.location.href);
+  target.searchParams.set('charset',String(item.pass||'').replace(/^`|`$/g,''));
+  window.location.href=target.href;
+}
+function render(){
+  const query=search.value.trim().toLocaleLowerCase('vi');
+  const items=ENVELOPES.filter(item=>String(item.titleEnvelope||'').toLocaleLowerCase('vi').includes(query));
+  grid.innerHTML='';
+  if(!items.length){const empty=document.createElement('div');empty.className='empty';empty.textContent='Không tìm thấy bao lì xì.';grid.append(empty);return;}
+  items.forEach(item=>{
+    const card=document.createElement('button');card.type='button';card.className='envelope';card.setAttribute('aria-label','Mở '+(item.titleEnvelope||'bao lì xì'));card.addEventListener('click',()=>openEnvelope(item));
+    const logoWrap=document.createElement('span');logoWrap.className='logo-wrap';
+    const logo=document.createElement('img');logo.className='logo';logo.src=item.logoIcon||'';logo.alt='';logo.loading='lazy';logo.onerror=()=>{logo.style.visibility='hidden';};
+    const name=document.createElement('span');name.className='name';name.textContent=item.titleEnvelope||'Bao chưa đặt tên';
+    logoWrap.append(logo);card.append(logoWrap,name);grid.append(card);
+  });
+}
+search.addEventListener('input',render);render();
+</script>
+</body></html>
